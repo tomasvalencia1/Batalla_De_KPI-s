@@ -1,0 +1,22 @@
+{
+  "rules": {
+    "live": {
+      "config": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.token.email === 'anfitrion@batalladekpis.com'"
+      }
+    },
+    "rounds": {
+      "$round": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.token.email === 'anfitrion@batalladekpis.com'",
+        "teams": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && (root.child('live/config/round').val() === $round || (!root.child('live/config').exists() && $round === 'inicio'))",
+            ".validate": "newData.hasChildren(['name', 'caseId', 'score', 'results', 'timeMs', 'joinedAt']) && newData.child('name').isString() && newData.child('name').val().length >= 2 && newData.child('name').val().length <= 28 && newData.child('caseId').isString() && newData.child('caseId').val().length <= 16 && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 2250 && newData.child('results').isString() && newData.child('results').val().length <= 15 && newData.child('timeMs').isNumber() && newData.child('joinedAt').isNumber()"
+          }
+        }
+      }
+    }
+  }
+}

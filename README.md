@@ -32,8 +32,9 @@ La página es estática: Vercel solo la publica. Los puntajes en vivo y la contr
 2. Elige la ubicación **Estados Unidos (us-central1)**.
 3. Elige **Comenzar en modo bloqueado** y toca **Habilitar**.
 4. Abre la pestaña **Reglas**, borra todo lo que aparece y pega el contenido completo de `database.rules.json`.
-5. Reemplaza las **dos** apariciones de `CORREO_DEL_ANFITRION` por el correo del anfitrión, en minúsculas (el mismo del paso 3). Deja las comillas simples.
-6. Toca **Publicar**.
+5. Toca **Publicar**.
+
+Las reglas ya traen el correo del anfitrión `anfitrion@batalladekpis.com`. Si quieres usar otro, cámbialo en las **dos** líneas donde aparece, en minúsculas, y también en `config.js`.
 
 ## Paso 3. Activar el inicio de sesión y crear al anfitrión
 
@@ -41,7 +42,7 @@ La página es estática: Vercel solo la publica. Los puntajes en vivo y la contr
 2. En **Método de acceso** activa:
    - **Anónimo**: así entran los celulares de los jugadores, sin crear cuentas.
    - **Correo electrónico/contraseña**: así entra la TV.
-3. Ve a la pestaña **Usuarios** y toca **Agregar usuario**. Escribe el correo del anfitrión y la contraseña de la TV.
+3. Ve a la pestaña **Usuarios** y toca **Agregar usuario**. En correo escribe exactamente `anfitrion@batalladekpis.com` y en contraseña la que usarás en la TV. Es un correo inventado a propósito: `config.js` es público y Firebase no le envía nada.
 
 Esa contraseña es la que escribirás en el botón **Pantalla del salón**. Solo la guarda Firebase: no está en el código ni en GitHub. Usa una contraseña nueva, solo para el juego, porque la vas a escribir frente al salón.
 
@@ -56,7 +57,7 @@ Si en ese bloque no aparece `databaseURL`, cópialo de la parte de arriba de la 
 
 ## Paso 5. Llenar `config.js`
 
-Abre `config.js` con el Bloc de notas o directamente en GitHub (ícono del lápiz) y reemplaza:
+`config.js` ya está lleno con los datos del proyecto `batalla-de-kpis`. Solo tendrías que editarlo si creas otro proyecto de Firebase. En ese caso, ábrelo con el Bloc de notas o en GitHub (ícono del lápiz) y reemplaza:
 
 - `apiKey`, `authDomain`, `databaseURL`, `projectId` y `appId` por los valores del paso 4.
 - `hostEmail` por el correo del anfitrión del paso 3.
