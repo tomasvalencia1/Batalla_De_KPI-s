@@ -595,9 +595,141 @@ input:focus { outline: none; border-color: var(--cyan); }
   border-radius: 12px;
 }
 
+/* ---------- TV: efectos ---------- */
+:root { --silver: #CFD4EA; --bronze: #E39B5E; }
+.tv-stage.in { animation: stageIn 0.45s ease both; }
+@keyframes stageIn { from { opacity: 0; transform: translateY(-8px); } }
+.tv-count.beat b { animation: beat 0.5s ease; }
+@keyframes beat { 30% { transform: scale(1.14); } }
+.answer-bar i { box-shadow: 0 0 18px color-mix(in srgb, var(--good) 60%, transparent); }
+.pchip.pop { animation: chipPop 0.5s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes chipPop { from { transform: scale(0.4); opacity: 0; } }
+.pchip.flash { animation: chipFlash 0.7s ease; }
+@keyframes chipFlash { 30% { transform: scale(1.08); box-shadow: 0 0 0 6px color-mix(in srgb, var(--good) 35%, transparent); } }
+.tv-leader { position: relative; overflow: hidden; }
+.tv-leader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--paper) 18%, transparent) 50%, transparent 65%);
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+.tv-leader.shine::after { animation: shine 1.1s ease; }
+@keyframes shine { to { transform: translateX(100%); } }
+.tv-empty b::after { content: ""; display: inline-block; width: 1.1em; text-align: left; animation: waitDots 1.6s steps(1) infinite; }
+@keyframes waitDots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+@keyframes spin { to { transform: rotate(1turn); } }
+
+/* ---------- “¡SE ACABÓ!” + podio ---------- */
+.showtime { background: rgba(10, 7, 22, 0.94); overflow: hidden; cursor: pointer; }
+.st-rays, .winner .rays {
+  position: absolute;
+  inset: -60%;
+  background: repeating-conic-gradient(color-mix(in srgb, var(--gold) 9%, transparent) 0 9deg, transparent 9deg 18deg);
+  animation: spin 40s linear infinite;
+  pointer-events: none;
+}
+.showtime canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.st-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  width: min(1200px, 100%);
+  height: 100%;
+  text-align: center;
+}
+.st-head { font-size: clamp(5rem, 17vw, 15rem); line-height: 0.9; transition: font-size 0.6s cubic-bezier(.2, .8, .2, 1); }
+.showtime.stage-podium .st-head { font-size: clamp(2.6rem, 6.5vw, 6rem); }
+.st-word {
+  display: inline-block;
+  font: 900 1em/0.85 var(--f-display);
+  text-transform: uppercase;
+  color: var(--gold);
+  letter-spacing: 0.01em;
+  text-shadow: 0 0.05em 0 var(--accent-deep), 0 0 0.4em color-mix(in srgb, var(--accent) 45%, transparent);
+  transform: rotate(-4deg);
+}
+.st-word.go { animation: slam 0.65s cubic-bezier(.2, 1.5, .35, 1) both, shake 0.5s 0.6s ease; }
+@keyframes slam { from { transform: scale(2.8) rotate(-16deg); opacity: 0; } 60% { opacity: 1; } to { transform: scale(1) rotate(-4deg); } }
+@keyframes shake {
+  20% { transform: translateX(-10px) rotate(-5deg); }
+  40% { transform: translateX(9px) rotate(-3deg); }
+  60% { transform: translateX(-6px) rotate(-4.5deg); }
+  80% { transform: translateX(4px) rotate(-3.5deg); }
+}
+.st-sub { font: 600 clamp(0.9rem, 1.6vw, 1.3rem) var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 2.2vw;
+  width: min(1050px, 94vw);
+  height: 0;
+  opacity: 0;
+  transition: height 0.6s cubic-bezier(.2, .8, .2, 1), opacity 0.4s ease;
+}
+.showtime.stage-podium .podium { height: 56vh; opacity: 1; }
+.pod { --c: var(--gold); display: flex; flex-direction: column; justify-content: flex-end; height: 100%; min-width: 0; }
+.pod.p2 { --c: var(--silver); }
+.pod.p3 { --c: var(--bronze); }
+.pod-who {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  margin-bottom: 14px;
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(24px) scale(0.9);
+  transition: opacity 0.35s ease 0.3s, transform 0.5s cubic-bezier(.2, 1.5, .4, 1) 0.3s;
+}
+.pod-name { font: 900 clamp(1.5rem, 3.2vw, 3.2rem)/0.95 var(--f-display); text-transform: uppercase; overflow-wrap: anywhere; }
+.pod-meta { font: 600 clamp(0.75rem, 1.2vw, 1rem) var(--f-mono); color: var(--muted); letter-spacing: 0.06em; }
+.pod-pts { font: 900 clamp(1.4rem, 2.8vw, 2.8rem)/1 var(--f-display); color: var(--c); font-variant-numeric: tabular-nums; }
+.pod .crown { width: clamp(36px, 4vw, 64px); height: auto; color: var(--gold); }
+.pod-bar {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  padding-top: 2vh;
+  border-radius: 16px 16px 4px 4px;
+  background: var(--c);
+  color: var(--ink);
+  font: 900 clamp(3rem, 8vw, 8rem)/1 var(--f-display);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.75s cubic-bezier(.2, 1.25, .3, 1);
+  box-shadow: inset 0 -14px 0 rgba(0, 0, 0, 0.16);
+}
+.pod.p1 .pod-bar { height: 72%; }
+.pod.p2 .pod-bar { height: 52%; }
+.pod.p3 .pod-bar { height: 38%; }
+.pod.on .pod-bar { transform: scaleY(1); }
+.pod.on .pod-who { opacity: 1; transform: none; }
+.pod.p1.on .pod-bar { box-shadow: inset 0 -14px 0 rgba(0, 0, 0, 0.16), 0 0 70px color-mix(in srgb, var(--gold) 50%, transparent); }
+.st-skip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+  font: 600 0.8rem var(--f-mono);
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---------- ganador ---------- */
+.winner { overflow: hidden; }
+.winner-card h2.go { animation: winIn 0.9s cubic-bezier(.2, 1.4, .35, 1) both; }
+@keyframes winIn { from { transform: scale(0.3); opacity: 0; letter-spacing: 0.3em; } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-  .ticker-track { animation: none; }
+  .ticker-track, .st-rays, .winner .rays { animation: none; }
 }
 </style>
 <style>:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }</style>
@@ -748,6 +880,7 @@ input:focus { outline: none; border-color: var(--cyan); }
       </div>
       <div class="tv-ctrl">
         <button class="btn btn-sm" id="tv-main" type="button">Empezar la batalla</button>
+        <button class="btn btn-ghost btn-sm" id="tv-sound" type="button" aria-pressed="false">Activar sonido</button>
         <button class="btn btn-ghost btn-sm" id="tv-new" type="button">Nueva partida</button>
         <button class="btn btn-ghost btn-sm" id="tv-fs" type="button">Pantalla completa</button>
         <button class="btn btn-ghost btn-sm" id="tv-exit" type="button">Salir</button>
@@ -816,8 +949,25 @@ input:focus { outline: none; border-color: var(--cyan); }
   </div>
 </div>
 
+<!-- se acabó: pausa animada entre retos -->
+<div class="overlay showtime" id="showtime" hidden>
+  <div class="st-rays" aria-hidden="true"></div>
+  <canvas id="st-canvas" aria-hidden="true"></canvas>
+  <div class="st-inner" role="status" aria-live="assertive">
+    <div class="st-head"><span class="st-word" id="st-word">¡Se acabó!</span></div>
+    <p class="st-sub" id="st-sub">Reto 01 de 15</p>
+    <div class="podium" aria-label="Los tres primeros puestos">
+      <div class="pod p2" id="pod-2"><div class="pod-who"><div class="pod-name"></div><div class="pod-meta"></div><div class="pod-pts"></div></div><div class="pod-bar">2</div></div>
+      <div class="pod p1" id="pod-1"><div class="pod-who"><svg class="crown" viewBox="0 0 64 40" aria-hidden="true"><path d="M4 36 8 8l14 14L32 2l10 20L56 8l4 28z" fill="currentColor"/></svg><div class="pod-name"></div><div class="pod-meta"></div><div class="pod-pts"></div></div><div class="pod-bar">1</div></div>
+      <div class="pod p3" id="pod-3"><div class="pod-who"><div class="pod-name"></div><div class="pod-meta"></div><div class="pod-pts"></div></div><div class="pod-bar">3</div></div>
+    </div>
+  </div>
+  <p class="st-skip">Toca la pantalla para ver la tabla</p>
+</div>
+
 <!-- winner -->
 <div class="overlay winner" id="winner" hidden>
+  <div class="rays" aria-hidden="true"></div>
   <canvas id="confetti"></canvas>
   <div class="winner-card">
     <p class="eyebrow">Ganador de la Batalla de <span class="nt">KPIs</span></p>
@@ -2160,6 +2310,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     nocheck: 'La pantalla del salón no está disponible: falta configurar Firebase en config.js.'
   };
   $('#btn-tv').addEventListener('click', () => {
+    audioUnlock();
     if (ssGet(TV_KEY) === '1') { enterTV(); return; }
     $('#pw-input').value = ''; $('#pw-err').hidden = true;
     $('#pw').hidden = false; $('#pw-input').focus();
@@ -2167,6 +2318,7 @@ input:focus { outline: none; border-color: var(--cyan); }
   $('#pw-cancel').addEventListener('click', () => { $('#pw').hidden = true; $('#btn-tv').focus(); });
   $('#pw-form').addEventListener('submit', async e => {
     e.preventDefault();
+    audioUnlock();
     const btn = $('#pw-submit');
     if (btn.disabled) return;
     btn.disabled = true; btn.textContent = 'Verificando…';
@@ -2189,7 +2341,7 @@ input:focus { outline: none; border-color: var(--cyan); }
   function enterTV() {
     stopTimer();
     show('tv');
-    boardKey = ''; chipsKey = '';
+    boardKey = ''; chipsKey = ''; resetTvFx();
     renderTV();
     keepAwake();
     clearInterval(tvTimer);
@@ -2198,6 +2350,8 @@ input:focus { outline: none; border-color: var(--cyan); }
   function lockTV() {
     ssDel(TV_KEY);
     clearInterval(tvTimer);
+    musicStop();
+    endShowtime(true);
     // Al salir, la TV deja de ser anfitrión y vuelve a una sesión anónima.
     if (LIVE.mode === 'firebase' && LIVE.isAdmin) { LIVE.isAdmin = false; FB.m.signOut(FB.auth).catch(() => {}); }
     try { if (wake) wake.release(); } catch {}
@@ -2233,6 +2387,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (e.key !== 'Escape') return;
     if (!$('#cf').hidden) $('#cf-no').click();
     else if (!$('#pw').hidden) $('#pw-cancel').click();
+    else if (!$('#showtime').hidden) endShowtime();
     else if (!$('#winner').hidden) $('#w-close').click();
   });
 
@@ -2250,6 +2405,8 @@ input:focus { outline: none; border-color: var(--cyan); }
   let busy = false;
   $('#tv-main').addEventListener('click', async () => {
     if (busy) return;
+    audioUnlock();
+    SFX.click();
     const view = tvView();
     const c = LIVE.cfg;
     if (view === 'final') { winnerDismissed = false; renderTV(); return; }
@@ -2373,8 +2530,9 @@ input:focus { outline: none; border-color: var(--cyan); }
       const t = ranked[0], cs = CASE_BY_ID[t.caseId];
       $('#w-name').textContent = t.name;
       $('#w-meta').textContent = `${t.score} puntos · ${t.correct} de ${Q_COUNT} aciertos · ${cs ? cs.brand : 'Marca'}`;
-      if (w.hidden) { w.hidden = false; confetti(); $('#w-close').focus(); }
+      if (w.hidden) { w.hidden = false; endShowtime(true); retrigger($('#w-name'), 'go'); confetti(); SFX.winner(); $('#w-close').focus(); }
     } else if (!w.hidden) w.hidden = true;
+    tvFx(view, c, ranked);
   }
   function renderChips(ranked, view) {
     const q = LIVE.cfg.q;
@@ -2385,11 +2543,18 @@ input:focus { outline: none; border-color: var(--cyan); }
     $('#tv-chips').innerHTML = list.map(t => {
       const cs = CASE_BY_ID[t.caseId];
       const ok = view === 'question' && t.results[q] !== null;
-      return `<span class="pchip${ok ? ' ok' : ''}" style="--c:${cs ? cs.color : 'var(--muted)'}"><i></i><span>${esc(t.name)}</span></span>`;
+      // Animación solo para quien acaba de entrar (pop) o acaba de responder (flash).
+      const before = chipSeen.get(t.id);
+      const fx = before === undefined ? (chipsInit ? ' pop' : '') : (ok && before === false ? ' flash' : '');
+      chipSeen.set(t.id, ok);
+      return `<span class="pchip${ok ? ' ok' : ''}${fx}" style="--c:${cs ? cs.color : 'var(--muted)'}"><i></i><span>${esc(t.name)}</span></span>`;
     }).join('');
+    chipsInit = true;
   }
   function renderLeader(ranked, view) {
     const t = ranked[0], s = ranked[1], cs = CASE_BY_ID[t.caseId];
+    if (leaderId && leaderId !== t.id && !RM) retrigger($('#tv-leader'), 'shine');
+    leaderId = t.id;
     $('#tv-l-label').textContent = view === 'final' ? 'Primer lugar' : 'Va ganando';
     $('#tv-l-name').textContent = t.name;
     $('#tv-l-pts').textContent = t.score;
@@ -2444,6 +2609,372 @@ input:focus { outline: none; border-color: var(--cyan); }
           el.animate([{ opacity: 0, transform: 'scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'ease-out' });
         }
       });
+    }
+  }
+
+  // ---------- sonido de la pantalla del salón ----------
+  // Todo se sintetiza en el navegador con Web Audio: no hay archivos de audio que subir.
+  // Los navegadores solo dejan sonar después de un toque, por eso el sonido se activa al entrar con la contraseña
+  // o con el botón “Activar sonido”.
+  const SOUND_KEY = 'batalla-kpis-sound';
+  const A = { ctx: null, master: null, music: null, sfx: null, noise: null, on: lsGet(SOUND_KEY) !== 'off' };
+  const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+  function audioReady() { return !!(A.ctx && A.ctx.state === 'running' && A.on); }
+  function updateSoundBtn() {
+    const b = $('#tv-sound');
+    const live = audioReady();
+    b.textContent = live ? 'Silenciar' : 'Activar sonido';
+    b.setAttribute('aria-pressed', String(live));
+  }
+  function audioUnlock() {
+    try {
+      if (!A.ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        const ctx = A.ctx = new AC();
+        const comp = ctx.createDynamicsCompressor();
+        comp.threshold.value = -16; comp.knee.value = 10; comp.ratio.value = 3.5;
+        A.master = ctx.createGain();
+        A.master.gain.value = A.on ? 0.9 : 0;
+        comp.connect(A.master);
+        A.master.connect(ctx.destination);
+        A.music = ctx.createGain(); A.music.gain.value = 0; A.music.connect(comp);
+        A.sfx = ctx.createGain(); A.sfx.gain.value = 0.85; A.sfx.connect(comp);
+        const buf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+        const d = buf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+        A.noise = buf;
+        ctx.onstatechange = () => { updateSoundBtn(); if (current === 'tv') musicSet(moodFor(tvView())); };
+      }
+      if (A.ctx.state === 'suspended') A.ctx.resume().catch(() => {});
+    } catch {}
+    updateSoundBtn();
+  }
+  function tone(dest, t, o) {
+    const c = A.ctx, dur = o.dur || 0.2, peak = Math.max(0.0002, o.gain || 0.2), att = Math.min(o.attack || 0.005, dur * 0.9);
+    const osc = c.createOscillator();
+    osc.type = o.type || 'sine';
+    osc.frequency.setValueAtTime(o.f, t);
+    if (o.f2) osc.frequency.exponentialRampToValueAtTime(o.f2, t + dur);
+    if (o.detune) osc.detune.value = o.detune;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + att);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    let node = osc;
+    if (o.filter) {
+      const fl = c.createBiquadFilter();
+      fl.type = o.filter.type || 'lowpass';
+      fl.frequency.setValueAtTime(o.filter.f, t);
+      if (o.filter.f2) fl.frequency.exponentialRampToValueAtTime(o.filter.f2, t + dur);
+      fl.Q.value = o.filter.q || 0.8;
+      osc.connect(fl);
+      node = fl;
+    }
+    node.connect(g);
+    g.connect(dest);
+    osc.start(t);
+    osc.stop(t + dur + 0.05);
+  }
+  function noise(dest, t, o) {
+    const c = A.ctx, dur = o.dur || 0.2, peak = Math.max(0.0002, o.gain || 0.2), att = Math.min(o.attack || 0.003, dur * 0.9);
+    const src = c.createBufferSource();
+    src.buffer = A.noise;
+    src.loop = true;
+    const fl = c.createBiquadFilter();
+    fl.type = o.type || 'highpass';
+    fl.frequency.setValueAtTime(o.f || 1000, t);
+    if (o.f2) fl.frequency.exponentialRampToValueAtTime(o.f2, t + dur);
+    fl.Q.value = o.q || 0.7;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + att);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(fl);
+    fl.connect(g);
+    g.connect(dest);
+    src.start(t, Math.random() * 0.3);
+    src.stop(t + dur + 0.05);
+  }
+
+  // --- música de fondo: un loop de 4 compases distinto para cada momento de la batalla ---
+  const INST = {
+    kick: t => tone(A.music, t, { f: 150, f2: 42, dur: 0.3, gain: 0.8, attack: 0.003 }),
+    snare: t => { noise(A.music, t, { dur: 0.16, gain: 0.3, type: 'bandpass', f: 1900, q: 0.8 }); tone(A.music, t, { type: 'triangle', f: 210, f2: 140, dur: 0.1, gain: 0.16 }); },
+    clap: t => [0, 0.012, 0.024].forEach(o => noise(A.music, t + o, { dur: 0.09, gain: 0.18, type: 'bandpass', f: 1400, q: 1.2 })),
+    hat: (t, v, open) => noise(A.music, t, { dur: open ? 0.22 : 0.045, gain: 0.08 * v, type: 'highpass', f: 7500 }),
+    bass: (t, m, dur) => tone(A.music, t, { type: 'sawtooth', f: mtof(m), dur: Math.max(0.08, dur * 0.95), gain: 0.2, attack: 0.006, filter: { f: 900, f2: 220, q: 4 } }),
+    pluck: (t, m, v) => tone(A.music, t, { type: 'triangle', f: mtof(m), dur: 0.22, gain: 0.07 * v, attack: 0.003 }),
+    pad: (t, notes, dur, v) => notes.forEach((m, i) => tone(A.music, t, { type: 'sawtooth', f: mtof(m), dur, gain: 0.022 * v, attack: 0.25, detune: i % 2 ? 7 : -7, filter: { f: 1400, q: 0.5 } }))
+  };
+  // r = nota del bajo, n = acorde (números MIDI). Cada compás tiene 16 pasos.
+  const SONGS = {
+    lobby: { bpm: 100, vol: 0.38, chords: [
+      { r: 36, n: [60, 64, 67, 71] }, { r: 45, n: [57, 60, 64, 67] }, { r: 41, n: [57, 60, 64, 65] }, { r: 43, n: [55, 59, 62, 67] }],
+      kick: [0, 7, 10], snare: [4, 12], clap: [], hat: [2, 6, 10, 14], ohat: [14],
+      bass: [[0, 0, 3], [3, 12, 1], [6, 0, 2], [8, 0, 3], [11, 12, 1], [14, 7, 2]],
+      pad: 1, arp: { steps: [0, 3, 6, 8, 11, 14], pattern: [0, 2, 1, 3, 2, 1], oct: 12, v: 0.8 } },
+    question: { bpm: 124, vol: 0.28, chords: [
+      { r: 45, n: [57, 60, 64] }, { r: 45, n: [57, 60, 64] }, { r: 41, n: [57, 60, 65] }, { r: 40, n: [56, 59, 64] }],
+      kick: [0, 4, 8, 12], snare: [], clap: [12], hat: 'all', ohat: [],
+      bass: [[0, 0, 1], [2, 12, 1], [4, 0, 1], [6, 12, 1], [8, 0, 1], [10, 12, 1], [12, 0, 1], [14, 12, 1]],
+      pad: 0.7, arp: { steps: [0, 3, 6, 10, 13], pattern: [2, 1, 0], oct: 12, v: 0.6 } },
+    standings: { bpm: 112, vol: 0.4, chords: [
+      { r: 41, n: [57, 60, 65] }, { r: 36, n: [55, 60, 64] }, { r: 38, n: [57, 62, 65] }, { r: 46, n: [58, 62, 65] }],
+      kick: [0, 8, 11], snare: [4, 12], clap: [12], hat: [2, 6, 10, 14], ohat: [],
+      bass: [[0, 0, 2], [3, 0, 1], [6, 12, 1], [8, 0, 2], [10, 7, 1], [13, 12, 2]],
+      pad: 1, arp: { steps: [0, 2, 4, 6, 8, 10, 12, 14], pattern: [0, 1, 2, 1], oct: 12, v: 0.9 } },
+    final: { bpm: 120, vol: 0.42, chords: [
+      { r: 36, n: [60, 64, 67] }, { r: 43, n: [59, 62, 67] }, { r: 45, n: [57, 60, 64] }, { r: 41, n: [57, 60, 65] }],
+      kick: [0, 4, 8, 12], snare: [4, 12], clap: [4, 12], hat: [2, 6, 10, 14], ohat: [6, 14],
+      bass: [[0, 0, 2], [3, 12, 1], [4, 0, 2], [8, 0, 2], [11, 12, 1], [12, 7, 2]],
+      pad: 1, arp: { steps: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], pattern: [0, 1, 2, 1], oct: 12, v: 0.55 } }
+  };
+  const SEQ = { mood: null, timer: 0, next: 0, step: 0, bar: 0, arp: 0, duck: 1 };
+  function moodFor(view) { return { lobby: 'lobby', question: 'question', standings: 'standings', final: 'final' }[view] || 'lobby'; }
+  function musicLevel() { const s = SONGS[SEQ.mood]; return (s ? s.vol : 0.4) * SEQ.duck; }
+  function musicSet(mood) {
+    if (!A.ctx || current !== 'tv') return;
+    if (SEQ.mood !== mood) { SEQ.mood = mood; SEQ.step = 0; SEQ.bar = 0; SEQ.arp = 0; }
+    A.music.gain.setTargetAtTime(musicLevel(), A.ctx.currentTime, 0.3);
+    if (!SEQ.timer) { SEQ.next = A.ctx.currentTime + 0.08; SEQ.timer = setInterval(musicTick, 25); }
+  }
+  function musicStop() {
+    clearInterval(SEQ.timer);
+    SEQ.timer = 0; SEQ.mood = null;
+    if (A.ctx) A.music.gain.setTargetAtTime(0, A.ctx.currentTime, 0.1);
+  }
+  function musicDuck(on) {
+    SEQ.duck = on ? 0.25 : 1;
+    if (A.ctx && SEQ.mood) A.music.gain.setTargetAtTime(musicLevel(), A.ctx.currentTime, 0.2);
+  }
+  function playStep(song, s, b, t, sd) {
+    const ch = song.chords[b];
+    if (song.kick.includes(s)) INST.kick(t);
+    if (song.snare.includes(s)) INST.snare(t);
+    if (song.clap.includes(s)) INST.clap(t);
+    if (song.hat === 'all' || song.hat.includes(s)) INST.hat(t, s % 4 === 2 ? 1 : 0.6, song.ohat.includes(s));
+    song.bass.forEach(([st, oct, len]) => { if (st === s) INST.bass(t, ch.r + oct, len * sd); });
+    if (s === 0 && song.pad) INST.pad(t, ch.n, sd * 16, song.pad);
+    if (song.arp && song.arp.steps.includes(s)) {
+      const p = song.arp.pattern;
+      INST.pluck(t, ch.n[p[SEQ.arp++ % p.length] % ch.n.length] + song.arp.oct, song.arp.v);
+    }
+  }
+  function musicTick() {
+    if (!A.ctx || A.ctx.state !== 'running' || !SEQ.mood) return;
+    const song = SONGS[SEQ.mood];
+    const sd = 60 / song.bpm / 4;
+    const t0 = A.ctx.currentTime;
+    if (SEQ.next < t0 - 0.25) SEQ.next = t0 + 0.05;
+    while (SEQ.next < t0 + 0.12) {
+      if (A.on) playStep(song, SEQ.step, SEQ.bar, SEQ.next, sd);
+      SEQ.next += sd;
+      SEQ.step = (SEQ.step + 1) % 16;
+      if (!SEQ.step) SEQ.bar = (SEQ.bar + 1) % song.chords.length;
+    }
+  }
+
+  // --- efectos de sonido para lo que aparece en la pantalla ---
+  function brass(t, m, dur, g) { tone(A.sfx, t, { type: 'sawtooth', f: mtof(m), dur, gain: g, attack: 0.03, filter: { f: 2600, f2: 900, q: 0.8 } }); }
+  const SFX = {
+    click() { if (!audioReady()) return; tone(A.sfx, A.ctx.currentTime, { type: 'square', f: 1500, dur: 0.035, gain: 0.04 }); },
+    join(n) {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime, b = [72, 74, 76, 79, 81][n % 5];
+      tone(A.sfx, t, { type: 'triangle', f: mtof(b), dur: 0.12, gain: 0.22 });
+      tone(A.sfx, t + 0.07, { type: 'triangle', f: mtof(b + 7), dur: 0.2, gain: 0.2 });
+    },
+    whoosh() {
+      if (!audioReady()) return;
+      noise(A.sfx, A.ctx.currentTime, { dur: 0.45, gain: 0.22, type: 'bandpass', f: 2500, f2: 350, q: 1.2, attack: 0.12 });
+    },
+    impact(t) {
+      tone(A.sfx, t, { f: 130, f2: 34, dur: 0.7, gain: 0.95 });
+      noise(A.sfx, t, { dur: 1.4, gain: 0.22, type: 'highpass', f: 3500 });
+      noise(A.sfx, t, { dur: 0.6, gain: 0.25, type: 'lowpass', f: 900, f2: 120 });
+    },
+    start() {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime;
+      noise(A.sfx, t, { dur: 0.95, gain: 0.26, type: 'bandpass', f: 250, f2: 6000, q: 1.1, attack: 0.85 });
+      tone(A.sfx, t, { type: 'sawtooth', f: 110, f2: 440, dur: 0.95, gain: 0.08, attack: 0.8, filter: { f: 600, f2: 3000 } });
+      SFX.impact(t + 0.95);
+      [60, 64, 67, 72].forEach(m => brass(t + 0.95, m, 0.6, 0.06));
+    },
+    question() {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime;
+      noise(A.sfx, t, { dur: 0.3, gain: 0.16, type: 'bandpass', f: 400, f2: 3500, q: 1, attack: 0.2 });
+      tone(A.sfx, t + 0.22, { f: mtof(84), dur: 0.3, gain: 0.22 });
+      tone(A.sfx, t + 0.36, { f: mtof(91), dur: 0.5, gain: 0.22 });
+    },
+    answer(n) {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime, m = 76 + Math.min(n, 14);
+      tone(A.sfx, t, { f: mtof(m), dur: 0.1, gain: 0.13 });
+      tone(A.sfx, t + 0.04, { type: 'triangle', f: mtof(m + 12), dur: 0.08, gain: 0.05 });
+    },
+    tick(sec) {
+      if (!audioReady()) return;
+      const f = sec <= 3 ? 1760 : 1320;
+      tone(A.sfx, A.ctx.currentTime, { type: 'square', f, dur: 0.07, gain: sec <= 3 ? 0.12 : 0.08, filter: { type: 'bandpass', f, q: 5 } });
+    },
+    timeUp() {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime;
+      tone(A.sfx, t, { type: 'sawtooth', f: 146.8, dur: 0.8, gain: 0.2, attack: 0.01, filter: { f: 1400, f2: 500 } });
+      tone(A.sfx, t, { type: 'sawtooth', f: 155.6, dur: 0.8, gain: 0.18, attack: 0.01, filter: { f: 1400, f2: 500 } });
+      SFX.impact(t + 0.05);
+    },
+    podium(place) {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime, m = { 3: 67, 2: 72, 1: 76 }[place], long = place === 1 ? 1.1 : 0.55;
+      tone(A.sfx, t, { f: 190, f2: 70, dur: 0.4, gain: 0.7 });
+      noise(A.sfx, t, { dur: 0.18, gain: 0.18, type: 'bandpass', f: 1600, q: 0.9 });
+      brass(t, m, long, 0.11);
+      brass(t, m - 12, long, 0.07);
+      if (place === 1) {
+        [84, 88, 91, 96].forEach((n, i) => tone(A.sfx, t + 0.12 + i * 0.07, { type: 'triangle', f: mtof(n), dur: 0.45, gain: 0.1 }));
+        noise(A.sfx, t, { dur: 1.3, gain: 0.16, type: 'highpass', f: 4500 });
+      }
+    },
+    winner() {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime;
+      [[67, 0, 0.13], [67, 0.15, 0.13], [67, 0.3, 0.13], [72, 0.45, 1.6]].forEach(([m, o, d]) => { brass(t + o, m, d, 0.14); brass(t + o, m - 12, d, 0.06); });
+      [64, 67, 72, 76].forEach(m => brass(t + 0.45, m, 1.7, 0.045));
+      for (let i = 0; i < 8; i++) tone(A.sfx, t + i * 0.05, { f: 95, f2: 70, dur: 0.12, gain: 0.25 });
+      SFX.impact(t + 0.45);
+    },
+    newRound() {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime;
+      [79, 74, 67].forEach((m, i) => tone(A.sfx, t + i * 0.09, { type: 'triangle', f: mtof(m), dur: 0.18, gain: 0.16 }));
+    }
+  };
+  $('#tv-sound').addEventListener('click', () => {
+    if (audioReady()) A.on = false;
+    else { A.on = true; audioUnlock(); }
+    lsSet(SOUND_KEY, A.on ? 'on' : 'off');
+    if (A.ctx) A.master.gain.setTargetAtTime(A.on ? 0.9 : 0, A.ctx.currentTime, 0.05);
+    if (A.on) musicSet(moodFor(tvView()));
+    updateSoundBtn();
+  });
+  // Si la TV se recargó, el primer toque en cualquier parte de la pantalla vuelve a activar el sonido.
+  $('#s-tv').addEventListener('pointerdown', () => { if (A.on && (!A.ctx || A.ctx.state !== 'running')) audioUnlock(); });
+
+  // ---------- “¡SE ACABÓ!” y podio de los 3 primeros al cerrar cada reto ----------
+  const ST = { active: false, q: -1, timers: [] };
+  function fillPod(place, t) {
+    const pod = $('#pod-' + place);
+    pod.classList.remove('on');
+    pod.style.visibility = t ? 'visible' : 'hidden';
+    if (!t) return;
+    const cs = CASE_BY_ID[t.caseId];
+    pod.querySelector('.pod-name').textContent = t.name;
+    pod.querySelector('.pod-meta').textContent = `${cs ? cs.brand : 'Marca'} · ${plural(t.correct, 'acierto', 'aciertos')}`;
+    pod.querySelector('.pod-pts').textContent = `${t.score} pts`;
+  }
+  function runShowtime(q) {
+    endShowtime(true);
+    const el = $('#showtime');
+    ST.active = true;
+    ST.q = q;
+    el.classList.remove('stage-podium');
+    $('#st-sub').textContent = q >= Q_COUNT - 1 ? `Último reto · ${pad(q + 1)} de ${Q_COUNT}` : `Reto ${pad(q + 1)} de ${Q_COUNT}`;
+    [1, 2, 3].forEach(p => fillPod(p, null));
+    el.hidden = false;
+    const word = $('#st-word');
+    word.classList.remove('go'); void word.offsetWidth; word.classList.add('go');
+    SFX.timeUp();
+    musicDuck(true);
+    const at = (ms, fn) => ST.timers.push(setTimeout(fn, ms));
+    at(1500, () => {
+      // Para este momento ya llegaron las respuestas del último segundo: el podio usa la tabla actual.
+      const ranked = rankTeams(LIVE.teams);
+      [1, 2, 3].forEach(p => fillPod(p, ranked[p - 1] || null));
+      el.classList.add('stage-podium');
+    });
+    at(2100, () => showPod(3));
+    at(3000, () => showPod(2));
+    at(4000, () => showPod(1));
+    at(8200, () => endShowtime());
+  }
+  function showPod(place) {
+    const pod = $('#pod-' + place);
+    if (!ST.active || pod.style.visibility === 'hidden') return;
+    pod.classList.add('on');
+    SFX.podium(place);
+    if (place === 1) sparkle($('#st-canvas'));
+  }
+  function endShowtime(silent) {
+    ST.timers.forEach(clearTimeout);
+    ST.timers = [];
+    if (!ST.active) return;
+    ST.active = false;
+    $('#showtime').hidden = true;
+    musicDuck(false);
+    if (!silent) { SFX.whoosh(); staggerRows(); }
+  }
+  $('#showtime').addEventListener('click', () => endShowtime());
+  function sparkle(cv) {
+    if (RM) return;
+    const ctx = cv.getContext('2d');
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = cv.width = Math.floor(innerWidth * dpr), H = cv.height = Math.floor(innerHeight * dpr);
+    const css = getComputedStyle(document.documentElement);
+    const cols = ['--gold', '--accent', '--cyan', '--paper'].map(v => css.getPropertyValue(v).trim());
+    const P = Array.from({ length: 140 }, () => {
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2, sp = (6 + Math.random() * 9) * dpr;
+      return { x: W / 2, y: H * 0.55, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, s: (3 + Math.random() * 5) * dpr, c: cols[Math.floor(Math.random() * cols.length)], r: Math.random() * 6 };
+    });
+    const t0 = performance.now();
+    (function frame(nowT) {
+      const t = nowT - t0;
+      ctx.clearRect(0, 0, W, H);
+      P.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.25 * dpr; p.vx *= 0.99; p.r += 0.2;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, 1 - t / 2600);
+        ctx.translate(p.x, p.y); ctx.rotate(p.r);
+        ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * 0.6);
+        ctx.restore();
+      });
+      if (t < 2600 && ST.active) requestAnimationFrame(frame); else ctx.clearRect(0, 0, W, H);
+    })(t0);
+  }
+
+  // ---------- efectos de la TV: detecta qué cambió desde el último cuadro ----------
+  let tvPrev = null, chipSeen = new Map(), chipsInit = false, leaderId = null;
+  function resetTvFx() { tvPrev = null; chipSeen = new Map(); chipsInit = false; leaderId = null; }
+  function staggerRows() {
+    if (RM) return;
+    [...$('#board').children].forEach((el, i) => el.animate(
+      [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 420, delay: i * 40, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+  }
+  function retrigger(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+  function tvFx(view, c, ranked) {
+    const ans = view === 'question' ? answeredCount(LIVE.teams, c.q) : 0;
+    const secs = view === 'question' ? Math.ceil(Math.max(0, c.startedAt + Q_MS - now()) / 1000) : 0;
+    const p = tvPrev;
+    tvPrev = { view, q: c.q, n: ranked.length, ans, secs };
+    if (ST.active && (view !== 'standings' || c.q !== ST.q)) endShowtime(true);
+    if (!p) { musicSet(moodFor(view)); return; }
+    if (view !== p.view || c.q !== p.q) {
+      retrigger($('#tv-stage'), 'in');
+      if (view === 'question' && p.view === 'lobby') SFX.start();
+      else if (view === 'question') SFX.question();
+      else if (view === 'standings' && p.view === 'question' && c.q === p.q) runShowtime(c.q);
+      else if (view === 'lobby' && p.view !== 'lobby') SFX.newRound();
+      musicSet(moodFor(view));
+    }
+    if (view === 'lobby' && ranked.length > p.n) SFX.join(ranked.length);
+    if (view === 'question' && c.q === p.q && ans > p.ans) SFX.answer(ans);
+    if (view === 'question' && secs !== p.secs && secs > 0) {
+      if (secs <= 5) SFX.tick(secs);
+      if (secs <= 8 && !RM) retrigger($('#tv-count-box'), 'beat');
     }
   }
 

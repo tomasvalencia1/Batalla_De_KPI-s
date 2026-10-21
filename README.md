@@ -98,9 +98,11 @@ Usa dos aparatos distintos, por ejemplo el computador para la TV y tu celular co
 1. **TV:** abre la página → **Pantalla del salón** → contraseña → **Pantalla completa**.
 2. **Jugadores:** escanean el QR, escriben su nombre, sortean su marca y tocan **Estoy listo**.
 3. **Anfitrión:** cuando estén todos, toca **Empezar la batalla**.
-4. Cada reto dura 35 segundos. Cuando todos responden o se acaba el tiempo, la TV muestra las posiciones, con flechas de quién subió o bajó. Si alguien se demora, puedes tocar **Cerrar reto**.
+4. Cada reto dura 35 segundos. Cuando todos responden o se acaba el tiempo, la TV muestra la animación **¡SE ACABÓ!** con el podio de los 3 primeros y luego la tabla de posiciones, con flechas de quién subió o bajó. Tocar la pantalla salta la animación. Si alguien se demora, puedes tocar **Cerrar reto**.
 5. Toca **Siguiente reto** para continuar. Después del reto 15 aparece **Anunciar ganador**.
 6. Para jugar otra vez con otro grupo, toca **Nueva partida**. Eso borra los puntajes de la partida anterior.
+
+**Sonido:** la TV pone música de fondo (distinta en la sala de espera, los retos, la pausa y el final) y efectos para cada cosa que aparece. Todo se genera en el navegador, sin archivos de audio. Se activa al entrar con la contraseña. Si recargas la TV y no se oye, toca **Activar sonido**. Revisa también que el audio salga por el TV (cable HDMI) y que el volumen esté arriba. Los celulares no suenan.
 
 Si alguien recarga la página o se le bloquea el celular, el juego lo devuelve al reto en curso. Quien entra con la batalla ya empezada juega desde el reto actual.
 
