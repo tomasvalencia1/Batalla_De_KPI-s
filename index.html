@@ -727,6 +727,113 @@ input:focus { outline: none; border-color: var(--cyan); }
 .winner-card h2.go { animation: winIn 0.9s cubic-bezier(.2, 1.4, .35, 1) both; }
 @keyframes winIn { from { transform: scale(0.3); opacity: 0; letter-spacing: 0.3em; } }
 
+/* ---------- retos a ciegas ---------- */
+.lockb { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; background: color-mix(in srgb, var(--violet) 22%, var(--panel)); border: 1px solid var(--violet); color: var(--fg); font: 600 0.7rem/1 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.lockb svg { color: var(--violet); }
+.tv-blind { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 40px; align-items: center; padding: 40px 44px; border-radius: 22px; background: color-mix(in srgb, var(--violet) 14%, var(--panel)); border: 2px dashed var(--violet); }
+.tvb-lock { width: 9rem; height: auto; color: var(--violet); animation: lockBob 2.4s ease-in-out infinite; }
+@keyframes lockBob { 50% { transform: translateY(-8px) rotate(-3deg); } }
+.tvb-title { display: block; font: 900 clamp(3rem, 6vw, 6rem)/0.9 var(--f-display); text-transform: uppercase; margin: 8px 0 12px; }
+.tvb-left { font: 900 2.2rem/1 var(--f-display); color: var(--gold); text-transform: uppercase; margin-top: 16px; }
+.showtime.secret .podium { visibility: hidden; }
+.st-secret { display: none; flex-direction: column; align-items: center; gap: 12px; text-align: center; color: var(--fg); }
+.showtime.secret.stage-podium .st-secret { display: flex; animation: stageIn 0.5s ease both; }
+.st-secret svg { width: clamp(80px, 9vw, 140px); height: auto; color: var(--violet); animation: lockBob 2.4s ease-in-out infinite; }
+.st-secret b { font: 900 clamp(2.8rem, 6vw, 5.6rem)/0.9 var(--f-display); text-transform: uppercase; }
+.st-secret span { font-size: clamp(1rem, 1.8vw, 1.6rem); color: var(--muted); }
+.blindintro { background-color: #0A0716; overflow: hidden; cursor: pointer; }
+.bi-pulse { position: absolute; inset: -20%; background: radial-gradient(circle, color-mix(in srgb, var(--violet) 34%, transparent) 0%, transparent 55%); animation: biPulse 1.2s ease-in-out infinite; }
+@keyframes biPulse { 50% { opacity: 0.35; transform: scale(1.08); } }
+.bi-inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2.4vh; text-align: center; max-width: 1200px; }
+.bi-kick { font: 600 clamp(0.9rem, 1.6vw, 1.3rem) var(--f-mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--violet); }
+.bi-title { font: 900 clamp(4rem, 12vw, 11rem)/0.85 var(--f-display); text-transform: uppercase; color: var(--fg); text-shadow: 0 0 0.35em color-mix(in srgb, var(--violet) 70%, transparent); }
+.blindintro.go .bi-title { animation: slam 0.65s cubic-bezier(.2, 1.5, .35, 1) both; }
+.bi-lock { width: clamp(80px, 10vw, 150px); height: auto; color: var(--gold); opacity: 0; transform: scale(0.5); transition: opacity 0.35s ease, transform 0.5s cubic-bezier(.2, 1.5, .4, 1); }
+.blindintro.lock-in .bi-lock { opacity: 1; transform: none; }
+.bi-shackle { transform: translateY(-14px); transition: transform 0.22s cubic-bezier(.6, 0, .9, .3); }
+.blindintro.locked .bi-shackle { transform: none; }
+.blindintro.locked .bi-lock { animation: lockHit 0.45s ease; }
+@keyframes lockHit { 35% { transform: scale(1.18) rotate(-7deg); } }
+.bi-sub { max-width: 34ch; font-size: clamp(1.1rem, 2.3vw, 2.1rem); line-height: 1.35; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.bi-sub b { color: var(--gold); }
+.blindintro.sub .bi-sub { opacity: 1; transform: none; }
+
+/* ---------- revelación del ganador ---------- */
+.reveal { display: block; padding: 0; background: #04020A; overflow: hidden; }
+.reveal canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.rv-glow { position: absolute; inset: 0; background: radial-gradient(circle at 50% 42%, rgba(255, 201, 61, 0.34), rgba(255, 91, 58, 0.12) 35%, transparent 62%); opacity: 0; transition: opacity 1s ease; }
+.reveal.s-boom .rv-glow { opacity: 1; }
+.rv-rays { position: absolute; left: 50%; top: 45%; width: 260vmax; height: 260vmax; margin: -130vmax 0 0 -130vmax; background: repeating-conic-gradient(rgba(255, 201, 61, 0.13) 0 8deg, transparent 8deg 16deg); opacity: 0; animation: spin 30s linear infinite; transition: opacity 0.8s ease 0.2s; }
+.reveal.s-boom .rv-rays { opacity: 1; }
+.rv-spot { position: absolute; width: 48vw; height: 48vw; border-radius: 50%; background: radial-gradient(circle, rgba(255, 244, 214, 0.2) 0%, rgba(255, 244, 214, 0.06) 40%, transparent 66%); opacity: 0; transition: opacity 0.8s ease, left 1.1s ease, top 1.1s ease; pointer-events: none; }
+.reveal.s-dark .rv-spot { opacity: 1; }
+.rv-spot1 { left: -12vw; top: -14vh; animation: spotA 3.1s ease-in-out infinite alternate; }
+.rv-spot2 { left: 62vw; top: 26vh; animation: spotB 2.6s ease-in-out infinite alternate; }
+@keyframes spotA { to { transform: translate(58vw, 40vh); } }
+@keyframes spotB { to { transform: translate(-54vw, -16vh); } }
+.reveal.s-drum .rv-spot { animation: none; left: 26vw; top: 20vh; }
+.reveal.s-boom .rv-spot { opacity: 0; }
+.rv-flash { position: absolute; inset: 0; background: #FFF8E6; opacity: 0; pointer-events: none; }
+.reveal.s-boom .rv-flash { animation: rvFlash 1s ease-out both; }
+@keyframes rvFlash { 0% { opacity: 1; } 100% { opacity: 0; } }
+.rv-stage { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5vh; padding: 4vh max(16px, 4vw); text-align: center; }
+.rv-ask { font: 900 clamp(3rem, 7.5vw, 7.5rem)/0.9 var(--f-display); text-transform: uppercase; color: var(--fg); opacity: 0; transform: scale(0.85); transition: opacity 0.6s ease, transform 0.8s cubic-bezier(.2, 1.3, .4, 1); text-wrap: balance; }
+.reveal.s-ask .rv-ask { opacity: 1; transform: none; animation: heartbeat 1.1s ease-in-out infinite 0.8s; }
+@keyframes heartbeat { 0%, 100% { transform: scale(1); } 14% { transform: scale(1.05); } 28% { transform: scale(1); } 42% { transform: scale(1.035); } }
+.rv-ask .a2 { display: none; color: var(--gold); }
+.reveal.s-drum .rv-ask .a1 { display: none; }
+.reveal.s-drum .rv-ask .a2 { display: inline; }
+.reveal.s-boom .rv-ask { display: none; }
+.rv-cards { display: flex; align-items: flex-end; gap: 2.4vw; }
+.reveal.s-boom .rv-cards { display: none; }
+.rv-card {
+  --c: var(--gline);
+  position: relative;
+  width: clamp(170px, 20vw, 320px);
+  height: clamp(220px, 26vw, 380px);
+  border-radius: 22px;
+  background: var(--panel);
+  border: 3px solid var(--c);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: translateY(70px) scale(0.9);
+  transition: opacity 0.5s ease, transform 0.7s cubic-bezier(.2, 1.4, .4, 1);
+}
+.rv-card.c1 { --c: var(--gold); width: clamp(200px, 24vw, 380px); height: clamp(260px, 31vw, 450px); transition-delay: 0.15s; box-shadow: 0 0 60px rgba(255, 201, 61, 0.25); }
+.rv-card.c2 { --c: var(--silver); }
+.rv-card.c3 { --c: var(--bronze); transition-delay: 0.3s; }
+.reveal.s-cards .rv-card { opacity: 1; transform: none; }
+.rv-place { position: absolute; top: 16px; left: 0; right: 0; font: 600 clamp(0.75rem, 1.2vw, 1.1rem) var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--c); }
+.rv-q { font: 900 clamp(5.5rem, 12vw, 11rem)/1 var(--f-display); color: var(--c); transition: opacity 0.25s ease, transform 0.3s ease; }
+.rv-name { position: absolute; inset: 48px 14px 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; opacity: 0; transform: rotateY(90deg); transition: opacity 0.3s ease 0.2s, transform 0.5s cubic-bezier(.2, 1.3, .4, 1) 0.2s; }
+.rv-name b { font: 900 clamp(1.7rem, 3.3vw, 3.3rem)/0.95 var(--f-display); text-transform: uppercase; overflow-wrap: anywhere; }
+.rv-name span { font: 600 clamp(0.75rem, 1.2vw, 1.05rem) var(--f-mono); color: var(--muted); }
+.rv-name em { font: 900 clamp(1.4rem, 2.6vw, 2.6rem)/1 var(--f-display); font-style: normal; color: var(--c); }
+.reveal.s-r3 .c3 .rv-q, .reveal.s-r2 .c2 .rv-q { opacity: 0; transform: rotateY(90deg); }
+.reveal.s-r3 .c3 .rv-name, .reveal.s-r2 .c2 .rv-name { opacity: 1; transform: none; }
+.rv-champ { display: none; flex-direction: column; align-items: center; gap: 1.6vh; position: relative; }
+.reveal.s-boom .rv-champ { display: flex; }
+.rv-trophy { width: clamp(90px, 11vw, 170px); height: auto; color: var(--gold); filter: drop-shadow(0 0 30px rgba(255, 201, 61, 0.65)); animation: trophyIn 0.9s cubic-bezier(.2, 1.6, .4, 1) both 0.1s; }
+@keyframes trophyIn { from { transform: translateY(-60vh) rotate(-20deg); } }
+.rv-kicker { font: 600 clamp(1rem, 1.8vw, 1.5rem) var(--f-mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); animation: stageIn 0.5s ease both 0.5s; }
+.rv-win {
+  font: 900 clamp(4.5rem, 13vw, 13rem)/0.85 var(--f-display);
+  text-transform: uppercase;
+  color: var(--gold);
+  text-shadow: 0 0.05em 0 var(--accent-deep), 0 0 0.45em rgba(255, 201, 61, 0.55);
+  overflow-wrap: anywhere;
+  animation: winIn 0.9s cubic-bezier(.2, 1.4, .35, 1) both 0.25s, winGlow 1.6s ease-in-out infinite 1.4s;
+}
+@keyframes winGlow { 50% { text-shadow: 0 0.05em 0 var(--accent-deep), 0 0 0.9em rgba(255, 201, 61, 0.95); } }
+.rv-pts { font: 900 clamp(2.4rem, 5vw, 4.6rem)/1 var(--f-display); animation: stageIn 0.5s ease both 0.9s; font-variant-numeric: tabular-nums; }
+.rv-pts small { font: 600 0.32em var(--f-mono); letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; }
+.rv-meta { font-size: clamp(1.1rem, 2vw, 1.8rem); color: var(--fg); animation: stageIn 0.5s ease both 1.1s; }
+#rv-table { margin-top: 2vh; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.reveal.s-done #rv-table { opacity: 1; pointer-events: auto; }
+.winner-banner.champ { animation: champPop 0.9s cubic-bezier(.2, 1.5, .4, 1) both; box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 35%, transparent), 0 0 40px color-mix(in srgb, var(--gold) 45%, transparent); }
+@keyframes champPop { from { transform: scale(0.6); opacity: 0; } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
   .ticker-track, .st-rays, .winner .rays { animation: none; }
@@ -828,6 +935,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     <div class="qbar">
       <span class="chip" id="q-brand"><i></i><span></span></span>
       <span class="mono" id="q-num">Reto 01/15</span>
+      <span class="lockb" id="q-lock" hidden><svg viewBox="0 0 64 80" width="11" height="14" aria-hidden="true"><path d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/></svg>Tabla oculta</span>
       <span class="score-pill"><span class="mono">Pts</span><b id="q-score">0</b></span>
     </div>
     <div class="timer-row">
@@ -917,6 +1025,15 @@ input:focus { outline: none; border-color: var(--cyan); }
       </div>
       <div class="pts" id="tv-l-pts">0</div>
     </div>
+    <div class="tv-blind" id="tv-blind" hidden>
+      <svg class="tvb-lock" viewBox="0 0 64 80" aria-hidden="true"><path d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/><circle cx="32" cy="50" r="5" fill="#130F26"/><rect x="29.5" y="52" width="5" height="10" rx="2" fill="#130F26"/></svg>
+      <div>
+        <p class="eyebrow" style="color: var(--violet);">Retos a ciegas</p>
+        <b class="tvb-title">Tabla oculta</b>
+        <p class="lede">Nadie sabe quién va ganando. Las posiciones se revelan cuando se anuncie al ganador.</p>
+        <p class="tvb-left" id="tv-blind-left"></p>
+      </div>
+    </div>
     <div class="board" id="board" hidden></div>
     <div class="tv-empty" id="tv-empty"><b>Esperando jugadores</b><p class="muted">Cada jugador aparecerá aquí apenas sortee su marca.</p></div>
   </section>
@@ -962,7 +1079,50 @@ input:focus { outline: none; border-color: var(--cyan); }
       <div class="pod p3" id="pod-3"><div class="pod-who"><div class="pod-name"></div><div class="pod-meta"></div><div class="pod-pts"></div></div><div class="pod-bar">3</div></div>
     </div>
   </div>
+  <div class="st-secret" aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 42%;">
+    <svg viewBox="0 0 64 80"><path d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/><circle cx="32" cy="50" r="5" fill="#130F26"/><rect x="29.5" y="52" width="5" height="10" rx="2" fill="#130F26"/></svg>
+    <b>Tabla oculta</b>
+    <span>¿Quién va ganando? Se sabrá cuando se revele al ganador.</span>
+  </div>
   <p class="st-skip">Toca la pantalla para ver la tabla</p>
+</div>
+
+<!-- aviso: empiezan los retos a ciegas -->
+<div class="overlay blindintro" id="blindintro" hidden>
+  <div class="bi-pulse" aria-hidden="true"></div>
+  <div class="bi-inner" role="status" aria-live="assertive">
+    <p class="bi-kick">Atención, salón</p>
+    <h2 class="bi-title">¡Últimos 4 retos!</h2>
+    <svg class="bi-lock" viewBox="0 0 64 80" aria-hidden="true"><path class="bi-shackle" d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/><circle cx="32" cy="50" r="5" fill="#130F26"/><rect x="29.5" y="52" width="5" height="10" rx="2" fill="#130F26"/></svg>
+    <p class="bi-sub"><b>La tabla se esconde.</b> Desde ahora nadie sabrá quién va ganando hasta que se revele al ganador.</p>
+  </div>
+  <p class="st-skip">Toca la pantalla para empezar el reto 12</p>
+</div>
+
+<!-- revelación del ganador: suspenso → celebración -->
+<div class="overlay reveal" id="reveal" hidden>
+  <div class="rv-glow" aria-hidden="true"></div>
+  <div class="rv-rays" aria-hidden="true"></div>
+  <div class="rv-spot rv-spot1" aria-hidden="true"></div>
+  <div class="rv-spot rv-spot2" aria-hidden="true"></div>
+  <canvas id="rv-canvas" aria-hidden="true"></canvas>
+  <div class="rv-stage" role="status" aria-live="polite">
+    <p class="rv-ask"><span class="a1">¿Quién ganó la Batalla de <span class="nt">KPIs</span>?</span><span class="a2">Y el campeón es…</span></p>
+    <div class="rv-cards">
+      <div class="rv-card c2" id="rv-c2"><div class="rv-place">2.º lugar</div><div class="rv-q">?</div><div class="rv-name"><b></b><span></span><em></em></div></div>
+      <div class="rv-card c1" id="rv-c1"><div class="rv-place">1.er lugar</div><div class="rv-q" id="rv-scr">?</div></div>
+      <div class="rv-card c3" id="rv-c3"><div class="rv-place">3.er lugar</div><div class="rv-q">?</div><div class="rv-name"><b></b><span></span><em></em></div></div>
+    </div>
+    <div class="rv-champ">
+      <svg class="rv-trophy" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28v12a14 14 0 0 1-28 0z" fill="currentColor"/><path d="M18 12h-8a9 9 0 0 0 10 12M46 12h8a9 9 0 0 1-10 12" fill="none" stroke="currentColor" stroke-width="4"/><rect x="29" y="33" width="6" height="11" fill="currentColor"/><rect x="20" y="44" width="24" height="8" rx="2" fill="currentColor"/></svg>
+      <p class="rv-kicker">¡Campeón de la Batalla de <span class="nt">KPIs</span>!</p>
+      <h2 class="rv-win" id="rv-win"></h2>
+      <p class="rv-pts"><b id="rv-ptsn">0</b> <small>puntos</small></p>
+      <p class="rv-meta" id="rv-meta"></p>
+      <button class="btn" id="rv-table" type="button">Ver tabla completa</button>
+    </div>
+  </div>
+  <div class="rv-flash" aria-hidden="true"></div>
 </div>
 
 <!-- winner -->
@@ -985,6 +1145,10 @@ input:focus { outline: none; border-color: var(--cyan); }
   'use strict';
 
   const Q_COUNT = 15, Q_MS = 35000, BASE = 100, BONUS = 50;
+  // Los últimos 4 retos se juegan “a ciegas”: la tabla se esconde hasta que se revela al ganador.
+  // SUSPENSE_MS: lo que dura el suspenso en la TV antes de mostrar el nombre del ganador.
+  const BLIND_FROM = Q_COUNT - 4, SUSPENSE_MS = 9000;
+  const isBlind = q => q >= BLIND_FROM;
   // Contraseña de la pantalla del salón dentro de claude.ai: solo se guarda su huella PBKDF2 (no la contraseña).
   // En la versión web esta línea queda en null: la contraseña es la del usuario anfitrión de Firebase Authentication.
   const PW = null;
@@ -1698,7 +1862,7 @@ input:focus { outline: none; border-color: var(--cyan); }
   // 'artifact': dentro de claude.ai, con la base de datos del artifact.
   // 'firebase': como página web (Vercel), con Firebase Realtime Database (los datos del proyecto van en config.js).
   // Sin conexión: cada jugador avanza a su ritmo en modo individual.
-  const FRESH_CFG = { phase: 'lobby', q: 0, startedAt: 0, closed: false, revealed: false };
+  const FRESH_CFG = { phase: 'lobby', q: 0, startedAt: 0, closed: false, revealed: false, revealAt: 0 };
   const LIVE = { mode: null, db: null, round: 'inicio', cfg: { ...FRESH_CFG }, cfgLoaded: false, teams: [], unsubTeams: null, writable: true, isAdmin: false, status: 'connecting', netDown: false, offset: null, fbError: null };
   let winnerDismissed = false, prevRanks = null;
   let liveReadyResolve;
@@ -1727,7 +1891,8 @@ input:focus { outline: none; border-color: var(--cyan); }
       q: Number.isInteger(d.q) ? Math.max(0, Math.min(Q_COUNT - 1, d.q)) : 0,
       startedAt: Number(d.startedAt) || 0,
       closed: d.closed === true,
-      revealed: d.revealed === true
+      revealed: d.revealed === true,
+      revealAt: Number(d.revealAt) || 0
     };
   }
   function cleanTeam(id, d) {
@@ -1959,11 +2124,12 @@ input:focus { outline: none; border-color: var(--cyan); }
   }
   // Mismas reglas que el servidor (api/admin.js) para pasar de una fase a otra.
   function nextConfig(c, action, fromQ) {
-    const base = { round: LIVE.round, phase: c.phase, q: c.q, startedAt: c.startedAt, closed: c.closed, revealed: c.revealed, updatedAt: Date.now() };
+    const base = { round: LIVE.round, phase: c.phase, q: c.q, startedAt: c.startedAt, closed: c.closed, revealed: c.revealed, revealAt: c.revealAt || 0, updatedAt: Date.now() };
     if (action === 'start' && c.phase === 'lobby') return { ...base, phase: 'question', q: 0, startedAt: Date.now(), closed: false, revealed: false };
     if (action === 'close' && c.phase === 'question' && fromQ === c.q) return { ...base, closed: true };
     if (action === 'next' && c.phase === 'question' && fromQ === c.q && c.q < Q_COUNT - 1) return { ...base, q: c.q + 1, startedAt: Date.now(), closed: false };
-    if (action === 'final' && c.phase === 'question') return { ...base, phase: 'final', closed: true, revealed: true };
+    // revealAt: hora (del servidor) en que la TV muestra el nombre del ganador; los celulares esperan hasta ese momento.
+    if (action === 'final' && c.phase === 'question') return { ...base, phase: 'final', closed: true, revealed: true, revealAt: Math.round(now()) + SUSPENSE_MS };
     if (action === 'newRound') return { round: 'r-' + rid(), ...FRESH_CFG, updatedAt: Date.now() };
     return null;
   }
@@ -2144,6 +2310,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     chip.style.setProperty('--c', c.color);
     chip.querySelector('span').textContent = c.brand;
     $('#q-num').textContent = `Reto ${pad(q + 1)}/${pad(Q_COUNT)}`;
+    $('#q-lock').hidden = !(isLive() && isBlind(q));
     $('#q-score').textContent = G.score;
   }
   function renderQuestion(q) {
@@ -2237,12 +2404,17 @@ input:focus { outline: none; border-color: var(--cyan); }
     const answered = teams.filter(t => t.results[st.q] !== null).length;
     const over = st.closed || now() >= st.startedAt + Q_MS || (teams.length > 0 && answered >= teams.length);
     $('#fb-wait-msg').textContent = over
-      ? (st.q >= Q_COUNT - 1 ? 'Último reto cerrado. El anfitrión va a anunciar al ganador.' : 'Reto cerrado. Mira las posiciones en la pantalla del salón; el anfitrión pasará al siguiente reto.')
+      ? (st.q >= Q_COUNT - 1 ? 'Último reto cerrado. Mira la pantalla: el anfitrión va a revelar al ganador.'
+        : isBlind(st.q) ? 'Reto cerrado. La tabla está oculta: el ganador se revela al final.'
+        : 'Reto cerrado. Mira las posiciones en la pantalla del salón; el anfitrión pasará al siguiente reto.')
       : 'Respuesta enviada. Espera a que el resto del salón termine este reto.';
     const ranks = rankMap(teams);
     const r = ranks.get(G.teamId);
     const place = $('#fb-place');
-    if (r) {
+    if (isBlind(st.q)) {
+      place.innerHTML = '<span class="mono">Tu puesto</span><b>?</b><span class="muted">la tabla está oculta hasta el final</span>';
+      place.hidden = false;
+    } else if (r) {
       place.innerHTML = `<span class="mono">Tu puesto ahora</span><b>#${r}</b><span class="muted">de ${plural(teams.length, 'jugador', 'jugadores')}</span>`;
       place.hidden = false;
     } else place.hidden = true;
@@ -2268,6 +2440,7 @@ input:focus { outline: none; border-color: var(--cyan); }
   }
 
   // ---------- final ----------
+  let endTimer = 0;
   function renderEnd() {
     if (!G) return;
     const c = caseOf(G);
@@ -2280,6 +2453,17 @@ input:focus { outline: none; border-color: var(--cyan); }
     $('#end-dots').innerHTML = G.picks.map(p => `<i class="${p && !p.skipped ? (p.ok ? 'ok' : 'no') : ''}"></i>`).join('');
     const pos = $('#end-pos');
     const win = $('#end-winner');
+    clearTimeout(endTimer);
+    // El ganador es secreto hasta que la TV lo revela (revealAt): mientras tanto, nada de puestos.
+    if (isLive() && G.round === LIVE.round && LIVE.cfg.phase === 'final' && now() < LIVE.cfg.revealAt) {
+      pos.hidden = true;
+      win.classList.remove('champ');
+      win.innerHTML = '<span class="mono">Atento a la pantalla del salón</span><b>Revelando al ganador…</b><span>Tu puesto final aparece aquí en cuanto se anuncie.</span>';
+      win.hidden = false;
+      endTimer = setTimeout(renderEnd, Math.max(60, LIVE.cfg.revealAt - now() + 80));
+      updateSyncUI();
+      return;
+    }
     if (isLive() && G.round === LIVE.round) {
       const ranked = rankTeams(LIVE.teams);
       const i = ranked.findIndex(t => t.id === G.teamId);
@@ -2289,6 +2473,7 @@ input:focus { outline: none; border-color: var(--cyan); }
       } else pos.hidden = true;
       if (LIVE.cfg.revealed && ranked.length) {
         const w = ranked[0];
+        win.classList.toggle('champ', w.id === G.teamId);
         win.innerHTML = w.id === G.teamId
           ? `<span class="mono">Resultado oficial</span><b>¡Ganaste la Batalla de <span class="nt">KPIs</span>!</b>`
           : `<span class="mono">Ganador de la batalla</span><b>${esc(w.name)}</b><span>${w.score} pts · ${w.correct} aciertos</span>`;
@@ -2352,6 +2537,8 @@ input:focus { outline: none; border-color: var(--cyan); }
     clearInterval(tvTimer);
     musicStop();
     endShowtime(true);
+    blindStop();
+    revealStop();
     // Al salir, la TV deja de ser anfitrión y vuelve a una sesión anónima.
     if (LIVE.mode === 'firebase' && LIVE.isAdmin) { LIVE.isAdmin = false; FB.m.signOut(FB.auth).catch(() => {}); }
     try { if (wake) wake.release(); } catch {}
@@ -2387,7 +2574,9 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (e.key !== 'Escape') return;
     if (!$('#cf').hidden) $('#cf-no').click();
     else if (!$('#pw').hidden) $('#pw-cancel').click();
+    else if (!$('#blindintro').hidden) blindSkip();
     else if (!$('#showtime').hidden) endShowtime();
+    else if (!$('#reveal').hidden && $('#reveal').classList.contains('s-done')) $('#rv-table').click();
     else if (!$('#winner').hidden) $('#w-close').click();
   });
 
@@ -2409,7 +2598,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     SFX.click();
     const view = tvView();
     const c = LIVE.cfg;
-    if (view === 'final') { winnerDismissed = false; renderTV(); return; }
+    if (view === 'final') { revealReopen(); return; }
     let action = null;
     if (view === 'lobby') action = 'start';
     else if (view === 'question') {
@@ -2418,6 +2607,8 @@ input:focus { outline: none; border-color: var(--cyan); }
       if (!go) return;
       action = 'close';
     } else if (view === 'standings') action = c.q >= Q_COUNT - 1 ? 'final' : 'next';
+    // Antes del reto 12 la TV avisa que empiezan los retos a ciegas; al terminar el aviso pasa sola al reto.
+    if (action === 'next' && c.q + 1 === BLIND_FROM) { runBlindIntro(); return; }
     if (!action) return;
     busy = true; renderTV();
     try { await adminAction(action); }
@@ -2494,12 +2685,13 @@ input:focus { outline: none; border-color: var(--cyan); }
       standings: `Pausa · posiciones después del reto ${pad(c.q + 1)} de ${Q_COUNT}`,
       final: 'Resultado final'
     }[view];
+    if (isBlind(c.q) && (view === 'question' || view === 'standings')) $('#tv-stage').textContent += ' · tabla oculta';
 
     const main = $('#tv-main');
     main.textContent = {
       lobby: 'Empezar la batalla',
       question: 'Cerrar reto',
-      standings: c.q >= Q_COUNT - 1 ? 'Anunciar ganador' : `Siguiente reto (${pad(c.q + 2)})`,
+      standings: c.q >= Q_COUNT - 1 ? 'Revelar ganador' : `Siguiente reto (${pad(c.q + 2)})`,
       final: 'Mostrar ganador'
     }[view];
     main.disabled = busy || (view !== 'final' && !canAdmin()) || (view === 'lobby' && !ranked.length);
@@ -2509,9 +2701,16 @@ input:focus { outline: none; border-color: var(--cyan); }
     $('#tv-question').hidden = view !== 'question';
     $('#tv-chips').hidden = !(view === 'lobby' || view === 'question') || !ranked.length;
     $('#tv-empty').hidden = !(view === 'lobby' && !ranked.length);
-    const showBoard = view === 'standings' || view === 'final';
+    // En los retos a ciegas la pausa no muestra posiciones: solo el candado y cuántos retos faltan.
+    const secretView = view === 'standings' && isBlind(c.q);
+    const showBoard = (view === 'standings' && !secretView) || view === 'final';
     $('#board').hidden = !showBoard || !ranked.length;
     $('#tv-leader').hidden = !showBoard || !ranked.length;
+    $('#tv-blind').hidden = !secretView;
+    if (secretView) {
+      const left = Q_COUNT - 1 - c.q;
+      $('#tv-blind-left').textContent = left > 0 ? `Faltan ${plural(left, 'reto', 'retos')}` : 'Terminaron los 15 retos';
+    }
 
     if (view === 'question') {
       const left = Math.max(0, c.startedAt + Q_MS - now());
@@ -2525,13 +2724,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (view === 'lobby' || view === 'question') renderChips(ranked, view);
     if (showBoard && ranked.length) { renderLeader(ranked, view); renderBoard(ranked, view); }
 
-    const w = $('#winner');
-    if (view === 'final' && ranked.length && !winnerDismissed) {
-      const t = ranked[0], cs = CASE_BY_ID[t.caseId];
-      $('#w-name').textContent = t.name;
-      $('#w-meta').textContent = `${t.score} puntos · ${t.correct} de ${Q_COUNT} aciertos · ${cs ? cs.brand : 'Marca'}`;
-      if (w.hidden) { w.hidden = false; endShowtime(true); retrigger($('#w-name'), 'go'); confetti(); SFX.winner(); $('#w-close').focus(); }
-    } else if (!w.hidden) w.hidden = true;
+    revealTick(view, ranked);
     tvFx(view, c, ranked);
   }
   function renderChips(ranked, view) {
@@ -2745,7 +2938,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (A.ctx) A.music.gain.setTargetAtTime(0, A.ctx.currentTime, 0.1);
   }
   function musicDuck(on) {
-    SEQ.duck = on ? 0.25 : 1;
+    SEQ.duck = on === true ? 0.25 : on === false ? 1 : on;
     if (A.ctx && SEQ.mood) A.music.gain.setTargetAtTime(musicLevel(), A.ctx.currentTime, 0.2);
   }
   function playStep(song, s, b, t, sd) {
@@ -2890,6 +3083,15 @@ input:focus { outline: none; border-color: var(--cyan); }
     SFX.timeUp();
     musicDuck(true);
     const at = (ms, fn) => ST.timers.push(setTimeout(fn, ms));
+    // Retos a ciegas: en lugar del podio, un candado. Nadie ve quién va ganando.
+    const secret = isBlind(q);
+    el.classList.toggle('secret', secret);
+    if (secret) {
+      $('#st-sub').textContent += ' · tabla oculta';
+      at(1500, () => { el.classList.add('stage-podium'); SFX.lock(); });
+      at(6200, () => endShowtime());
+      return;
+    }
     at(1500, () => {
       // Para este momento ya llegaron las respuestas del último segundo: el podio usa la tabla actual.
       const ranked = rankTeams(LIVE.teams);
@@ -2977,6 +3179,201 @@ input:focus { outline: none; border-color: var(--cyan); }
       if (secs <= 8 && !RM) retrigger($('#tv-count-box'), 'beat');
     }
   }
+
+  // ---------- aviso “¡Últimos 4 retos!” (la tabla se esconde) ----------
+  const BI = { active: false, timers: [] };
+  SFX.lock = () => {
+    if (!audioReady()) return;
+    const t = A.ctx.currentTime;
+    noise(A.sfx, t, { dur: 0.04, gain: 0.3, type: 'bandpass', f: 3200, q: 2 });
+    noise(A.sfx, t + 0.06, { dur: 0.05, gain: 0.25, type: 'bandpass', f: 2200, q: 2 });
+    tone(A.sfx, t + 0.06, { type: 'square', f: 1900, dur: 0.05, gain: 0.05 });
+    tone(A.sfx, t, { f: 120, f2: 60, dur: 0.25, gain: 0.35 });
+  };
+  SFX.blind = () => {
+    if (!audioReady()) return;
+    const t = A.ctx.currentTime;
+    SFX.impact(t);
+    tone(A.sfx, t, { type: 'sawtooth', f: 220, f2: 55, dur: 1.4, gain: 0.12, filter: { f: 1600, f2: 200 } });
+    tone(A.sfx, t + 0.2, { f: 55, dur: 5.5, gain: 0.14, attack: 1.5 });
+    tone(A.sfx, t + 0.2, { f: 58.3, dur: 5.5, gain: 0.08, attack: 1.8 });
+  };
+  function runBlindIntro() {
+    if (BI.active || busy) return;
+    BI.active = true;
+    const el = $('#blindintro');
+    el.className = 'overlay blindintro';
+    el.hidden = false;
+    retrigger(el, 'go');
+    SFX.blind();
+    musicDuck(0.15);
+    const at = (ms, fn) => BI.timers.push(setTimeout(fn, ms));
+    at(1300, () => el.classList.add('lock-in'));
+    at(1900, () => { el.classList.add('locked'); SFX.lock(); });
+    at(2300, () => el.classList.add('sub'));
+    at(6400, () => blindSkip());
+  }
+  function blindStop() {
+    BI.timers.forEach(clearTimeout);
+    BI.timers = [];
+    if (!BI.active) return;
+    BI.active = false;
+    $('#blindintro').hidden = true;
+    musicDuck(false);
+  }
+  async function blindSkip() {
+    if (!BI.active) return;
+    blindStop();
+    busy = true; renderTV();
+    try { await adminAction('next'); }
+    catch { toast('No se pudo avanzar. Revisa la conexión e intenta otra vez.'); }
+    busy = false; renderTV();
+  }
+  $('#blindintro').addEventListener('click', blindSkip);
+
+  // ---------- revelación del ganador: suspenso → ¡bum! → celebración → tabla completa ----------
+  // Todo se calcula desde revealAt (hora del servidor), así la TV y los celulares quedan sincronizados.
+  const RV = { anchor: -1, stage: -2, shown: false, dismissed: false, raf: 0, scheduled: -1, score: 0, cannon: [], bursts: [] };
+  const RV_STAGES = [[0, 'dark'], [0.6, 'ask'], [2.4, 'cards'], [3.2, 'r3'], [5.0, 'r2'], [6.4, 'drum'], [9.0, 'boom'], [12.5, 'done']];
+  const RV_BURSTS = [0.5, 1.3, 2.1, 2.8, 3.6, 4.5, 5.3, 6.2, 7.2, 8.4, 9.5, 10.8, 12.0, 13.4, 14.9];
+  const k01 = x => Math.min(1, Math.max(0, x));
+  function fillReveal(ranked) {
+    [1, 2, 3].forEach(p => {
+      const card = $('#rv-c' + p), t = ranked[p - 1];
+      card.style.visibility = t ? 'visible' : 'hidden';
+      if (!t || p === 1) return;
+      const cs = CASE_BY_ID[t.caseId];
+      card.querySelector('.rv-name b').textContent = t.name;
+      card.querySelector('.rv-name span').textContent = cs ? cs.brand : 'Marca';
+      card.querySelector('.rv-name em').textContent = `${t.score} pts`;
+    });
+    const w = ranked[0], cs = CASE_BY_ID[w.caseId];
+    $('#rv-win').textContent = w.name;
+    $('#rv-meta').textContent = `${plural(w.correct, 'acierto', 'aciertos')} de ${Q_COUNT} · ${cs ? cs.brand : 'Marca'}`;
+    RV.score = w.score;
+    const cols = ['#FF5B3A', '#45D0FF', '#FFC93D', '#A98BFF', '#38D99A', '#FFFFFF'];
+    const pick = () => cols[Math.floor(Math.random() * cols.length)];
+    RV.cannon = Array.from({ length: 220 }, () => ({ side: Math.random() < 0.5 ? 0 : 1, d: Math.random() * 0.5, vx: 250 + Math.random() * 650, vy: -(700 + Math.random() * 800), w: 8 + Math.random() * 9, h: 10 + Math.random() * 12, r: Math.random() * 6, vr: (Math.random() - 0.5) * 12, c: pick() }));
+    RV.bursts = RV_BURSTS.map(t => ({ t, x: 0.15 + Math.random() * 0.7, y: 0.14 + Math.random() * 0.3, c: pick(), parts: Array.from({ length: 56 }, (_, i) => { const a = (i / 56) * Math.PI * 2, sp = 140 + Math.random() * 120; return { vx: Math.cos(a) * sp, vy: Math.sin(a) * sp }; }) }));
+  }
+  function drawRevealFx(tau) {
+    const cv = $('#rv-canvas'), ctx = cv.getContext('2d');
+    const dpr = Math.min(2, window.devicePixelRatio || 1), W = innerWidth, H = innerHeight;
+    if (cv.width !== Math.floor(W * dpr) || cv.height !== Math.floor(H * dpr)) { cv.width = Math.floor(W * dpr); cv.height = Math.floor(H * dpr); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    const t = tau - 9;
+    if (t < 0 || RM) return;
+    // cañones de confeti desde las dos esquinas de abajo
+    RV.cannon.forEach(p => {
+      const tt = t - p.d;
+      if (tt < 0 || tt > 6) return;
+      const x = p.side ? W - p.vx * tt : p.vx * tt, y = H + p.vy * tt + 560 * tt * tt;
+      if (y > H + 30) return;
+      ctx.save();
+      ctx.globalAlpha = k01(1 - (tt - 4.5) / 1.5);
+      ctx.translate(x, y); ctx.rotate(p.r + p.vr * tt);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r + p.vr * tt)));
+      ctx.restore();
+    });
+    // fuegos artificiales
+    RV.bursts.forEach(b => {
+      const tt = t - b.t;
+      if (tt < 0 || tt > 1.9) return;
+      const cx = b.x * W, cy = b.y * H, k = 1 - Math.exp(-tt * 3.2);
+      ctx.globalAlpha = k01(1 - tt / 1.9);
+      ctx.fillStyle = b.c;
+      b.parts.forEach(p => { ctx.beginPath(); ctx.arc(cx + p.vx * k, cy + p.vy * k + 70 * tt * tt, 2.8, 0, 6.2832); ctx.fill(); });
+    });
+    ctx.globalAlpha = 1;
+  }
+  // Sonido de toda la revelación, programado de una vez desde el punto en que va (tauNow).
+  function revealAudio(tauNow) {
+    const c = A.ctx, base = c.currentTime - tauNow;
+    const at = (tau, fn) => { if (tau >= tauNow - 0.05) fn(Math.max(c.currentTime, base + tau)); };
+    if (tauNow < 9) {
+      const t0 = c.currentTime, dur = 9 - tauNow;
+      tone(A.sfx, t0, { f: 55, dur, gain: 0.14, attack: Math.min(2, dur * 0.8) });
+      tone(A.sfx, t0, { f: 82.4, dur, gain: 0.07, attack: Math.min(2.5, dur * 0.8) });
+    }
+    at(0, t => tone(A.sfx, t, { f: 90, f2: 30, dur: 0.6, gain: 0.7 }));
+    at(0.6, t => { noise(A.sfx, t, { dur: 0.5, gain: 0.12, type: 'bandpass', f: 300, f2: 2500, attack: 0.3 }); tone(A.sfx, t + 0.2, { type: 'triangle', f: mtof(69), dur: 0.8, gain: 0.12 }); tone(A.sfx, t + 0.35, { type: 'triangle', f: mtof(72), dur: 0.9, gain: 0.1 }); });
+    [0.9, 1.15, 2.0, 2.25, 4.0, 4.25].forEach(b => at(b, t => tone(A.sfx, t, { f: 70, f2: 38, dur: 0.22, gain: 0.55 })));
+    [2.4, 2.55, 2.7].forEach(b => at(b, t => noise(A.sfx, t, { dur: 0.35, gain: 0.1, type: 'bandpass', f: 600, f2: 3000, attack: 0.15 })));
+    [[3.2, 67], [5.0, 72]].forEach(([b, m]) => at(b, t => { tone(A.sfx, t, { f: 180, f2: 70, dur: 0.4, gain: 0.6 }); brass(t, m, 0.6, 0.1); brass(t, m - 12, 0.6, 0.06); noise(A.sfx, t, { dur: 0.25, gain: 0.15, type: 'bandpass', f: 1500 }); }));
+    // redoble que acelera hasta el ¡bum!
+    for (let x = 6.4; x < 9; ) { const k = (x - 6.4) / 2.6; at(x, t => noise(A.sfx, t, { dur: 0.07, gain: 0.07 + 0.25 * k, type: 'bandpass', f: 1800, q: 0.7 })); x += 0.12 - 0.09 * k; }
+    at(6.4, t => { noise(A.sfx, t, { dur: 2.6, gain: 0.2, type: 'bandpass', f: 200, f2: 5000, q: 1.2, attack: 2.4 }); tone(A.sfx, t, { type: 'sawtooth', f: 110, f2: 520, dur: 2.6, gain: 0.07, attack: 2.4, filter: { f: 500, f2: 3500 } }); });
+    at(9, t => {
+      SFX.impact(t); SFX.impact(t + 0.03);
+      [[67, 0, 0.14], [67, 0.16, 0.14], [67, 0.32, 0.14], [72, 0.48, 0.3], [76, 0.8, 0.3], [79, 1.1, 1.9]].forEach(([m, o, d]) => { brass(t + o, m, d, 0.13); brass(t + o, m - 12, d, 0.06); });
+      [60, 64, 67, 72, 76].forEach(m => brass(t + 1.1, m, 2.2, 0.04));
+      noise(A.sfx, t + 0.1, { dur: 4.5, gain: 0.2, type: 'bandpass', f: 1300, q: 0.5, attack: 0.6 });
+      for (let i = 0; i < 46; i++) noise(A.sfx, t + 0.3 + Math.random() * 3.8, { dur: 0.05, gain: 0.05 + Math.random() * 0.07, type: 'bandpass', f: 1800 + Math.random() * 1500, q: 1 });
+    });
+    RV_BURSTS.forEach(b => at(9 + b, t => { tone(A.sfx, t, { f: 80, f2: 40, dur: 0.5, gain: 0.3 }); for (let i = 0; i < 10; i++) noise(A.sfx, t + 0.15 + Math.random() * 0.6, { dur: 0.03, gain: 0.04 + Math.random() * 0.05, type: 'highpass', f: 4000 }); }));
+  }
+  function revealFrame() {
+    RV.raf = 0;
+    if (!RV.shown) return;
+    const el = $('#reveal');
+    const tau = RV.anchor > 0 ? (now() - RV.anchor) / 1000 : 99;
+    let idx = -1;
+    RV_STAGES.forEach(([at], i) => { if (tau >= at) idx = i; });
+    if (idx !== RV.stage) {
+      RV.stage = idx;
+      RV_STAGES.forEach(([, name], i) => el.classList.toggle('s-' + name, i <= idx));
+      if (tau < 9) musicDuck(0);
+      else { musicDuck(false); $('#rv-c1').style.transform = ''; }
+    }
+    if (RV.scheduled !== RV.anchor && audioReady()) { RV.scheduled = RV.anchor; revealAudio(tau); }
+    // redoble: la tarjeta del 1.er lugar tiembla cada vez más y cambia de símbolo
+    if (tau >= 6.4 && tau < 9 && !RM) {
+      const k = (tau - 6.4) / 2.6, amp = 2 + 13 * k * k;
+      $('#rv-c1').style.transform = `translate(${(Math.random() - 0.5) * amp}px, ${(Math.random() - 0.5) * amp}px) rotate(${(Math.random() - 0.5) * amp * 0.3}deg)`;
+      $('#rv-scr').textContent = '?#%&@*!$'[Math.floor(tau * 14) % 8];
+    } else if (tau < 6.4) $('#rv-scr').textContent = '?';
+    if (tau >= 9) {
+      $('#rv-ptsn').textContent = Math.round(RV.score * (1 - Math.pow(1 - k01((tau - 9.8) / 1.8), 3)));
+      drawRevealFx(tau);
+    }
+    RV.raf = requestAnimationFrame(revealFrame);
+  }
+  function revealTick(view, ranked) {
+    const el = $('#reveal');
+    if (view !== 'final' || !ranked.length || RV.dismissed) {
+      if (RV.shown || !el.hidden) revealStop();
+      if (view !== 'final') { RV.dismissed = false; RV.anchor = -1; }
+      return;
+    }
+    const R = LIVE.cfg.revealAt || 0;
+    const anchor = R ? R - SUSPENSE_MS : 0;
+    if (RV.anchor !== anchor) { RV.anchor = anchor; RV.stage = -2; fillReveal(ranked); }
+    if (el.hidden) { el.hidden = false; endShowtime(true); }
+    RV.shown = true;
+    if (!RV.raf) RV.raf = requestAnimationFrame(revealFrame);
+  }
+  function revealStop() {
+    cancelAnimationFrame(RV.raf);
+    RV.raf = 0;
+    RV.shown = false;
+    $('#reveal').hidden = true;
+  }
+  function revealReopen() {
+    RV.dismissed = false;
+    RV.stage = -2;
+    SFX.winner();
+    renderTV();
+  }
+  $('#rv-table').addEventListener('click', e => {
+    e.stopPropagation();
+    RV.dismissed = true;
+    revealStop();
+    musicDuck(false);
+    boardKey = '';
+    renderTV();
+    staggerRows();
+  });
 
   // ---------- confeti ----------
   function confetti() {

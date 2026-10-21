@@ -1,6 +1,6 @@
 # Batalla de KPIs
 
-Juego para el salón: cada jugador maneja las redes sociales de una marca colombiana sorteada al azar y debe elegir el KPI correcto en 15 retos de 35 segundos. Después de cada reto, la batalla se pausa, la pantalla del salón (TV) muestra las posiciones en vivo y el anfitrión pasa al siguiente reto con un botón. Gana un solo jugador.
+Juego para el salón: cada jugador maneja las redes sociales de una marca colombiana sorteada al azar y debe elegir el KPI correcto en 15 retos de 35 segundos. Después de cada reto, la batalla se pausa, la pantalla del salón (TV) muestra las posiciones en vivo y el anfitrión pasa al siguiente reto con un botón. En los últimos 4 retos la tabla se oculta: nadie sabe quién gana hasta la revelación final. Gana un solo jugador.
 
 - 10 marcas posibles: Juan Valdez, Rappi, Frisby, Arturo Calle, Postobón, Alpina, Nequi, Totto, Crepes & Waffles y Platzi.
 - 15 retos por marca, con 4 opciones. La respuesta correcta cambia de letra en cada reto.
@@ -99,8 +99,10 @@ Usa dos aparatos distintos, por ejemplo el computador para la TV y tu celular co
 2. **Jugadores:** escanean el QR, escriben su nombre, sortean su marca y tocan **Estoy listo**.
 3. **Anfitrión:** cuando estén todos, toca **Empezar la batalla**.
 4. Cada reto dura 35 segundos. Cuando todos responden o se acaba el tiempo, la TV muestra la animación **¡SE ACABÓ!** con el podio de los 3 primeros y luego la tabla de posiciones, con flechas de quién subió o bajó. Tocar la pantalla salta la animación. Si alguien se demora, puedes tocar **Cerrar reto**.
-5. Toca **Siguiente reto** para continuar. Después del reto 15 aparece **Anunciar ganador**.
-6. Para jugar otra vez con otro grupo, toca **Nueva partida**. Eso borra los puntajes de la partida anterior.
+5. Toca **Siguiente reto** para continuar.
+6. Al pasar al reto 12 la TV muestra el aviso **¡Últimos 4 retos!** y la tabla se oculta. Desde ahí ni la TV ni los celulares muestran posiciones ni podio: los puntos se siguen sumando en secreto.
+7. Después del reto 15 toca **Revelar ganador**. La TV arma el suspenso (aparecen el 3.º y el 2.º puesto y suena un redoble), revela al campeón con la celebración y muestra el botón **Ver tabla completa**. Mientras tanto los celulares dicen “Revelando al ganador…” y cada jugador ve su puesto final cuando el campeón sale en la TV. Para repetir la revelación toca **Mostrar ganador**.
+8. Para jugar otra vez con otro grupo, toca **Nueva partida**. Eso borra los puntajes de la partida anterior.
 
 **Sonido:** la TV pone música de fondo (distinta en la sala de espera, los retos, la pausa y el final) y efectos para cada cosa que aparece. Todo se genera en el navegador, sin archivos de audio. Se activa al entrar con la contraseña. Si recargas la TV y no se oye, toca **Activar sonido**. Revisa también que el audio salga por el TV (cable HDMI) y que el volumen esté arriba. Los celulares no suenan.
 
