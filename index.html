@@ -1,0 +1,2514 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Batalla de KPIs: manejas las redes de una marca colombiana. Elige el KPI correcto en cada reto y sigue la tabla en vivo.">
+<meta name="theme-color" content="#130F26">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23130F26%22%2F%3E%3Cpath%20d%3D%22M20%2014h24v10a12%2012%200%200%201-24%200z%22%20fill%3D%22%23FFC93D%22%2F%3E%3Cpath%20d%3D%22M20%2018h-6a8%208%200%200%200%208%2010M44%2018h6a8%208%200%200%201-8%2010%22%20fill%3D%22none%22%20stroke%3D%22%23FFC93D%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2229%22%20y%3D%2235%22%20width%3D%226%22%20height%3D%229%22%20fill%3D%22%23FFC93D%22%2F%3E%3Crect%20x%3D%2221%22%20y%3D%2244%22%20width%3D%2222%22%20height%3D%227%22%20rx%3D%222%22%20fill%3D%22%23FF5B3A%22%2F%3E%3C%2Fsvg%3E">
+<title>Batalla de KPIs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: a single-column game stage for phones (max 760px); TV mode widens into a broadcast-style board that switches between lobby, live question and standings. */
+:root {
+  --bg: #130F26;
+  --panel: #1D1838;
+  --panel-2: #29224C;
+  --line: #3B3366;
+  --fg: #F5F2FF;
+  --muted: #ABA3CF;
+  --ink: #140F26;
+  --paper: #FFFFFF;
+  --accent: #FF5B3A;
+  --accent-deep: #A8321C;
+  --cyan: #45D0FF;
+  --gold: #FFC93D;
+  --violet: #A98BFF;
+  --good: #38D99A;
+  --bad: #FF4F6E;
+  --grid: rgba(245, 242, 255, 0.055);
+  --f-display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+html.tv { font-size: clamp(14px, 0.95vw, 21px); }
+[hidden] { display: none !important; }
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--grid) 1px, transparent 1.3px);
+  background-size: 26px 26px;
+  color: var(--fg);
+  font-family: var(--f-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.app {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 56px;
+}
+html.tv .app { max-width: 1760px; padding-block: 18px 28px; }
+section { display: flex; flex-direction: column; gap: 22px; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; }
+button { font: inherit; }
+.nt { text-transform: none; }
+
+/* ---------- type ---------- */
+.eyebrow, .mono {
+  font-family: var(--f-mono);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.h-display {
+  font-family: var(--f-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  font-size: clamp(2.6rem, 9vw, 4rem);
+  overflow-wrap: anywhere;
+}
+.lede { font-size: 1.125rem; color: var(--fg); max-width: 60ch; }
+.muted { color: var(--muted); }
+.disclaimer { font-size: 0.82rem; color: var(--muted); max-width: 62ch; }
+
+/* ---------- buttons ---------- */
+.btn {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 1.375rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 10px;
+  padding: 13px 26px 12px;
+  background: var(--accent);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--accent-deep);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+}
+.btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 5px 0 var(--accent-deep); }
+.btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--accent-deep); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-ghost {
+  background: transparent;
+  color: var(--fg);
+  box-shadow: inset 0 0 0 2px var(--line);
+}
+.btn-ghost:hover:not(:disabled) { box-shadow: inset 0 0 0 2px var(--muted); }
+.btn-ghost:active:not(:disabled) { box-shadow: inset 0 0 0 2px var(--muted); transform: translateY(1px); }
+.btn-sm { font-size: 1.05rem; padding: 9px 16px 8px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+.lock-ic { width: 16px; height: 16px; vertical-align: -2px; margin-right: 6px; }
+
+/* ---------- home ---------- */
+.home-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.hero-title {
+  font-family: var(--f-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.82;
+  font-size: clamp(4.6rem, 22vw, 9.5rem);
+  letter-spacing: -0.005em;
+  margin-top: 8px;
+}
+.hero-title span { display: block; }
+.hero-title .kpis { color: var(--accent); text-transform: none; }
+.hero-title .de { font-size: 0.42em; color: var(--muted); letter-spacing: 0.04em; line-height: 1.1; }
+.ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  padding-block: 10px;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.ticker-track { display: flex; width: max-content; animation: ticker 38s linear infinite; }
+.ticker-track span {
+  font-family: var(--f-mono);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  padding-right: 28px;
+}
+.ticker-track b { color: var(--fg); font-weight: 600; }
+.ticker-track em { font-style: normal; }
+.ticker-track .up { color: var(--good); }
+.ticker-track .down { color: var(--bad); }
+@keyframes ticker { to { transform: translateX(-50%); } }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fact { border-left: 3px solid var(--c); padding: 4px 0 4px 12px; }
+.fact b { display: block; font-family: var(--f-display); font-weight: 900; font-size: 2.2rem; line-height: 1; }
+.fact span { font-size: 0.875rem; color: var(--muted); }
+
+/* ---------- intro ---------- */
+.notif {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  max-width: 520px;
+}
+.notif-ic {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: 1.2rem;
+}
+.notif-top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 0.875rem; }
+.notif-top span { color: var(--muted); font-family: var(--f-mono); font-size: 0.75rem; }
+.notif p { margin-top: 2px; }
+.rules { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: r; }
+.rules li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; align-items: start; counter-increment: r; }
+.rules li::before {
+  content: counter(r);
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: 1.3rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--panel-2);
+  color: var(--gold);
+}
+.rules b { color: var(--fg); }
+.rules p { color: var(--muted); }
+.formcard {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+}
+label { font-weight: 700; }
+input[type="text"], input[type="password"] {
+  width: 100%;
+  font: 700 1.2rem var(--f-body);
+  color: var(--fg);
+  background: var(--bg);
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+input:focus { outline: none; border-color: var(--cyan); }
+.err { color: var(--bad); font-weight: 700; font-size: 0.95rem; }
+
+/* ---------- draw ---------- */
+.brands { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.brand {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  transition: border-color 0.1s, background-color 0.1s, opacity 0.3s;
+  min-width: 0;
+}
+.brand > div:last-child { min-width: 0; }
+.brand .mono-tile {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--c);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  font: 900 1.25rem var(--f-display);
+}
+.brand b { display: block; font-size: 1rem; line-height: 1.2; }
+.brand small { color: var(--muted); font-size: 0.78rem; line-height: 1.3; display: block; }
+.brand.hot { border-color: var(--c); background: var(--panel-2); }
+.brand.picked { border-color: var(--c); background: color-mix(in srgb, var(--c) 18%, var(--panel)); }
+.brand.out { opacity: 0.35; }
+.brand .stamp {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background: var(--c);
+  color: var(--ink);
+  font: 800 0.8rem var(--f-display);
+  letter-spacing: 0.08em;
+  padding: 3px 8px 2px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.brief {
+  background: var(--panel);
+  border: 2px solid var(--c);
+  border-radius: 18px;
+  padding: 22px;
+  display: grid;
+  gap: 16px;
+}
+.brief h3 { font: 900 clamp(2.2rem, 8vw, 3.2rem)/0.95 var(--f-display); text-transform: uppercase; color: var(--c); overflow-wrap: anywhere; }
+.brief dl { margin: 0; display: grid; gap: 10px; }
+.brief dl div { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 10px; }
+.brief dt { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.brief dd { margin: 0; }
+@media (max-width: 520px) {
+  .brief dl div { grid-template-columns: 1fr; gap: 0; }
+}
+@media (max-width: 420px) {
+  .brand { padding: 10px; gap: 10px; }
+  .brand small { display: none; }
+  .brand .mono-tile { width: 38px; height: 38px; font-size: 1.1rem; }
+  .brand b { font-size: 0.92rem; }
+}
+
+/* ---------- wait ---------- */
+.wait-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px;
+  display: grid;
+  gap: 14px;
+}
+.wait-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pulse-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--cyan); animation: blink 1.2s ease-in-out infinite; flex: none; }
+
+/* ---------- quiz ---------- */
+.qbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 5px 12px 5px 6px;
+  border-radius: 99px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  max-width: 100%;
+}
+.chip i { width: 20px; height: 20px; border-radius: 50%; background: var(--c); display: inline-block; flex: none; }
+.score-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 14px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.score-pill b { font: 900 1.6rem var(--f-display); font-variant-numeric: tabular-nums; }
+.timer-row { display: flex; align-items: center; gap: 12px; }
+.timer { flex: 1; height: 10px; background: var(--panel-2); border-radius: 99px; overflow: hidden; }
+.timer i { display: block; height: 100%; width: 100%; background: var(--cyan); transform-origin: left center; border-radius: 99px; }
+.timer.low i { background: var(--accent); }
+.secs { min-width: 3ch; text-align: right; font-size: 1rem; color: var(--fg); font-variant-numeric: tabular-nums; }
+.sit { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
+.sit p { font-size: 1.2rem; margin-top: 6px; }
+.q { font: 800 clamp(1.7rem, 6vw, 2.3rem)/1 var(--f-display); text-transform: uppercase; letter-spacing: 0.01em; }
+.opts { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 640px) { .opts { grid-template-columns: 1fr 1fr; } }
+.opt {
+  --c: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 74px;
+  padding: 12px 16px 12px 12px;
+  text-align: left;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  color: var(--fg);
+  font: 700 1.05rem/1.3 var(--f-body);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s, transform 0.12s, opacity 0.2s;
+  min-width: 0;
+}
+.opt:nth-child(2) { --c: var(--cyan); }
+.opt:nth-child(3) { --c: var(--gold); }
+.opt:nth-child(4) { --c: var(--violet); }
+.opt:hover:not(:disabled) { border-color: var(--c); transform: translateY(-2px); }
+.opt .key {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--c);
+  color: var(--ink);
+  font: 900 1.5rem var(--f-display);
+}
+.opt span:last-child { min-width: 0; }
+.opt:disabled { cursor: default; }
+.opt.is-dim { opacity: 0.4; }
+.opt.is-correct { border-color: var(--good); background: color-mix(in srgb, var(--good) 16%, var(--panel)); opacity: 1; }
+.opt.is-correct .key { background: var(--good); }
+.opt.is-wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 16%, var(--panel)); opacity: 1; }
+.opt.is-wrong .key { background: var(--bad); }
+.fb {
+  border-radius: 16px;
+  padding: 18px 20px;
+  background: var(--panel);
+  border: 2px solid var(--fbc, var(--line));
+  display: grid;
+  gap: 10px;
+}
+.fb.ok { --fbc: var(--good); }
+.fb.no { --fbc: var(--bad); }
+.fb.skip { --fbc: var(--muted); }
+.fb-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.fb-title { font: 900 1.9rem/1 var(--f-display); text-transform: uppercase; color: var(--fbc); }
+.fb-pts { font: 900 1.9rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.fb-ans b { color: var(--good); }
+.formula {
+  font-family: var(--f-mono);
+  font-size: 0.85rem;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--cyan);
+  overflow-x: auto;
+}
+.fb .btn { justify-self: start; margin-top: 4px; }
+.fb-wait {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px dashed var(--line);
+  background: var(--bg);
+  margin-top: 4px;
+}
+.place { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.place b { font: 900 2.2rem/1 var(--f-display); color: var(--cyan); }
+.sync { font-size: 0.85rem; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+.sync::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.sync[data-s="live"]::before { background: var(--good); }
+.sync[data-s="retry"]::before, .sync[data-s="readonly"]::before { background: var(--gold); }
+.pop { animation: pop 0.45s ease; }
+@keyframes pop { 40% { transform: scale(1.18); } }
+
+/* ---------- end ---------- */
+.end-score b { display: block; font: 900 clamp(5rem, 24vw, 9rem)/0.85 var(--f-display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.stats div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+.stats span { display: block; }
+.stats b { display: block; font: 800 1.5rem/1.1 var(--f-display); margin-top: 4px; overflow-wrap: anywhere; }
+@media (max-width: 460px) { .stats { grid-template-columns: 1fr 1fr; } .stats div:last-child { grid-column: 1 / -1; } }
+.dots { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.dots i { width: 11px; height: 11px; border-radius: 50%; background: var(--panel-2); border: 1px solid var(--line); }
+.dots i.ok { background: var(--good); border-color: transparent; }
+.dots i.no { background: var(--bad); border-color: transparent; }
+.dots.big i { width: 16px; height: 16px; }
+.pos {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.pos b { font: 900 2.6rem/1 var(--f-display); color: var(--cyan); }
+.winner-banner {
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--gold) 16%, var(--panel));
+  border: 2px solid var(--gold);
+}
+.winner-banner b { display: block; font: 900 2rem/1 var(--f-display); text-transform: uppercase; color: var(--gold); margin-top: 4px; overflow-wrap: anywhere; }
+
+/* ---------- TV ---------- */
+.tv-head { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; justify-content: space-between; }
+.tv-title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.tv-title h1 { font: 900 2.6rem/1 var(--f-display); text-transform: uppercase; }
+.tv-title h1 em { font-style: normal; color: var(--accent); text-transform: none; }
+.live-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--bad); animation: blink 1.6s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: 0.25; } }
+.tv-stats { display: flex; gap: 22px; }
+.tv-stats div { display: flex; align-items: baseline; gap: 6px; }
+.tv-stats b { font: 900 2.2rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.tv-stats span { color: var(--muted); }
+.tv-ctrl { display: flex; gap: 8px; flex-wrap: wrap; }
+.tv-stage { font: 800 1.6rem/1 var(--f-display); text-transform: uppercase; letter-spacing: 0.04em; color: var(--gold); }
+.tv-join {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+  padding: 24px;
+  border-radius: 18px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.tv-qr { background: var(--paper); padding: 12px; border-radius: 12px; width: 15rem; max-width: 100%; aspect-ratio: 1; display: grid; place-items: center; }
+.tv-qr svg, .tv-qr img { width: 100%; height: 100%; display: block; }
+.tv-url { display: block; font: 900 clamp(2rem, 4vw, 4rem)/1 var(--f-display); color: var(--cyan); overflow-wrap: anywhere; margin-block: 6px 10px; }
+@media (max-width: 640px) { .tv-join { grid-template-columns: 1fr; } }
+.pchips { display: flex; flex-wrap: wrap; gap: 10px; }
+.pchip {
+  --c: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 8px;
+  border-radius: 99px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  font-weight: 700;
+  font-size: 1.1rem;
+  max-width: 100%;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+.pchip i { width: 18px; height: 18px; border-radius: 50%; background: var(--c); flex: none; }
+.pchip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pchip.ok { border-color: var(--good); background: color-mix(in srgb, var(--good) 16%, var(--panel)); }
+.tv-q { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.tv-q b { display: block; font: 900 clamp(5rem, 12vw, 11rem)/0.85 var(--f-display); font-variant-numeric: tabular-nums; }
+.tv-count { text-align: right; }
+.tv-count b { color: var(--cyan); }
+.tv-count.low b { color: var(--accent); }
+.answer-bar { height: 16px; border-radius: 99px; background: var(--panel-2); overflow: hidden; }
+.answer-bar i { display: block; height: 100%; width: 0; background: var(--good); border-radius: 99px; transition: width 0.4s ease; }
+.tv-ans { font-size: 1.4rem; }
+.tv-leader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 24px;
+  align-items: end;
+  padding: 18px 24px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--gold) 12%, var(--panel));
+  border: 2px solid var(--gold);
+}
+.tv-leader .nm { font: 900 clamp(2.6rem, 5vw, 5rem)/0.9 var(--f-display); text-transform: uppercase; overflow-wrap: anywhere; }
+.tv-leader .pts { font: 900 clamp(3rem, 6vw, 6rem)/0.85 var(--f-display); color: var(--gold); font-variant-numeric: tabular-nums; text-align: right; }
+.tv-leader .sub { color: var(--muted); font-size: 1.05rem; }
+.tv-leader .eyebrow { color: var(--gold); }
+.tv-note { padding: 14px 18px; border-radius: 12px; border: 1px dashed var(--gold); color: var(--fg); }
+.board { column-width: 28rem; column-gap: 16px; }
+.row {
+  --c: var(--muted);
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px 10px 12px;
+  margin-bottom: 10px;
+  break-inside: avoid;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--c);
+  border-radius: 12px;
+}
+.row .rk { text-align: center; }
+.row .rk b { display: block; font: 900 2rem/1 var(--f-display); color: var(--muted); font-variant-numeric: tabular-nums; }
+.row .delta { display: block; font: 600 0.72rem var(--f-mono); color: var(--muted); min-height: 1em; }
+.row .delta.up { color: var(--good); }
+.row .delta.down { color: var(--bad); }
+.row.first { border-color: var(--gold); border-left-color: var(--c); background: color-mix(in srgb, var(--gold) 10%, var(--panel)); }
+.row.first .rk b { color: var(--gold); }
+.row .who { min-width: 0; }
+.row .nm { font-weight: 700; font-size: 1.2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .meta { font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .pts { font: 900 2.1rem/1 var(--f-display); font-variant-numeric: tabular-nums; min-width: 3.6ch; text-align: right; }
+.row .dots { flex-wrap: nowrap; gap: 3px; }
+.row .dots i { width: 8px; height: 8px; }
+@media (max-width: 760px) {
+  .row { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
+  .row .dots { display: none; }
+}
+.tv-empty { text-align: center; padding: 40px 16px; border: 2px dashed var(--line); border-radius: 18px; }
+.tv-empty b { display: block; font: 900 2.4rem/1 var(--f-display); text-transform: uppercase; margin-bottom: 8px; }
+
+/* ---------- overlays ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 7, 22, 0.82);
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.modal {
+  width: min(440px, 100%);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px;
+  display: grid;
+  gap: 12px;
+}
+.modal h2 { font: 900 2rem/1 var(--f-display); text-transform: uppercase; }
+.modal .btn-row { justify-content: flex-end; margin-top: 6px; }
+.winner { background: rgba(10, 7, 22, 0.9); }
+.winner canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.winner-card { position: relative; text-align: center; display: grid; gap: 14px; justify-items: center; max-width: 1100px; }
+.winner-card .eyebrow { color: var(--gold); font-size: 1rem; }
+.winner-card h2 { font: 900 clamp(3.6rem, 11vw, 10rem)/0.85 var(--f-display); text-transform: uppercase; color: var(--gold); overflow-wrap: anywhere; }
+.winner-card p.meta { font-size: 1.3rem; }
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 60;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  background: var(--fg);
+  color: var(--ink);
+  font-weight: 700;
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  .ticker-track { animation: none; }
+}
+</style>
+<style>:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HOME -->
+  <section id="s-home">
+    <div class="home-top">
+      <p class="eyebrow">Juego de marketing digital · Hasta 30 jugadores · 1 ganador</p>
+      <button class="btn btn-ghost btn-sm" id="btn-tv" type="button">
+        <svg class="lock-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none"/></svg>Pantalla del salón
+      </button>
+    </div>
+    <h1 class="hero-title"><span>Batalla</span><span class="de">de</span><span class="kpis">KPIs</span></h1>
+    <p class="lede">Hoy manejas las redes sociales de una marca colombiana. Cada reto es una situación de tu negocio. Elige el KPI que te da la respuesta antes de que se acabe el tiempo.</p>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track" id="ticker"></div>
+    </div>
+    <div class="facts">
+      <div class="fact" style="--c: var(--accent)"><b>10</b><span>marcas colombianas</span></div>
+      <div class="fact" style="--c: var(--cyan)"><b>15</b><span>retos por jugador</span></div>
+      <div class="fact" style="--c: var(--gold)"><b>35 s</b><span>para cada reto</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="btn-begin" type="button">Comenzar</button>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section id="s-intro" hidden>
+    <p class="eyebrow">Antes de empezar</p>
+    <div class="notif" role="note">
+      <div class="notif-ic" aria-hidden="true">CM</div>
+      <div>
+        <div class="notif-top"><b>Tu community manager</b><span>Lunes · 8:02 a. m.</span></div>
+        <p>Renuncié. Desde hoy las redes de la marca las manejas tú. Suerte con los números.</p>
+      </div>
+    </div>
+    <h2 class="h-display">Ahora las redes son tuyas</h2>
+    <p class="lede">Imagina que eres el dueño o la dueña de una marca conocida en Colombia. Cada día pasa algo en sus redes: un anuncio nuevo, un video que se vuelve tendencia, una promo que hay que medir. Para decidir bien necesitas mirar el KPI correcto, el indicador clave que responde a esa situación.</p>
+    <ol class="rules">
+      <li><div><b>Te toca una marca al azar.</b><p>Hay 10 posibles: Juan Valdez, Rappi, Frisby, Arturo Calle, Postobón, Alpina, Nequi, Totto, Crepes &amp; Waffles y Platzi.</p></div></li>
+      <li><div><b>Enfrentas 15 retos al mismo ritmo que todo el salón.</b><p>Cada reto describe una situación y te da 4 KPIs. Solo uno es el indicado.</p></div></li>
+      <li><div><b>Tienes 35 segundos por reto.</b><p>Acierto: 100 puntos más un bono de hasta 50 por rapidez. Error o tiempo agotado: 0 puntos.</p></div></li>
+      <li><div><b>Después de cada reto, la batalla se pausa.</b><p>La pantalla del salón muestra las posiciones y el anfitrión decide cuándo pasar al siguiente reto.</p></div></li>
+      <li><div><b>Gana un solo jugador.</b><p>El que sume más puntos. Si hay empate, gana quien tenga más aciertos y, después, quien haya respondido en menos tiempo.</p></div></li>
+    </ol>
+    <p class="disclaimer">Las situaciones son casos ficticios con fines educativos. Las marcas no participan, no patrocinan ni avalan este juego.</p>
+    <form class="formcard" id="name-form" novalidate>
+      <label for="team-name">Nombre del jugador o equipo</label>
+      <input id="team-name" type="text" maxlength="28" autocomplete="off" placeholder="Ej. Los del CTR" required>
+      <p class="err" id="name-err" hidden></p>
+      <div class="btn-row">
+        <button class="btn" type="submit">Sortear mi marca</button>
+        <button class="btn btn-ghost btn-sm" type="button" id="btn-back-home">Volver</button>
+      </div>
+      <p class="sync" data-s="connecting"></p>
+    </form>
+  </section>
+
+  <!-- DRAW -->
+  <section id="s-draw" hidden>
+    <p class="eyebrow">Sorteo de marca</p>
+    <h2 class="h-display" id="draw-title">Sorteando tu marca…</h2>
+    <div class="brands" id="brands"></div>
+    <div class="brief" id="brief" hidden>
+      <p class="eyebrow">Te tocó</p>
+      <h3 id="brief-name"></h3>
+      <dl>
+        <div><dt>El negocio</dt><dd id="brief-type"></dd></div>
+        <div><dt>Tus redes</dt><dd id="brief-nets"></dd></div>
+        <div><dt>Meta del trimestre</dt><dd id="brief-goal"></dd></div>
+        <div><dt>Tu misión</dt><dd>15 retos · 35 segundos cada uno</dd></div>
+      </dl>
+      <p class="disclaimer">Caso ficticio con fines educativos. La marca no participa ni patrocina este juego.</p>
+      <div class="btn-row"><button class="btn" id="btn-ready" type="button">Estoy listo</button></div>
+    </div>
+  </section>
+
+  <!-- WAIT -->
+  <section id="s-wait" hidden>
+    <p class="eyebrow">Sala de espera</p>
+    <h2 class="h-display" id="wait-title"></h2>
+    <div class="wait-card">
+      <span class="chip" id="wait-brand"><i></i><span></span></span>
+      <div class="wait-row"><span class="pulse-dot" aria-hidden="true"></span><p class="lede" id="wait-msg">Mira la pantalla del salón. El anfitrión empezará la batalla cuando estén todos.</p></div>
+      <p class="muted" id="wait-count"></p>
+    </div>
+    <p class="sync" data-s="connecting"></p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="s-quiz" hidden>
+    <div class="qbar">
+      <span class="chip" id="q-brand"><i></i><span></span></span>
+      <span class="mono" id="q-num">Reto 01/15</span>
+      <span class="score-pill"><span class="mono">Pts</span><b id="q-score">0</b></span>
+    </div>
+    <div class="timer-row">
+      <div class="timer" id="timer" role="progressbar" aria-label="Tiempo restante" aria-valuemin="0" aria-valuemax="35"><i></i></div>
+      <span class="secs mono" id="secs">35 s</span>
+    </div>
+    <div class="sit"><p class="mono">Situación</p><p id="q-sit"></p></div>
+    <h2 class="q" id="q-text"></h2>
+    <div class="opts" id="opts"></div>
+    <div class="fb" id="fb" hidden aria-live="polite">
+      <div class="fb-head"><span class="fb-title" id="fb-title"></span><span class="fb-pts" id="fb-pts"></span></div>
+      <p class="fb-ans" id="fb-ans"></p>
+      <p id="fb-why"></p>
+      <div class="formula" id="fb-f" hidden></div>
+      <button class="btn" id="btn-next" type="button" hidden>Siguiente reto</button>
+      <div class="fb-wait" id="fb-wait" hidden>
+        <div class="wait-row"><span class="pulse-dot" aria-hidden="true"></span><b id="fb-wait-msg"></b></div>
+        <div class="place" id="fb-place" hidden></div>
+      </div>
+    </div>
+    <p class="sync" data-s="connecting"></p>
+  </section>
+
+  <!-- END -->
+  <section id="s-end" hidden>
+    <p class="eyebrow">Batalla terminada</p>
+    <h2 class="h-display" id="end-name"></h2>
+    <div class="end-score"><p class="mono">Puntos finales</p><b id="end-score">0</b></div>
+    <div class="stats">
+      <div><span class="mono">Aciertos</span><b id="end-correct"></b></div>
+      <div><span class="mono">Tiempo</span><b id="end-time"></b></div>
+      <div><span class="mono">Marca</span><b id="end-brand"></b></div>
+    </div>
+    <div class="dots big" id="end-dots" aria-label="Resultado de cada reto"></div>
+    <div class="pos" id="end-pos" hidden></div>
+    <div class="winner-banner" id="end-winner" hidden></div>
+    <p class="sync" data-s="connecting"></p>
+    <div class="btn-row">
+      <button class="btn btn-ghost btn-sm" id="btn-retry-send" type="button" hidden>Reenviar mi puntaje</button>
+      <button class="btn" id="btn-again" type="button" hidden>Jugar otra vez</button>
+    </div>
+  </section>
+
+  <!-- TV -->
+  <section id="s-tv" hidden>
+    <header class="tv-head">
+      <div class="tv-title"><span class="live-dot" aria-hidden="true"></span><span class="mono">En vivo</span><h1>Batalla de <em>KPIs</em></h1></div>
+      <div class="tv-stats">
+        <div><b id="tv-n">0</b><span id="tv-n-label">jugadores</span></div>
+      </div>
+      <div class="tv-ctrl">
+        <button class="btn btn-sm" id="tv-main" type="button">Empezar la batalla</button>
+        <button class="btn btn-ghost btn-sm" id="tv-new" type="button">Nueva partida</button>
+        <button class="btn btn-ghost btn-sm" id="tv-fs" type="button">Pantalla completa</button>
+        <button class="btn btn-ghost btn-sm" id="tv-exit" type="button">Salir</button>
+      </div>
+    </header>
+    <p class="tv-stage" id="tv-stage">Sala de espera</p>
+    <div class="tv-note" id="tv-note" hidden></div>
+
+    <div class="tv-join" id="tv-lobby">
+      <div class="tv-qr" id="tv-qr" hidden></div>
+      <div>
+        <p class="eyebrow">Entra desde tu celular</p>
+        <b class="tv-url" id="tv-url">Abre el enlace del juego</b>
+        <p class="lede">Escribe tu nombre, sortea tu marca y toca “Estoy listo”. Cuando estén todos, el anfitrión empieza la batalla.</p>
+      </div>
+    </div>
+
+    <div id="tv-question" hidden>
+      <div class="tv-q">
+        <div><p class="eyebrow">Reto en juego</p><b id="tv-q-num">01</b><span class="muted">de 15</span></div>
+        <div class="tv-count" id="tv-count-box"><p class="eyebrow">Segundos</p><b id="tv-count">35</b></div>
+      </div>
+      <div class="answer-bar" aria-hidden="true"><i id="tv-ans-bar"></i></div>
+      <p class="tv-ans" id="tv-ans">0 de 0 respondieron</p>
+    </div>
+
+    <div class="pchips" id="tv-chips"></div>
+
+    <div class="tv-leader" id="tv-leader" hidden>
+      <div>
+        <p class="eyebrow" id="tv-l-label">Va ganando</p>
+        <div class="nm" id="tv-l-name"></div>
+        <p class="sub" id="tv-l-sub"></p>
+      </div>
+      <div class="pts" id="tv-l-pts">0</div>
+    </div>
+    <div class="board" id="board" hidden></div>
+    <div class="tv-empty" id="tv-empty"><b>Esperando jugadores</b><p class="muted">Cada jugador aparecerá aquí apenas sortee su marca.</p></div>
+  </section>
+</div>
+
+<!-- password -->
+<div class="overlay" id="pw" hidden>
+  <form class="modal" id="pw-form" novalidate>
+    <h2>Pantalla del salón</h2>
+    <p class="muted">Escribe la contraseña del anfitrión para ver la tabla en vivo y controlar la batalla.</p>
+    <label for="pw-input">Contraseña</label>
+    <input id="pw-input" type="password" autocomplete="off">
+    <p class="err" id="pw-err" hidden></p>
+    <div class="btn-row">
+      <button class="btn btn-ghost btn-sm" type="button" id="pw-cancel">Cancelar</button>
+      <button class="btn btn-sm" type="submit" id="pw-submit">Entrar</button>
+    </div>
+  </form>
+</div>
+
+<!-- confirm -->
+<div class="overlay" id="cf" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cf-title">
+    <h2 id="cf-title"></h2>
+    <p id="cf-msg" class="muted"></p>
+    <div class="btn-row">
+      <button class="btn btn-ghost btn-sm" type="button" id="cf-no">Cancelar</button>
+      <button class="btn btn-sm" type="button" id="cf-yes">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- winner -->
+<div class="overlay winner" id="winner" hidden>
+  <canvas id="confetti"></canvas>
+  <div class="winner-card">
+    <p class="eyebrow">Ganador de la Batalla de <span class="nt">KPIs</span></p>
+    <h2 id="w-name"></h2>
+    <p class="meta" id="w-meta"></p>
+    <button class="btn btn-ghost btn-sm" type="button" id="w-close">Ver la tabla final</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+  'use strict';
+
+  const Q_COUNT = 15, Q_MS = 35000, BASE = 100, BONUS = 50;
+  // Contraseña de la pantalla del salón dentro de claude.ai: solo se guarda su huella PBKDF2 (no la contraseña).
+  // En la versión web esta línea queda en null: la contraseña es la del usuario anfitrión de Firebase Authentication.
+  const PW = null;
+  const LS_KEY = 'batalla-kpis-v3', TV_KEY = 'batalla-kpis-tv';
+  const DEFAULT_Q = '¿Qué KPI deberías revisar?';
+  const LETTERS = ['A', 'B', 'C', 'D'];
+  const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  // Casos ficticios con fines educativos. Las marcas no participan ni patrocinan el juego.
+  const CASES = [
+    {
+      id: 'juanvaldez', brand: 'Juan Valdez', mono: 'JV', color: '#E8A462',
+      type: 'Tiendas de café colombiano y venta online',
+      nets: 'Instagram, TikTok, Google Maps y tienda online',
+      goal: 'Que más personas visiten las tiendas y compren café para la casa.',
+      qs: [
+        { s: 'Publicas un reel del nuevo latte de temporada. Quieres saber a cuántas personas distintas les apareció, sin contar repeticiones.',
+          a: 'Alcance', d: ['Impresiones', 'Seguidores totales', 'Guardados'],
+          why: 'El alcance cuenta personas únicas. Las impresiones cuentan cada vez que el contenido se mostró, aunque sea a la misma persona.' },
+        { s: 'El reel llegó a mucha gente. Ahora quieres saber qué tanto interactuaron con él en proporción a quienes lo vieron.',
+          a: 'Tasa de engagement', d: ['Alcance', 'Frecuencia', 'CPM (costo por mil impresiones)'],
+          f: 'Interacciones ÷ alcance × 100',
+          why: 'La tasa de engagement compara likes, comentarios, compartidos y guardados con cuántos vieron el contenido. Mide conexión, no tamaño.' },
+        { s: 'Lanzas un cupón “2x1 en capuchino” que solo se reclama mostrando la publicación en la tienda. Quieres saber cuántas personas fueron por él.',
+          a: 'Cupones canjeados en tienda', d: ['Clics en la publicación', 'Me gusta', 'Impresiones'],
+          why: 'La meta es que la gente llegue a la tienda. El cupón canjeado conecta la publicación con una visita real.' },
+        { s: 'Actualizas las fichas de Google Maps de tus tiendas con fotos y horarios. Quieres saber si eso está llevando gente a visitarlas.',
+          a: 'Solicitudes de “Cómo llegar”', d: ['Visitas a la ficha', 'Fotos subidas por clientes', 'Seguidores ganados'],
+          why: 'Pedir la ruta hacia una tienda muestra intención clara de ir. Es lo más cercano a una visita que te da la ficha.' },
+        { s: 'Publicas un TikTok de 45 segundos sobre cómo preparar café en prensa francesa. Quieres saber si la gente lo ve hasta el final.',
+          a: 'Retención del video', d: ['Reproducciones totales', 'Seguidores ganados', 'Me gusta'],
+          why: 'La retención muestra hasta qué segundo se queda la gente. Si cae al inicio, el gancho del video no funciona.' },
+        { s: 'Quieres saber qué porcentaje de las personas que llegan a la tienda online desde Instagram terminan comprando café.',
+          a: 'Tasa de conversión', d: ['CTR (tasa de clics)', 'Tasa de rebote', 'Sesiones totales'],
+          f: 'Compras ÷ visitas × 100',
+          why: 'Si llegan visitas pero no compran, el problema está en la tienda o en la oferta. La tasa de conversión lo revela.' },
+        { s: 'Quieres decidir desde qué monto ofrecer envío gratis en la tienda online. Primero necesitas saber cuánto gasta cada cliente por compra.',
+          a: 'Ticket promedio', d: ['Ingresos totales', 'Tasa de conversión', 'CPA (costo por adquisición)'],
+          f: 'Ingresos ÷ número de pedidos',
+          why: 'Con el ticket promedio defines un monto un poco más alto, para que el cliente agregue un producto más y gane el envío gratis.' },
+        { s: 'Quieres saber cuánto te costó, en promedio, cada venta online que trajeron los anuncios de este mes.',
+          a: 'CPA (costo por adquisición)', d: ['CPC (costo por clic)', 'CPM (costo por mil impresiones)', 'Alcance'],
+          f: 'Inversión ÷ número de ventas',
+          why: 'El CPA dice cuánto pagas por cada compra. El CPC solo mide el costo de un clic, que puede no terminar en venta.' },
+        { s: 'Termina la campaña de café para regalar en Navidad. Quieres comparar lo que vendiste gracias a los anuncios con lo que invertiste en ellos.',
+          a: 'ROAS (retorno de la inversión publicitaria)', d: ['Alcance total', 'Impresiones', 'Tasa de engagement'],
+          f: 'Ingresos por anuncios ÷ inversión en anuncios',
+          why: 'Un ROAS de 4 significa que cada peso invertido en anuncios trajo 4 en ventas.' },
+        { s: 'Quieres saber si este mes en redes se habló más de tu marca o de otras cadenas de café.',
+          a: 'Share of voice', d: ['Seguidores totales', 'Tasa de engagement', 'CPC (costo por clic)'],
+          f: 'Menciones de tu marca ÷ menciones de la categoría × 100',
+          why: 'El share of voice mide qué parte de la conversación de tu categoría te menciona a ti frente a la competencia.' },
+        { s: 'Publicas un carrusel “5 recetas con café frío”. Quieres saber si la gente lo encontró tan útil como para volver a verlo después.',
+          a: 'Guardados', d: ['Me gusta', 'Impresiones', 'Visitas al perfil'],
+          why: 'Guardar es señal de utilidad: la persona quiere volver al contenido. Es clave para medir contenido educativo.' },
+        { s: 'Lanzas el reto #MiTintoDeLaMañana para que la gente suba fotos con su café. Quieres saber cuánta gente participó con su propio contenido.',
+          a: 'Contenido generado por usuarios (UGC)', d: ['Alcance del anuncio', 'Seguidores ganados', 'CTR (tasa de clics)'],
+          why: 'Contar las publicaciones de clientes con el hashtag mide la participación real, y ese contenido genera confianza en otros.' },
+        { s: 'El programa de clientes frecuentes envía un correo con un beneficio. Quieres saber qué porcentaje de quienes lo recibieron lo abrió.',
+          a: 'Tasa de apertura', d: ['Correos enviados', 'CTR del correo', 'Churn (tasa de cancelación)'],
+          f: 'Correos abiertos ÷ correos entregados × 100',
+          why: 'Antes de medir clics necesitas saber si el correo llamó la atención. La tasa de apertura mide eso.' },
+        { s: 'Quieres saber si los clientes que compraron café online vuelven a comprar en los siguientes dos meses.',
+          a: 'Tasa de recompra', d: ['Ticket promedio', 'Pedidos totales', 'Tasa de engagement'],
+          f: 'Clientes que compraron 2 o más veces ÷ clientes totales × 100',
+          why: 'La tasa de recompra mide la fidelidad. El café es de consumo frecuente, así que los clientes que repiten valen mucho.' },
+        { s: 'Llegan muchos mensajes directos preguntando horarios de las tiendas. Quieres medir qué tan rápido los atiendes.',
+          a: 'Tiempo promedio de respuesta', d: ['Mensajes recibidos', 'Alcance de las historias', 'Tasa de engagement'],
+          why: 'El tiempo de respuesta muestra si atiendes a tiempo a quien ya quiere visitarte.' }
+      ]
+    },
+    {
+      id: 'rappi', brand: 'Rappi', mono: 'RA', color: '#FF6B57',
+      type: 'App de domicilios',
+      nets: 'Instagram, TikTok, notificaciones y anuncios de la app',
+      goal: 'Conseguir usuarios nuevos y que pidan con frecuencia.',
+      qs: [
+        { s: 'Lanzas una campaña para que la gente descargue la app. Quieres saber cuánto te costó cada descarga.',
+          a: 'CPI (costo por instalación)', d: ['CPM (costo por mil impresiones)', 'CPC (costo por clic)', 'ROAS (retorno de la inversión publicitaria)'],
+          f: 'Inversión ÷ instalaciones',
+          why: 'En una app la primera meta es la instalación. El CPI dice cuánto pagas por cada una.' },
+        { s: 'Muchas personas descargan la app, pero no sabes cuántas hacen su primer pedido.',
+          a: 'Tasa de activación', d: ['Descargas totales', 'Calificación en la tienda de apps', 'Alcance'],
+          f: 'Usuarios con primer pedido ÷ descargas × 100',
+          why: 'Descargar no es usar. La tasa de activación mide cuántos dan el primer paso de valor: pedir.' },
+        { s: 'Quieres saber cuántas personas distintas usan la app al menos una vez al mes.',
+          a: 'Usuarios activos mensuales (MAU)', d: ['Descargas totales', 'Seguidores en Instagram', 'Impresiones'],
+          why: 'Las descargas se acumulan aunque la gente ya no use la app. Los usuarios activos muestran el uso real.' },
+        { s: 'Envías una notificación: “Envío gratis hoy en restaurantes”. Quieres saber qué porcentaje de quienes la recibieron la abrió.',
+          a: 'Tasa de apertura de notificaciones', d: ['Notificaciones enviadas', 'Usuarios activos mensuales (MAU)', 'Tiempo en la app'],
+          f: 'Aperturas ÷ notificaciones entregadas × 100',
+          why: 'Mide si el mensaje despertó interés. Enviar muchas no sirve si casi nadie las abre.' },
+        { s: 'De los usuarios que pidieron por primera vez en enero, quieres saber qué porcentaje sigue pidiendo tres meses después.',
+          a: 'Tasa de retención', d: ['Descargas totales', 'CPI (costo por instalación)', 'Ticket promedio'],
+          f: 'Usuarios que siguen activos ÷ usuarios del grupo inicial × 100',
+          why: 'La retención muestra si la app se volvió un hábito o si la gente la probó y se fue.' },
+        { s: 'Quieres saber cuánto gasta en promedio un usuario cada vez que hace un pedido.',
+          a: 'Ticket promedio', d: ['Pedidos totales', 'LTV (valor de vida del cliente)', 'CAC (costo de adquisición de cliente)'],
+          f: 'Ventas ÷ número de pedidos',
+          why: 'El ticket promedio mide el valor de cada pedido, no de toda la relación con el usuario.' },
+        { s: 'Quieres saber cuánto dinero deja un usuario durante todo el tiempo que usa la app, para decidir cuánto pagar por atraerlo.',
+          a: 'LTV (valor de vida del cliente)', d: ['Ticket promedio', 'CPI (costo por instalación)', 'Tasa de activación'],
+          why: 'El LTV suma lo que un usuario deja a lo largo del tiempo. Atraerlo debe costar menos que eso.' },
+        { s: 'Sumas anuncios, cupones de bienvenida y envíos gratis para atraer usuarios. Quieres saber cuánto te cuesta en total cada usuario nuevo que pide.',
+          a: 'CAC (costo de adquisición de cliente)', d: ['CPI (costo por instalación)', 'CPC (costo por clic)', 'CPM (costo por mil impresiones)'],
+          f: 'Costos totales de adquisición ÷ clientes nuevos',
+          why: 'El CAC suma todo lo que gastas para conseguir un cliente, no solo los anuncios.' },
+        { s: 'Muchos usuarios llenan el carrito y cierran la app sin pagar.',
+          a: 'Tasa de abandono de carrito', d: ['Tasa de rebote', 'Churn (tasa de cancelación)', 'CTR (tasa de clics)'],
+          f: 'Carritos sin pago ÷ carritos creados × 100',
+          why: 'Mide cuántas compras se pierden en el último paso, justo cuando el usuario ya decidió qué quería.' },
+        { s: 'Quieres saber cuántas veces al mes pide, en promedio, cada usuario activo.',
+          a: 'Frecuencia de compra', d: ['Frecuencia de los anuncios', 'Usuarios activos mensuales (MAU)', 'Ticket promedio'],
+          f: 'Pedidos del mes ÷ usuarios activos',
+          why: 'La frecuencia de compra mide el hábito. No es lo mismo que la frecuencia de anuncios, que cuenta cuántas veces alguien vio un anuncio.' },
+        { s: 'Un TikTok de humor sobre pedir antojos a medianoche se volvió viral. Quieres saber cuántas veces la gente lo mandó a sus amigos.',
+          a: 'Compartidos', d: ['Me gusta', 'Reproducciones', 'Comentarios'],
+          why: 'Compartir es la recomendación más fuerte: pone el contenido frente a nuevas personas sin pagar.' },
+        { s: 'Quieres saber qué opina la gente de la app en redes: si los comentarios son positivos, neutros o negativos.',
+          a: 'Sentimiento de las menciones', d: ['Número de menciones', 'Share of voice', 'Alcance'],
+          why: 'El análisis de sentimiento clasifica el tono de lo que se dice. Cuántas menciones hay no dice si son buenas o malas.' },
+        { s: 'Pones anuncios de la app en Instagram. Quieres saber qué porcentaje de las veces que se mostró el anuncio alguien hizo clic.',
+          a: 'CTR (tasa de clics)', d: ['CPI (costo por instalación)', 'Alcance', 'Tasa de activación'],
+          f: 'Clics ÷ impresiones × 100',
+          why: 'El CTR mide qué tan atractivo es el anuncio. Lo que pasa después del clic se mide con otros KPIs.' },
+        { s: 'Envías una encuesta en la app: “Del 0 al 10, ¿qué tan probable es que recomiendes la app a un amigo?”',
+          q: '¿Qué KPI estás midiendo?',
+          a: 'NPS (Net Promoter Score)', d: ['Tasa de engagement', 'Tasa de retención', 'Usuarios activos mensuales (MAU)'],
+          f: '% de promotores (9-10) − % de detractores (0-6)',
+          why: 'El NPS mide la lealtad: a quienes te recomendarían con entusiasmo les resta quienes no lo harían.' },
+        { s: 'Lanzas un programa de referidos: “Invita a un amigo y ambos ganan un cupón”. Quieres saber cuántos usuarios nuevos llegaron por invitación.',
+          a: 'Usuarios nuevos por referido', d: ['Seguidores ganados', 'Impresiones', 'Me gusta de la publicación'],
+          why: 'El objetivo del programa es sumar usuarios recomendados. Contar los que llegan con código de invitación mide su éxito.' }
+      ]
+    },
+    {
+      id: 'frisby', brand: 'Frisby', mono: 'FR', color: '#FFC93D',
+      type: 'Cadena de restaurantes de pollo',
+      nets: 'Instagram, TikTok, X y pedidos por WhatsApp',
+      goal: 'Vender más combos a domicilio y mantener la conversación con sus fans.',
+      qs: [
+        { s: 'Publicas un meme de la marca. Quieres saber qué tanto conectó con quienes lo vieron, en proporción.',
+          a: 'Tasa de engagement', d: ['Impresiones', 'Alcance', 'Seguidores totales'],
+          f: 'Interacciones ÷ alcance × 100',
+          why: 'Un meme se mide por la reacción que provoca. La tasa de engagement compara interacciones con quienes lo vieron.' },
+        { s: 'Un video tuyo en TikTok se volvió tendencia. Quieres saber cuántas personas empezaron a seguirte gracias a él.',
+          a: 'Seguidores ganados por la publicación', d: ['Reproducciones', 'Me gusta', 'Compartidos'],
+          why: 'Un video viral puede tener millones de vistas y casi no sumar comunidad. Los seguidores ganados muestran cuánta audiencia te quedó.' },
+        { s: 'Quieres saber qué parte de la conversación sobre pollo en redes menciona a tu marca frente a la competencia.',
+          a: 'Share of voice', d: ['Seguidores totales', 'Tasa de engagement', 'Alcance'],
+          f: 'Menciones de tu marca ÷ menciones de la categoría × 100',
+          why: 'El share of voice mide tu presencia en la conversación de tu categoría, no solo en tu propia cuenta.' },
+        { s: 'Pusiste un botón “Pide por WhatsApp” en tu perfil de Instagram. Quieres saber cuántas personas lo tocaron este mes.',
+          a: 'Clics en el botón de WhatsApp', d: ['Visitas al perfil', 'Alcance', 'Seguidores ganados'],
+          why: 'Cada clic en el botón es alguien que intentó pedir. Ver el perfil no muestra esa intención.' },
+        { s: 'Hiciste un anuncio del combo familiar del domingo. Invertiste $2.000.000 y entraron 400 pedidos con el código del anuncio. Quieres saber cuánto costó cada pedido.',
+          a: 'CPA (costo por pedido)', d: ['CPC (costo por clic)', 'CPM (costo por mil impresiones)', 'Alcance'],
+          f: '$2.000.000 ÷ 400 pedidos = $5.000 por pedido',
+          why: 'Si cada pedido deja más ganancia que lo que costó conseguirlo, la promo es rentable.' },
+        { s: 'Quieres decidir a qué hora publicar la historia del almuerzo para que la vea la mayor parte de tus seguidores.',
+          q: '¿Qué métrica revisas?',
+          a: 'Horas de mayor actividad de tus seguidores', d: ['Seguidores totales', 'Frecuencia', 'CPM (costo por mil impresiones)'],
+          why: 'Las estadísticas de la cuenta muestran a qué horas está conectada tu audiencia. Publicar en esos picos aumenta las vistas sin pagar.' },
+        { s: 'Haces una historia con encuesta: “¿Salsa de la casa o miel mostaza?”. Quieres saber qué porcentaje de quienes la vieron votaron.',
+          a: 'Tasa de respuesta de la encuesta', d: ['Visualizaciones de la historia', 'Seguidores totales', 'Alcance'],
+          f: 'Votos ÷ visualizaciones de la historia × 100',
+          why: 'Ver la historia no es lo mismo que participar. La tasa de respuesta mide la participación.' },
+        { s: 'Subes 5 historias seguidas con el menú y el botón para pedir está en la última. Quieres saber cuánta gente llega hasta ella.',
+          a: 'Tasa de finalización de historias', d: ['Visualizaciones de la primera historia', 'Respuestas a historias', 'Seguidores ganados'],
+          f: 'Vistas de la última historia ÷ vistas de la primera × 100',
+          why: 'Si mucha gente se sale antes de la última historia, nunca ve el botón. Conviene subir la invitación a pedir.' },
+        { s: 'Muchos fans suben fotos con su pedido y etiquetan a la marca. Quieres medir cuántas veces pasa al mes.',
+          a: 'Menciones y etiquetas de clientes', d: ['Visualizaciones de tus historias', 'Seguidores ganados', 'CTR (tasa de clics)'],
+          why: 'Cada etiqueta es publicidad gratis hecha por un cliente. Contarlas muestra cuánto se habla de ti de forma espontánea.' },
+        { s: 'Quieres saber si los clientes que pidieron a domicilio una vez vuelven a pedir en el mismo mes.',
+          a: 'Tasa de recompra', d: ['Ticket promedio', 'Pedidos totales', 'Tasa de engagement'],
+          f: 'Clientes que pidieron 2 o más veces ÷ clientes totales × 100',
+          why: 'En comida rápida los clientes que repiten sostienen las ventas. La tasa de recompra mide esa fidelidad.' },
+        { s: 'Quieres saber cómo califican los clientes el servicio a domicilio en las apps y en Google.',
+          a: 'Calificación promedio de reseñas', d: ['Número de reseñas', 'Share of voice', 'Alcance'],
+          why: 'La calificación promedio resume la experiencia. Muchas reseñas no ayudan si la nota es baja.' },
+        { s: 'Respondes con humor los comentarios de tus fans en X. Quieres saber cuántas veces en total se mostraron tus publicaciones, contando repeticiones.',
+          a: 'Impresiones', d: ['Alcance', 'Seguidores totales', 'Tasa de engagement'],
+          why: 'Las impresiones cuentan cada vez que algo aparece en pantalla, aunque sea la misma persona varias veces.' },
+        { s: 'Lanzas un anuncio de un producto nuevo y quieres saber cuánto te cuesta que tu anuncio se muestre mil veces.',
+          a: 'CPM (costo por mil impresiones)', d: ['CPC (costo por clic)', 'CPA (costo por adquisición)', 'ROAS (retorno de la inversión publicitaria)'],
+          f: 'Inversión ÷ impresiones × 1.000',
+          why: 'En un lanzamiento importa que te vean. El CPM mide el costo de esa visibilidad.' },
+        { s: 'El mismo anuncio lleva cuatro semanas activo y los resultados bajan. Sospechas que la gente ya está cansada de verlo.',
+          q: '¿Qué KPI confirma tu sospecha?',
+          a: 'Frecuencia', d: ['Alcance', 'Impresiones', 'Seguidores ganados'],
+          f: 'Impresiones ÷ alcance',
+          why: 'La frecuencia dice cuántas veces vio el anuncio cada persona en promedio. Si sube mucho, hay fatiga y toca cambiarlo.' },
+        { s: 'Al final del mes comparas lo que vendiste gracias a los anuncios con lo que invertiste en ellos.',
+          a: 'ROAS (retorno de la inversión publicitaria)', d: ['Alcance total', 'CPM (costo por mil impresiones)', 'Seguidores ganados'],
+          f: 'Ingresos por anuncios ÷ inversión',
+          why: 'El ROAS convierte la publicidad en una cuenta clara: cuántos pesos vuelven por cada peso invertido.' }
+      ]
+    },
+    {
+      id: 'arturocalle', brand: 'Arturo Calle', mono: 'AC', color: '#7FA8FF',
+      type: 'Marca de moda masculina con tiendas y venta online',
+      nets: 'Instagram, Facebook, anuncios de Meta y tienda online',
+      goal: 'Vender más en la tienda online en temporadas como el Día del Padre.',
+      qs: [
+        { s: 'Tu anuncio de camisas para el Día del Padre se mostró 80.000 veces. Quieres saber qué porcentaje de esas veces alguien hizo clic.',
+          a: 'CTR (tasa de clics)', d: ['Alcance', 'Tasa de conversión', 'Frecuencia'],
+          f: 'Clics ÷ impresiones × 100',
+          why: 'El CTR mide qué tan atractivo es el anuncio. La compra se mide después, con la tasa de conversión.' },
+        { s: 'Llegan muchas visitas a la tienda online desde el anuncio, pero pocas compras. Quieres saber qué porcentaje de las visitas compra.',
+          a: 'Tasa de conversión', d: ['CTR (tasa de clics)', 'Sesiones totales', 'Tasa de engagement'],
+          f: 'Compras ÷ visitas × 100',
+          why: 'Si el anuncio trae gente pero no compra, el problema puede estar en la página, el precio o el envío.' },
+        { s: 'Mucha gente agrega un traje al carrito y se va sin pagar.',
+          a: 'Tasa de abandono de carrito', d: ['Tasa de rebote', 'Seguidores perdidos', 'CTR (tasa de clics)'],
+          f: 'Carritos sin compra ÷ carritos creados × 100',
+          why: 'Mide las ventas que se pierden en el último paso. Un correo de recordatorio puede recuperar parte de ellas.' },
+        { s: 'Quieres saber cuánto pagas, en promedio, por cada clic en tus anuncios.',
+          a: 'CPC (costo por clic)', d: ['CPM (costo por mil impresiones)', 'CPA (costo por adquisición)', 'CTR (tasa de clics)'],
+          f: 'Inversión ÷ clics',
+          why: 'El CPC dice cuánto cuesta llevar a una persona a tu tienda. El CTR es un porcentaje, no un costo.' },
+        { s: 'Quieres saber cuánto te cuesta cada venta que traen los anuncios.',
+          a: 'CPA (costo por adquisición)', d: ['CPC (costo por clic)', 'CPM (costo por mil impresiones)', 'Ticket promedio'],
+          f: 'Inversión ÷ número de ventas',
+          why: 'El CPA mide el costo de un resultado de negocio: la venta. Si es mayor que tu ganancia por venta, pierdes dinero.' },
+        { s: 'Muchas personas llegan a la página de un producto y se van en pocos segundos sin hacer clic en nada.',
+          a: 'Tasa de rebote', d: ['Tasa de conversión', 'Visitas totales', 'CTR (tasa de clics)'],
+          f: 'Visitas que se van sin interactuar ÷ visitas totales × 100',
+          why: 'Una tasa de rebote alta indica que la página no muestra lo que el anuncio prometía o que carga lento.' },
+        { s: 'Quieres saber cuánto gasta en promedio cada cliente por compra online.',
+          a: 'Ticket promedio', d: ['Ingresos totales', 'CPA (costo por adquisición)', 'Tasa de conversión'],
+          f: 'Ingresos ÷ número de pedidos',
+          why: 'El ticket promedio ayuda a diseñar combos, como camisa más corbata, para que cada compra sea más grande.' },
+        { s: 'Comparas dos campañas con el mismo presupuesto: una con un creador de contenido de moda y otra con anuncios. Quieres saber cuál trajo más ventas por cada peso invertido.',
+          a: 'ROAS (retorno de la inversión publicitaria)', d: ['Alcance', 'Tasa de engagement', 'Seguidores ganados'],
+          f: 'Ingresos ÷ inversión',
+          why: 'Con el mismo presupuesto, el ROAS muestra qué campaña convirtió mejor la inversión en ventas.' },
+        { s: 'Le das a cada creador de contenido un código de descuento propio. Quieres saber cuál de ellos generó más ventas.',
+          a: 'Ventas por código de descuento', d: ['Seguidores de cada creador', 'Me gusta de su publicación', 'Alcance de su publicación'],
+          why: 'El código conecta cada venta con quien la generó. Muchos seguidores no garantizan ventas.' },
+        { s: 'Publicas un carrusel “Cómo combinar un blazer azul”. Quieres saber si la gente lo encontró útil para consultarlo después.',
+          a: 'Guardados', d: ['Me gusta', 'Impresiones', 'Visitas al perfil'],
+          why: 'Un post guardado es una guía que la persona piensa usar. Es la mejor señal de contenido útil.' },
+        { s: 'Un cliente típico compra 3 veces al año. Quieres saber cuánto dinero deja durante toda su relación con la marca.',
+          a: 'LTV (valor de vida del cliente)', d: ['Ticket promedio', 'ROAS (retorno de la inversión publicitaria)', 'CPA (costo por adquisición)'],
+          why: 'El LTV suma todas las compras del cliente en el tiempo. Te dice cuánto vale la pena invertir para conseguirlo.' },
+        { s: 'Envías por correo el catálogo de la nueva colección. Quieres saber qué porcentaje de quienes lo recibieron hizo clic para ver los productos.',
+          a: 'CTR del correo', d: ['Tasa de apertura', 'Correos enviados', 'Suscriptores de la lista'],
+          f: 'Clics ÷ correos entregados × 100',
+          why: 'La apertura dice quién vio el correo; el CTR dice quién dio el siguiente paso y llegó a la tienda.' },
+        { s: 'Usas anuncios que le vuelven a mostrar a cada persona los productos que vio en la web. Quieres saber cuántas veces en promedio ve el anuncio cada persona.',
+          a: 'Frecuencia', d: ['Alcance', 'CTR (tasa de clics)', 'CPM (costo por mil impresiones)'],
+          f: 'Impresiones ÷ alcance',
+          why: 'En remarketing es fácil saturar. Una frecuencia muy alta puede molestar en vez de convencer.' },
+        { s: 'Quieres saber cuántas visitas de la tienda online llegan desde Instagram.',
+          a: 'Tráfico referido desde redes sociales', d: ['Visitas al perfil', 'Alcance', 'Seguidores totales'],
+          why: 'La analítica de la web muestra de dónde llega cada visita. Así sabes si Instagram está mandando compradores.' },
+        { s: 'Haces un live mostrando la colección nueva. Quieres saber cuántas personas estuvieron conectadas al mismo tiempo en el mejor momento.',
+          a: 'Pico de espectadores simultáneos', d: ['Seguidores totales', 'Me gusta del live', 'Alcance del perfil'],
+          why: 'El pico de espectadores muestra el momento de mayor interés. Ahí conviene anunciar la oferta.' }
+      ]
+    },
+    {
+      id: 'postobon', brand: 'Postobón', mono: 'PO', color: '#45D0FF',
+      type: 'Empresa de bebidas de consumo masivo',
+      nets: 'Instagram, TikTok, YouTube y anuncios en video',
+      goal: 'Que más personas conozcan y recuerden el lanzamiento de un sabor nuevo.',
+      qs: [
+        { s: 'Lanzas un sabor nuevo con un video en YouTube. Quieres saber cuántas personas distintas vieron el anuncio.',
+          a: 'Alcance', d: ['Impresiones', 'Reproducciones', 'Suscriptores del canal'],
+          why: 'En un lanzamiento quieres llegar a mucha gente distinta. El alcance cuenta personas únicas.' },
+        { s: 'Ahora quieres saber cuántas veces en total se mostró el anuncio, contando cada repetición.',
+          a: 'Impresiones', d: ['Alcance', 'Seguidores totales', 'Tasa de engagement'],
+          why: 'Las impresiones suman todas las veces que el anuncio apareció, aunque sea a la misma persona.' },
+        { s: 'Tienes un presupuesto fijo y quieres comparar qué tan caro es que tu anuncio se muestre mil veces en YouTube frente a TikTok.',
+          a: 'CPM (costo por mil impresiones)', d: ['CPC (costo por clic)', 'CPA (costo por adquisición)', 'ROAS (retorno de la inversión publicitaria)'],
+          f: 'Inversión ÷ impresiones × 1.000',
+          why: 'En campañas de reconocimiento el objetivo es ser visto. El CPM compara el costo de esa visibilidad.' },
+        { s: 'Un mes después del lanzamiento quieres saber si quienes vieron tus anuncios recuerdan la marca más que quienes no los vieron.',
+          a: 'Aumento de recordación de marca', d: ['Impresiones', 'Frecuencia', 'CTR (tasa de clics)'],
+          why: 'Los estudios de recordación comparan un grupo que vio el anuncio con uno que no. Miden si la marca se quedó en la cabeza.' },
+        { s: 'Pagas tus videos por cada reproducción. Quieres saber cuánto te cuesta, en promedio, cada vista.',
+          a: 'CPV (costo por visualización)', d: ['CPM (costo por mil impresiones)', 'CPC (costo por clic)', 'CPA (costo por adquisición)'],
+          f: 'Inversión ÷ reproducciones',
+          why: 'Cuando el objetivo es que vean el video, el CPV mide el costo de cada vista lograda.' },
+        { s: 'Quieres saber qué porcentaje de las personas que empezaron tu video de 30 segundos lo vieron completo.',
+          a: 'Tasa de reproducción completa', d: ['Reproducciones totales', 'Me gusta', 'Alcance'],
+          f: 'Reproducciones completas ÷ reproducciones iniciadas × 100',
+          why: 'Si casi nadie llega al final, el mensaje principal del video no se está viendo.' },
+        { s: 'Lanzas el reto #BrindaConSabor en TikTok. Quieres saber cuántos videos subió la gente usando el hashtag.',
+          a: 'Contenido generado por usuarios (UGC)', d: ['Alcance del anuncio', 'Seguidores ganados', 'CTR (tasa de clics)'],
+          why: 'El UGC mide cuánta gente se animó a crear contenido con tu marca. Es participación real.' },
+        { s: 'Quieres saber si el sabor nuevo gusta: si los comentarios en redes son positivos, neutros o negativos.',
+          a: 'Sentimiento de las menciones', d: ['Número de comentarios', 'Alcance', 'Share of voice'],
+          why: 'El sentimiento mide el tono de la conversación. Muchos comentarios pueden ser buenos o malos.' },
+        { s: 'Quieres saber qué parte de la conversación sobre bebidas en redes menciona a tu marca frente a otras.',
+          a: 'Share of voice', d: ['Seguidores totales', 'Tasa de engagement', 'Alcance'],
+          f: 'Menciones de tu marca ÷ menciones de la categoría × 100',
+          why: 'El share of voice compara tu presencia en la conversación con la de la competencia.' },
+        { s: 'Patrocinas un concierto y la gente publica historias etiquetando a la marca. Quieres medir cuántas veces pasó.',
+          a: 'Menciones de la marca', d: ['Seguidores totales', 'Impresiones de tus anuncios', 'CTR (tasa de clics)'],
+          why: 'Las menciones muestran cuánta gente habló de ti por su cuenta gracias al patrocinio.' },
+        { s: 'Trabajas con cinco creadores de contenido. Quieres comparar cuál logró más interacción en proporción a su audiencia.',
+          a: 'Tasa de engagement de cada creador', d: ['Seguidores de cada creador', 'Reproducciones totales', 'Impresiones'],
+          f: 'Interacciones ÷ seguidores del creador × 100',
+          why: 'Un creador con menos seguidores pero más engagement puede conectar mejor con su comunidad.' },
+        { s: 'Un video del lanzamiento gustó tanto que la gente se lo mandó a sus amigos por mensaje. Quieres medir eso.',
+          a: 'Compartidos', d: ['Me gusta', 'Reproducciones', 'Comentarios'],
+          why: 'Compartir es recomendar. Cada video compartido llega gratis a personas nuevas.' },
+        { s: 'Quieres saber si tu comunidad en TikTok creció de forma sana este mes, en proporción a la que ya tenías.',
+          a: 'Tasa de crecimiento de seguidores', d: ['Seguidores totales', 'Alcance', 'Tasa de engagement'],
+          f: 'Seguidores nuevos netos ÷ seguidores al inicio del mes × 100',
+          why: 'El total solo dice cuántos tienes. La tasa de crecimiento muestra si vas acelerando o frenando.' },
+        { s: 'Haces una dinámica: “Comenta con qué comida combinas el sabor nuevo y gana un kit”. Quieres saber cuántas personas participaron.',
+          a: 'Número de comentarios', d: ['Me gusta', 'Impresiones', 'Guardados'],
+          why: 'En esta dinámica, participar es comentar. Contar los comentarios mide directamente la participación.' },
+        { s: 'El mismo video lleva un mes al aire y sientes que la gente ya lo vio demasiadas veces.',
+          q: '¿Qué KPI confirma tu sospecha?',
+          a: 'Frecuencia', d: ['Alcance', 'CPM (costo por mil impresiones)', 'Aumento de recordación de marca'],
+          f: 'Impresiones ÷ alcance',
+          why: 'La frecuencia alta indica que las mismas personas ven el anuncio una y otra vez. Es momento de renovarlo.' }
+      ]
+    },
+    {
+      id: 'alpina', brand: 'Alpina', mono: 'AL', color: '#5FE3C0',
+      type: 'Marca de lácteos y alimentos',
+      nets: 'Instagram, TikTok, YouTube y recetas en su página web',
+      goal: 'Dar a conocer una nueva línea de yogures saludables.',
+      qs: [
+        { s: 'Publicas un video de recetas con el yogur nuevo. Quieres saber si la gente lo ve completo o se va al inicio.',
+          a: 'Retención del video', d: ['Reproducciones totales', 'Me gusta', 'Seguidores ganados'],
+          why: 'La retención muestra en qué segundo se va la gente. Así sabes si la receta engancha.' },
+        { s: 'Publicas un carrusel “3 desayunos en 5 minutos”. Quieres saber si la gente lo guardó para usarlo después.',
+          a: 'Guardados', d: ['Me gusta', 'Impresiones', 'Comentarios'],
+          why: 'Una receta guardada es una receta que la persona piensa preparar. Es la mejor señal de utilidad.' },
+        { s: 'Pones el enlace a las recetas de tu web en la bio de Instagram. Quieres saber cuánta gente llegó a la web desde Instagram.',
+          a: 'Tráfico referido desde redes sociales', d: ['Visitas al perfil', 'Alcance', 'Reproducciones de reels'],
+          why: 'La analítica de la web muestra cuántas visitas llegaron desde Instagram. Visitar el perfil no es entrar a la web.' },
+        { s: 'Trabajas con nutricionistas que publican sobre el yogur. Quieres saber cuál logró más interacción en proporción a su audiencia.',
+          a: 'Tasa de engagement de cada creador', d: ['Seguidores de cada creador', 'Reproducciones', 'Impresiones'],
+          f: 'Interacciones ÷ seguidores del creador × 100',
+          why: 'Comparar en proporción es justo: un perfil pequeño puede tener una comunidad más activa.' },
+        { s: 'Quieres saber cómo percibe la gente la nueva línea: si los comentarios son positivos, neutros o negativos.',
+          a: 'Sentimiento de las menciones', d: ['Número de comentarios', 'Alcance', 'Share of voice'],
+          why: 'El sentimiento mide el tono de lo que se dice del producto, no solo cuánto se dice.' },
+        { s: 'Haces un sorteo: “Etiqueta a la persona con la que compartes el desayuno”. Quieres saber cuántas personas participaron.',
+          a: 'Participaciones en el sorteo (comentarios)', d: ['Seguidores ganados', 'Alcance', 'Me gusta'],
+          why: 'Para participar había que comentar etiquetando a alguien. Esos comentarios son las participaciones.' },
+        { s: 'Después del sorteo quieres saber cuántas personas dejaron de seguirte en las semanas siguientes.',
+          a: 'Seguidores perdidos', d: ['Seguidores ganados', 'Alcance', 'Impresiones'],
+          why: 'Los sorteos atraen seguidores que solo querían el premio. Medir cuántos se van muestra el crecimiento real.' },
+        { s: 'Quieres comparar cuánto te cuesta que tu anuncio se muestre mil veces en Instagram y en YouTube.',
+          a: 'CPM (costo por mil impresiones)', d: ['CPC (costo por clic)', 'CPA (costo por adquisición)', 'Tasa de engagement'],
+          f: 'Inversión ÷ impresiones × 1.000',
+          why: 'Para dar a conocer un producto importa ser visto. El CPM compara ese costo entre plataformas.' },
+        { s: 'Al terminar la campaña quieres saber si más personas recuerdan la nueva línea de yogures gracias a los anuncios.',
+          a: 'Aumento de recordación de marca', d: ['Impresiones', 'Alcance', 'CTR (tasa de clics)'],
+          why: 'Haber visto un anuncio no garantiza recordarlo. Los estudios de recordación miden justamente eso.' },
+        { s: 'Envías un boletín de recetas por correo. Quieres saber qué porcentaje de quienes lo recibieron lo abrió.',
+          a: 'Tasa de apertura', d: ['Correos enviados', 'CTR del correo', 'Suscriptores de la lista'],
+          f: 'Correos abiertos ÷ correos entregados × 100',
+          why: 'La tasa de apertura dice si el asunto del correo llamó la atención.' },
+        { s: 'En tu web de recetas, mucha gente entra y se va en segundos sin ver nada más.',
+          a: 'Tasa de rebote', d: ['Tasa de conversión', 'Visitas totales', 'CTR (tasa de clics)'],
+          f: 'Visitas que se van sin interactuar ÷ visitas totales × 100',
+          why: 'Un rebote alto indica que la página no engancha o no muestra lo que la persona buscaba.' },
+        { s: 'Haces un live con una nutricionista. Quieres saber cuántas personas estuvieron conectadas al mismo tiempo en el mejor momento.',
+          a: 'Pico de espectadores simultáneos', d: ['Seguidores totales', 'Me gusta del live', 'Alcance del perfil'],
+          why: 'El pico de espectadores muestra el momento de mayor interés del live.' },
+        { s: 'Quieres saber cuántos videos subieron tus clientes con el hashtag de la campaña.',
+          a: 'Contenido generado por usuarios (UGC)', d: ['Alcance del anuncio', 'Seguidores ganados', 'CTR (tasa de clics)'],
+          why: 'El UGC muestra cuánta gente usó tu producto y quiso contarlo. Además da confianza a otros compradores.' },
+        { s: 'Respondes preguntas sobre ingredientes por mensaje directo. Quieres saber a qué porcentaje de los mensajes recibidos les diste respuesta.',
+          a: 'Tasa de respuesta a mensajes', d: ['Mensajes recibidos', 'Tiempo de reproducción', 'Seguidores totales'],
+          f: 'Mensajes respondidos ÷ mensajes recibidos × 100',
+          why: 'Un mensaje sin respuesta es una oportunidad perdida. Esta tasa mide qué tan bien atiendes.' },
+        { s: 'Lanzas anuncios para que la gente descargue un recetario gratis a cambio de su correo. Quieres saber cuánto te cuesta cada contacto.',
+          a: 'CPL (costo por lead)', d: ['CPM (costo por mil impresiones)', 'CTR (tasa de clics)', 'ROAS (retorno de la inversión publicitaria)'],
+          f: 'Inversión ÷ número de leads',
+          why: 'Un lead es un contacto interesado. El CPL dice cuánto pagas por cada uno.' }
+      ]
+    },
+    {
+      id: 'nequi', brand: 'Nequi', mono: 'NQ', color: '#FF8FC8',
+      type: 'Billetera digital en el celular',
+      nets: 'Instagram, TikTok, YouTube y la propia app',
+      goal: 'Que más jóvenes abran su cuenta y la usen cada semana.',
+      qs: [
+        { s: 'Lanzas anuncios para que la gente descargue la app. Quieres saber cuánto te cuesta cada descarga.',
+          a: 'CPI (costo por instalación)', d: ['CPM (costo por mil impresiones)', 'CPC (costo por clic)', 'Tasa de engagement'],
+          f: 'Inversión ÷ instalaciones',
+          why: 'Para una app el primer resultado es la instalación. El CPI mide su costo.' },
+        { s: 'De las personas que descargan la app, quieres saber qué porcentaje termina de abrir su cuenta.',
+          a: 'Tasa de activación', d: ['Descargas totales', 'Alcance', 'CTR (tasa de clics)'],
+          f: 'Cuentas abiertas ÷ descargas × 100',
+          why: 'Descargar no es usar. La activación mide cuántos completan el paso que les da valor.' },
+        { s: 'Quieres saber cuántas personas distintas usan la app al menos una vez por semana.',
+          a: 'Usuarios activos semanales', d: ['Descargas totales', 'Seguidores en redes', 'Impresiones'],
+          why: 'La meta es el uso frecuente. Los usuarios activos muestran cuánta gente realmente usa la app.' },
+        { s: 'Abrir la cuenta tiene 5 pasos. Quieres saber en cuál paso abandona más gente.',
+          a: 'Tasa de abandono por paso del registro', d: ['Descargas totales', 'CTR (tasa de clics)', 'Usuarios activos semanales'],
+          why: 'Ver el abandono paso a paso, como un embudo, muestra exactamente dónde se traba la gente.' },
+        { s: 'Publicas un video corto explicando cómo pagar con código QR. Quieres saber si la gente lo ve hasta el final.',
+          a: 'Retención del video', d: ['Reproducciones totales', 'Seguidores ganados', 'Me gusta'],
+          why: 'Si la gente se va antes de ver el paso clave, el tutorial no cumple su objetivo.' },
+        { s: 'Envías una notificación: “Activa tus metas de ahorro”. Quieres saber qué porcentaje de quienes la recibieron la abrió.',
+          a: 'Tasa de apertura de notificaciones', d: ['Notificaciones enviadas', 'Usuarios activos semanales', 'Seguidores ganados'],
+          f: 'Aperturas ÷ notificaciones entregadas × 100',
+          why: 'Mide si el mensaje despertó interés. Muchas notificaciones sin abrir pueden cansar al usuario.' },
+        { s: 'De los usuarios que abrieron su cuenta en enero, quieres saber qué porcentaje la sigue usando tres meses después.',
+          a: 'Tasa de retención', d: ['Descargas totales', 'CPI (costo por instalación)', 'Ticket promedio'],
+          f: 'Usuarios que siguen activos ÷ usuarios del grupo inicial × 100',
+          why: 'La retención mide si la app se volvió parte de la rutina.' },
+        { s: 'Lanzas un programa de referidos. Quieres saber cuántas cuentas nuevas se abrieron con un código de invitación.',
+          a: 'Cuentas nuevas por referido', d: ['Seguidores ganados', 'Impresiones', 'Me gusta de la publicación'],
+          why: 'El objetivo del programa es sumar cuentas recomendadas por otros usuarios. Contarlas mide su éxito.' },
+        { s: 'Envías una encuesta en la app: “Del 0 al 10, ¿qué tan probable es que recomiendes la app?”',
+          q: '¿Qué KPI estás midiendo?',
+          a: 'NPS (Net Promoter Score)', d: ['Tasa de engagement', 'Tasa de retención', 'Usuarios activos semanales'],
+          f: '% de promotores (9-10) − % de detractores (0-6)',
+          why: 'El NPS mide lealtad: quién te recomendaría con entusiasmo y quién no.' },
+        { s: 'Muchos usuarios escriben por mensaje directo preguntando cómo cambiar su clave. Quieres medir qué tan rápido los atiendes.',
+          a: 'Tiempo promedio de respuesta', d: ['Mensajes recibidos', 'Alcance de las historias', 'Tasa de engagement'],
+          why: 'En temas de dinero la rapidez genera confianza. El tiempo de respuesta lo mide.' },
+        { s: 'Publicas un meme sobre dividir la cuenta con los amigos. Quieres saber qué tanto conectó con quienes lo vieron, en proporción.',
+          a: 'Tasa de engagement', d: ['Impresiones', 'Alcance', 'Seguidores totales'],
+          f: 'Interacciones ÷ alcance × 100',
+          why: 'La tasa de engagement compara reacciones con personas alcanzadas. Mide conexión, no tamaño.' },
+        { s: 'Pones anuncios en TikTok. Quieres saber qué porcentaje de las veces que se mostró el anuncio alguien hizo clic para ir a la tienda de apps.',
+          a: 'CTR (tasa de clics)', d: ['CPI (costo por instalación)', 'Alcance', 'Tasa de activación'],
+          f: 'Clics ÷ impresiones × 100',
+          why: 'El CTR mide el interés que despierta el anuncio, antes de la descarga.' },
+        { s: 'Sumas anuncios, bonos de bienvenida y referidos. Quieres saber cuánto te cuesta en total cada usuario nuevo que usa la app.',
+          a: 'CAC (costo de adquisición de cliente)', d: ['CPI (costo por instalación)', 'CPC (costo por clic)', 'CPM (costo por mil impresiones)'],
+          f: 'Costos totales de adquisición ÷ clientes nuevos',
+          why: 'El CAC incluye todos los costos para conseguir un cliente activo, no solo la descarga.' },
+        { s: 'Quieres saber si en redes se habla más de tu app o de otras billeteras digitales.',
+          a: 'Share of voice', d: ['Seguidores totales', 'Tasa de engagement', 'Alcance'],
+          f: 'Menciones de tu marca ÷ menciones de la categoría × 100',
+          why: 'El share of voice compara tu presencia en la conversación con la de la competencia.' },
+        { s: 'Quieres saber cuántas veces al mes, en promedio, cada usuario activo hace un pago con la app.',
+          a: 'Frecuencia de uso', d: ['Frecuencia de los anuncios', 'Usuarios activos semanales', 'Ticket promedio'],
+          f: 'Transacciones del mes ÷ usuarios activos',
+          why: 'La frecuencia de uso mide el hábito. No es la frecuencia de anuncios, que cuenta cuántas veces alguien vio un anuncio.' }
+      ]
+    },
+    {
+      id: 'totto', brand: 'Totto', mono: 'TO', color: '#C6F25E',
+      type: 'Marca de morrales, maletas y accesorios',
+      nets: 'Instagram, TikTok, anuncios de Meta y tienda online',
+      goal: 'Vender más morrales online en la temporada de regreso a clases.',
+      qs: [
+        { s: 'Tu anuncio de morrales escolares se mostró 60.000 veces. Quieres saber qué porcentaje de esas veces alguien hizo clic.',
+          a: 'CTR (tasa de clics)', d: ['Alcance', 'Tasa de conversión', 'Frecuencia'],
+          f: 'Clics ÷ impresiones × 100',
+          why: 'El CTR mide qué tan atractivo es el anuncio para llevar gente a la tienda.' },
+        { s: 'Quieres saber qué porcentaje de las visitas a la tienda online termina en compra.',
+          a: 'Tasa de conversión', d: ['CTR (tasa de clics)', 'Sesiones totales', 'Tasa de engagement'],
+          f: 'Compras ÷ visitas × 100',
+          why: 'La tasa de conversión muestra si la tienda logra cerrar la venta con quienes llegan.' },
+        { s: 'Quieres saber cuánto te costó cada venta que trajeron los anuncios de regreso a clases.',
+          a: 'CPA (costo por adquisición)', d: ['CPC (costo por clic)', 'CPM (costo por mil impresiones)', 'Alcance'],
+          f: 'Inversión ÷ número de ventas',
+          why: 'El CPA mide el costo de cada venta. Debe ser menor que la ganancia que deja.' },
+        { s: 'Al cerrar la temporada comparas lo que vendiste gracias a los anuncios con lo que invertiste en ellos.',
+          a: 'ROAS (retorno de la inversión publicitaria)', d: ['Alcance total', 'Impresiones', 'Seguidores ganados'],
+          f: 'Ingresos por anuncios ÷ inversión',
+          why: 'El ROAS resume si la temporada de anuncios fue rentable.' },
+        { s: 'Mucha gente llena el carrito con un morral y una lonchera, pero no paga.',
+          a: 'Tasa de abandono de carrito', d: ['Tasa de rebote', 'Seguidores perdidos', 'CTR (tasa de clics)'],
+          f: 'Carritos sin compra ÷ carritos creados × 100',
+          why: 'El abandono de carrito muestra cuántas ventas casi cerradas se están perdiendo.' },
+        { s: 'Quieres regalar un estuche desde cierto monto de compra. Primero necesitas saber cuánto gasta en promedio cada cliente.',
+          a: 'Ticket promedio', d: ['Ingresos totales', 'Tasa de conversión', 'CPA (costo por adquisición)'],
+          f: 'Ingresos ÷ número de pedidos',
+          why: 'Con el ticket promedio defines un monto un poco más alto para animar compras más grandes.' },
+        { s: 'Publicas un TikTok “¿Qué cabe en este morral?”. Quieres saber cuántas veces lo compartieron.',
+          a: 'Compartidos', d: ['Me gusta', 'Reproducciones', 'Comentarios'],
+          why: 'Cada vez que alguien comparte el video lo pone frente a nuevas personas, gratis.' },
+        { s: 'Le das a cada creador de contenido un código de descuento propio. Quieres saber cuál generó más ventas.',
+          a: 'Ventas por código de descuento', d: ['Seguidores de cada creador', 'Me gusta de su publicación', 'Alcance de su publicación'],
+          why: 'El código conecta cada venta con el creador que la generó.' },
+        { s: 'Usas anuncios que le vuelven a mostrar el morral a quien lo miró en la web. Quieres saber cuántas veces en promedio vio cada persona el anuncio.',
+          a: 'Frecuencia', d: ['Alcance', 'CTR (tasa de clics)', 'CPM (costo por mil impresiones)'],
+          f: 'Impresiones ÷ alcance',
+          why: 'Una frecuencia muy alta puede cansar. Conviene ponerle un límite al remarketing.' },
+        { s: 'Quieres saber cuánto pagas, en promedio, por cada clic en tus anuncios.',
+          a: 'CPC (costo por clic)', d: ['CPM (costo por mil impresiones)', 'CPA (costo por adquisición)', 'CTR (tasa de clics)'],
+          f: 'Inversión ÷ clics',
+          why: 'El CPC mide el costo de llevar a una persona a la tienda.' },
+        { s: 'Envías un correo a quienes dejaron el carrito sin pagar. Quieres saber qué porcentaje de quienes lo recibieron hizo clic para volver.',
+          a: 'CTR del correo', d: ['Tasa de apertura', 'Correos enviados', 'Suscriptores de la lista'],
+          f: 'Clics ÷ correos entregados × 100',
+          why: 'El CTR del correo mide cuántos dieron el paso de volver a la tienda.' },
+        { s: 'Quieres saber cómo califican los clientes los productos que compraron online.',
+          a: 'Calificación promedio de reseñas', d: ['Número de reseñas', 'Share of voice', 'Alcance'],
+          why: 'La calificación promedio resume la satisfacción y ayuda a otros a decidir su compra.' },
+        { s: 'Quieres saber qué porcentaje de los clientes que compraron el año pasado volvieron a comprar este año.',
+          a: 'Tasa de recompra', d: ['Ticket promedio', 'Pedidos totales', 'Tasa de engagement'],
+          f: 'Clientes que volvieron a comprar ÷ clientes del año pasado × 100',
+          why: 'La temporada escolar se repite cada año. La recompra muestra si los clientes regresan.' },
+        { s: 'Lanzas el concurso “Muestra tu morral viajero”. Quieres saber cuántas fotos subieron los clientes con el hashtag.',
+          a: 'Contenido generado por usuarios (UGC)', d: ['Alcance del anuncio', 'Seguidores ganados', 'CTR (tasa de clics)'],
+          why: 'El UGC mide la participación y muestra el producto en uso real.' },
+        { s: 'Quieres saber cuántas personas distintas vieron tu campaña de regreso a clases.',
+          a: 'Alcance', d: ['Impresiones', 'Seguidores totales', 'Frecuencia'],
+          why: 'El alcance cuenta personas únicas, sin repetir a quienes vieron la campaña varias veces.' }
+      ]
+    },
+    {
+      id: 'crepes', brand: 'Crepes & Waffles', mono: 'CW', color: '#A98BFF',
+      type: 'Cadena de restaurantes y heladerías',
+      nets: 'Instagram, TikTok, Google Maps y reservas online',
+      goal: 'Que más personas reserven y vuelvan a visitar los restaurantes.',
+      qs: [
+        { s: 'Publicas un reel de un postre nuevo. Quieres saber a cuántas personas distintas les apareció.',
+          a: 'Alcance', d: ['Impresiones', 'Seguidores totales', 'Guardados'],
+          why: 'El alcance cuenta personas únicas. Las impresiones cuentan cada vez que el reel se mostró.' },
+        { s: 'Quieres saber qué porcentaje de las personas que entran a la página de reservas termina reservando.',
+          a: 'Tasa de conversión de reservas', d: ['Visitas a la página', 'CTR (tasa de clics)', 'Tasa de rebote'],
+          f: 'Reservas ÷ visitas a la página de reservas × 100',
+          why: 'Si mucha gente entra pero no reserva, el proceso de reserva puede ser confuso o largo.' },
+        { s: 'De las personas que reservaron, quieres saber cuántas llegaron de verdad al restaurante.',
+          a: 'Tasa de asistencia', d: ['Reservas totales', 'Alcance', 'Calificación promedio de reseñas'],
+          f: 'Reservas cumplidas ÷ reservas hechas × 100',
+          why: 'Una reserva que no llega deja una mesa vacía. Esta tasa ayuda a decidir si enviar recordatorios.' },
+        { s: 'Quieres saber cómo califican los clientes la experiencia en Google Maps.',
+          a: 'Calificación promedio de reseñas', d: ['Número de reseñas', 'Share of voice', 'Alcance'],
+          why: 'La calificación promedio resume la experiencia y pesa mucho cuando alguien elige dónde comer.' },
+        { s: 'Actualizas las fotos de tus restaurantes en Google Maps. Quieres saber si eso hace que más gente vaya.',
+          a: 'Solicitudes de “Cómo llegar”', d: ['Visitas a la ficha', 'Fotos subidas por clientes', 'Seguidores ganados'],
+          why: 'Pedir la ruta es la señal más clara de que alguien piensa ir al restaurante.' },
+        { s: 'Publicas un carrusel “Cómo armar tu waffle perfecto”. Quieres saber si la gente lo guardó.',
+          a: 'Guardados', d: ['Me gusta', 'Impresiones', 'Visitas al perfil'],
+          why: 'Guardar indica que el contenido fue útil o antojó lo suficiente para volver a verlo.' },
+        { s: 'Los clientes suben fotos de sus helados y etiquetan a la marca. Quieres saber cuántas veces pasa al mes.',
+          a: 'Menciones y etiquetas de clientes', d: ['Visualizaciones de tus historias', 'Seguidores ganados', 'CTR (tasa de clics)'],
+          why: 'Las etiquetas espontáneas son recomendaciones de clientes reales. Contarlas mide el boca a boca digital.' },
+        { s: 'Quieres decidir a qué hora publicar el postre del día para que lo vea la mayor parte de tus seguidores.',
+          q: '¿Qué métrica revisas?',
+          a: 'Horas de mayor actividad de tus seguidores', d: ['Seguidores totales', 'Frecuencia', 'CPM (costo por mil impresiones)'],
+          why: 'Publicar cuando tu audiencia está conectada aumenta las vistas sin pagar publicidad.' },
+        { s: 'Con tu programa de clientes frecuentes quieres saber cuántos de los que vinieron una vez regresan en los siguientes tres meses.',
+          a: 'Tasa de recompra', d: ['Ticket promedio', 'Reservas totales', 'Tasa de engagement'],
+          f: 'Clientes que regresaron ÷ clientes totales × 100',
+          why: 'Que los clientes vuelvan es la mejor prueba de una buena experiencia.' },
+        { s: 'Haces una historia con encuesta: “¿Qué sabor de helado debería volver?”. Quieres saber qué porcentaje de quienes la vieron votaron.',
+          a: 'Tasa de respuesta de la encuesta', d: ['Visualizaciones de la historia', 'Seguidores totales', 'Alcance'],
+          f: 'Votos ÷ visualizaciones de la historia × 100',
+          why: 'La tasa de respuesta mide qué tanto participa tu audiencia, no solo cuántos vieron.' },
+        { s: 'Lanzas un anuncio del menú de temporada. Quieres saber cuánto pagas por cada mil veces que se muestra.',
+          a: 'CPM (costo por mil impresiones)', d: ['CPC (costo por clic)', 'CPA (costo por adquisición)', 'ROAS (retorno de la inversión publicitaria)'],
+          f: 'Inversión ÷ impresiones × 1.000',
+          why: 'El CPM mide el costo de visibilidad, ideal para dar a conocer un menú nuevo.' },
+        { s: 'Muchas personas preguntan por mensaje directo si hay opciones vegetarianas. Quieres medir qué tan rápido respondes.',
+          a: 'Tiempo promedio de respuesta', d: ['Mensajes recibidos', 'Alcance de las historias', 'Tasa de engagement'],
+          why: 'Responder rápido ayuda a que la persona decida venir hoy y no busque otro lugar.' },
+        { s: 'Envías una encuesta: “Del 0 al 10, ¿qué tan probable es que recomiendes el restaurante?”',
+          q: '¿Qué KPI estás midiendo?',
+          a: 'NPS (Net Promoter Score)', d: ['Tasa de engagement', 'Calificación promedio de reseñas', 'Tasa de recompra'],
+          f: '% de promotores (9-10) − % de detractores (0-6)',
+          why: 'El NPS usa justo esa pregunta de 0 a 10 para medir la lealtad.' },
+        { s: 'Publicas un video del proceso de preparación de los crepes. Quieres saber si la gente lo vio completo.',
+          a: 'Retención del video', d: ['Reproducciones totales', 'Seguidores ganados', 'Me gusta'],
+          why: 'La retención muestra si el video mantiene la atención hasta el final.' },
+        { s: 'Quieres saber qué tanto conectó una publicación con quienes la vieron, en proporción.',
+          a: 'Tasa de engagement', d: ['Impresiones', 'Alcance', 'Seguidores totales'],
+          f: 'Interacciones ÷ alcance × 100',
+          why: 'La tasa de engagement mide conexión: cuántos reaccionaron de quienes vieron.' }
+      ]
+    },
+    {
+      id: 'platzi', brand: 'Platzi', mono: 'PL', color: '#FF5B3A',
+      type: 'Plataforma de educación online',
+      nets: 'YouTube, Instagram, TikTok y clases en vivo',
+      goal: 'Conseguir estudiantes que paguen la suscripción y la mantengan.',
+      qs: [
+        { s: 'Subes clases gratis a YouTube y quieres que la plataforma recomiende más tus videos.',
+          q: '¿Qué KPI deberías hacer crecer?',
+          a: 'Tiempo de reproducción', d: ['Número de videos subidos', 'Me gusta', 'Suscriptores totales'],
+          why: 'El tiempo de reproducción suma los minutos que la gente pasa viendo tus videos. Es una de las señales que más pesa en las recomendaciones.' },
+        { s: 'Haces un webinar gratis. Se registraron muchas personas, pero no sabes cuántas se conectaron de verdad.',
+          a: 'Tasa de asistencia', d: ['Registros totales', 'Alcance del anuncio', 'CTR (tasa de clics)'],
+          f: 'Asistentes ÷ registrados × 100',
+          why: 'Registrarse cuesta poco. La asistencia muestra cuántos interesados aparecieron de verdad.' },
+        { s: 'Lanzas anuncios para que la gente descargue una guía gratis a cambio de su correo. Quieres saber cuántos contactos conseguiste.',
+          a: 'Leads generados', d: ['Impresiones', 'CTR (tasa de clics)', 'Seguidores ganados'],
+          why: 'Cada correo es un lead: alguien interesado al que luego le puedes ofrecer un curso.' },
+        { s: 'Ahora quieres saber cuánto te costó cada uno de esos contactos.',
+          a: 'CPL (costo por lead)', d: ['CPM (costo por mil impresiones)', 'CPC (costo por clic)', 'ROAS (retorno de la inversión publicitaria)'],
+          f: 'Inversión ÷ número de leads',
+          why: 'El CPL dice cuánto pagas por cada contacto interesado y permite comparar campañas.' },
+        { s: 'De las personas que crearon una cuenta gratis, quieres saber qué porcentaje pagó la suscripción.',
+          a: 'Tasa de conversión de gratis a pago', d: ['Cuentas gratis creadas', 'NPS (Net Promoter Score)', 'Tasa de asistencia'],
+          f: 'Suscriptores que pagan ÷ cuentas gratis × 100',
+          why: 'Las cuentas gratis solo cumplen su objetivo si una parte se convierte en clientes que pagan.' },
+        { s: 'Cada mes algunos estudiantes cancelan la suscripción. Quieres medir qué porcentaje se va.',
+          a: 'Churn (tasa de cancelación)', d: ['Seguidores perdidos', 'Tasa de rebote', 'Frecuencia'],
+          f: 'Cancelaciones del mes ÷ suscriptores al inicio del mes × 100',
+          why: 'En una suscripción, si se van más estudiantes de los que llegan, el negocio se encoge.' },
+        { s: 'Quieres saber si los estudiantes terminan los cursos que empiezan.',
+          a: 'Tasa de finalización de cursos', d: ['Estudiantes inscritos', 'NPS (Net Promoter Score)', 'Tiempo de reproducción'],
+          f: 'Cursos terminados ÷ cursos empezados × 100',
+          why: 'Un estudiante que termina cursos ve resultados y es más probable que mantenga la suscripción.' },
+        { s: 'Haces una clase en vivo cada semana. Quieres saber cuántas personas estuvieron conectadas al mismo tiempo en el mejor momento.',
+          a: 'Pico de espectadores simultáneos', d: ['Seguidores totales', 'Me gusta del live', 'Alcance del perfil'],
+          why: 'El pico de espectadores muestra el momento de mayor interés de la clase.' },
+        { s: 'Muchas personas llegan a la página de precios desde Instagram y se van en segundos sin hacer clic en nada.',
+          a: 'Tasa de rebote', d: ['Tasa de conversión', 'Visitas totales', 'CTR (tasa de clics)'],
+          f: 'Visitas que se van sin interactuar ÷ visitas totales × 100',
+          why: 'Un rebote alto indica que la página no coincide con lo que la persona esperaba.' },
+        { s: 'Envías el correo “Clase gratis de inteligencia artificial”. Quieres saber qué porcentaje de quienes lo recibieron hizo clic en el enlace.',
+          a: 'CTR del correo', d: ['Tasa de apertura', 'Correos enviados', 'Suscriptores de la lista'],
+          f: 'Clics ÷ correos entregados × 100',
+          why: 'La apertura dice quién vio el correo; el CTR dice quién llegó a la clase.' },
+        { s: 'Un TikTok sobre errores al empezar a programar se volvió viral. Quieres saber cuántas personas empezaron a seguirte gracias a él.',
+          a: 'Seguidores ganados por la publicación', d: ['Reproducciones', 'Me gusta', 'Compartidos'],
+          why: 'Las vistas pasan; los seguidores ganados son la audiencia que se queda.' },
+        { s: 'Quieres saber cuánto dinero deja un estudiante durante todo el tiempo que mantiene la suscripción.',
+          a: 'LTV (valor de vida del cliente)', d: ['Ticket promedio', 'CAC (costo de adquisición de cliente)', 'Churn (tasa de cancelación)'],
+          why: 'El LTV suma todos los pagos del estudiante. Te dice cuánto puedes invertir para conseguir uno nuevo.' },
+        { s: 'Sumas anuncios, becas y descuentos de bienvenida. Quieres saber cuánto te cuesta en total cada estudiante nuevo que paga.',
+          a: 'CAC (costo de adquisición de cliente)', d: ['CPL (costo por lead)', 'CPC (costo por clic)', 'CPM (costo por mil impresiones)'],
+          f: 'Costos totales de adquisición ÷ clientes nuevos',
+          why: 'El CAC incluye todo lo que gastas para conseguir un estudiante que paga, no solo un contacto.' },
+        { s: 'Preguntas a tus estudiantes: “Del 0 al 10, ¿qué tan probable es que recomiendes la plataforma?”',
+          q: '¿Qué KPI estás midiendo?',
+          a: 'NPS (Net Promoter Score)', d: ['Tasa de engagement', 'Tasa de finalización de cursos', 'Seguidores totales'],
+          f: '% de promotores (9-10) − % de detractores (0-6)',
+          why: 'El NPS mide la lealtad a partir de esa pregunta de 0 a 10.' },
+        { s: 'Quieres saber qué porcentaje de las veces que se mostró tu anuncio en Instagram alguien hizo clic.',
+          a: 'CTR (tasa de clics)', d: ['Alcance', 'CPL (costo por lead)', 'Tasa de conversión'],
+          f: 'Clics ÷ impresiones × 100',
+          why: 'El CTR mide qué tan atractivo es el anuncio para que la gente quiera saber más.' }
+      ]
+    }
+  ];
+  const CASE_BY_ID = Object.fromEntries(CASES.map(c => [c.id, c]));
+
+  // ---------- helpers ----------
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const pad = n => String(n).padStart(2, '0');
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-5);
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  // Posición de la respuesta correcta: repartida entre A-D y nunca repetida en dos retos seguidos.
+  function correctSlots(n) {
+    const base = Array.from({ length: n }, (_, i) => i % 4);
+    for (let t = 0; t < 500; t++) {
+      const s = shuffle(base);
+      if (s.every((v, i) => i === 0 || v !== s[i - 1])) return s;
+    }
+    return base;
+  }
+  function fmtTime(ms) {
+    const s = Math.round(ms / 1000);
+    return s < 60 ? `${s} s` : `${Math.floor(s / 60)} min ${pad(s % 60)} s`;
+  }
+  let toastTimer = 0;
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 5000);
+  }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  function lsDel(k) { try { localStorage.removeItem(k); } catch {} }
+  function ssGet(k) { try { return sessionStorage.getItem(k); } catch { return null; } }
+  function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch {} }
+  function ssDel(k) { try { sessionStorage.removeItem(k); } catch {} }
+
+  // ---------- screens ----------
+  const SCREENS = ['home', 'intro', 'draw', 'wait', 'quiz', 'end', 'tv'];
+  let current = 'home';
+  function show(name) {
+    if (current === name) return;
+    SCREENS.forEach(s => { $('#s-' + s).hidden = s !== name; });
+    current = name;
+    document.documentElement.classList.toggle('tv', name === 'tv');
+    window.scrollTo(0, 0);
+  }
+
+  (function buildTicker() {
+    const items = [['CTR', '2,4%', 'up'], ['ROAS', '3,1x', 'up'], ['CPA', '$18.500', 'down'], ['Alcance', '48,2K', 'up'], ['Engagement', '5,7%', 'up'], ['CPM', '$9.200', 'down'], ['Churn', '4,1%', 'down'], ['NPS', '62', 'up'], ['Guardados', '1.204', 'up'], ['Frecuencia', '3,8', 'down'], ['Share of voice', '27%', 'up'], ['LTV', '$420K', 'up']];
+    const html = items.map(([k, v, d]) => `<span>${k} <b>${v}</b> <em class="${d}">${d === 'up' ? '▲' : '▼'}</em></span>`).join('');
+    $('#ticker').innerHTML = html + html;
+  })();
+
+  // ---------- estado del jugador ----------
+  // G.picks[q] = { pick, ok, pts, elapsed, timeout } o { skipped: true }; null si aún no responde.
+  let G = null;
+  function persist() { if (G) lsSet(LS_KEY, JSON.stringify(G)); }
+  function clearSaved() { lsDel(LS_KEY); }
+  function caseOf(g) { return CASE_BY_ID[g.caseId]; }
+  function touch() { G.ver = (G.ver || 0) + 1; persist(); saveTeam(); }
+  function resultsOf(g) { return g.picks.map(p => (!p || p.skipped ? null : (p.ok ? 1 : 0))); }
+  function recomputeTotals() {
+    let score = 0, correct = 0, timeMs = 0;
+    G.picks.forEach(p => { if (p && !p.skipped) { score += p.pts; correct += p.ok ? 1 : 0; timeMs += p.elapsed; } });
+    G.score = score; G.correct = correct; G.timeMs = timeMs;
+  }
+
+  // ---------- conexión en vivo ----------
+  // 'artifact': dentro de claude.ai, con la base de datos del artifact.
+  // 'firebase': como página web (Vercel), con Firebase Realtime Database (los datos del proyecto van en config.js).
+  // Sin conexión: cada jugador avanza a su ritmo en modo individual.
+  const FRESH_CFG = { phase: 'lobby', q: 0, startedAt: 0, closed: false, revealed: false };
+  const LIVE = { mode: null, db: null, round: 'inicio', cfg: { ...FRESH_CFG }, cfgLoaded: false, teams: [], unsubTeams: null, writable: true, isAdmin: false, status: 'connecting', netDown: false, offset: null, fbError: null };
+  let winnerDismissed = false, prevRanks = null;
+  let liveReadyResolve;
+  const liveReady = new Promise(r => { liveReadyResolve = r; });
+  const now = () => Date.now() + (LIVE.offset || 0);
+  const isLive = () => !!LIVE.mode && LIVE.cfgLoaded;
+
+  const SYNC_TEXT = {
+    connecting: 'Conectando con la pantalla del salón…',
+    live: 'En vivo: tu puntaje aparece en la pantalla del salón.',
+    retry: 'No se pudo enviar tu último puntaje. Se volverá a enviar con tu próxima respuesta.',
+    readonly: 'Tu cuenta solo puede ver este juego, así que tu puntaje no llega a la pantalla del salón.',
+    off: 'Modo individual: avanzas a tu ritmo y tu puntaje solo se ve en este dispositivo.'
+  };
+  function updateSyncUI() {
+    document.querySelectorAll('.sync').forEach(el => { el.dataset.s = LIVE.status; el.textContent = SYNC_TEXT[LIVE.status] || ''; });
+    $('#btn-retry-send').hidden = !(LIVE.status === 'retry' && G && current === 'end');
+    $('#btn-again').hidden = !(G && current === 'end' && !isLive());
+  }
+
+  function normConfig(d) {
+    d = d || {};
+    return {
+      round: typeof d.round === 'string' && /^[a-z0-9-]{1,40}$/.test(d.round) ? d.round : 'inicio',
+      phase: ['lobby', 'question', 'final'].includes(d.phase) ? d.phase : 'lobby',
+      q: Number.isInteger(d.q) ? Math.max(0, Math.min(Q_COUNT - 1, d.q)) : 0,
+      startedAt: Number(d.startedAt) || 0,
+      closed: d.closed === true,
+      revealed: d.revealed === true
+    };
+  }
+  function cleanTeam(id, d) {
+    const n = v => (typeof v === 'number' && isFinite(v) ? v : 0);
+    // results llega como lista [1, 0, null…] (claude.ai) o como texto "10-…" (Firebase).
+    const raw = typeof d.results === 'string' ? [...d.results].map(ch => (ch === '1' ? 1 : ch === '0' ? 0 : null))
+      : Array.isArray(d.results) ? d.results
+      : (d.results && typeof d.results === 'object' ? Object.assign([], d.results) : []);
+    const results = Array.from({ length: Q_COUNT }, (_, i) => (raw[i] === 1 ? 1 : raw[i] === 0 ? 0 : null));
+    return {
+      id,
+      name: (typeof d.name === 'string' && d.name.trim() ? d.name : 'Sin nombre').slice(0, 28),
+      caseId: CASE_BY_ID[d.caseId] ? d.caseId : null,
+      score: Math.max(0, Math.min(Q_COUNT * (BASE + BONUS), n(d.score))),
+      correct: results.filter(x => x === 1).length,
+      answered: results.filter(x => x !== null).length,
+      results,
+      timeMs: Math.max(0, n(d.timeMs)),
+      joinedAt: n(d.joinedAt)
+    };
+  }
+  function rankTeams(list) {
+    return list.slice().sort((a, b) =>
+      (b.score - a.score) ||
+      (b.correct - a.correct) ||
+      (a.timeMs - b.timeMs) ||
+      (a.joinedAt - b.joinedAt) ||
+      a.name.localeCompare(b.name));
+  }
+  function rankMap(list) { const m = new Map(); rankTeams(list).forEach((t, i) => m.set(t.id, i + 1)); return m; }
+
+  function applyConfig(d) {
+    const c = normConfig(d);
+    const prev = LIVE.cfg;
+    const roundChanged = !LIVE.cfgLoaded || c.round !== LIVE.round;
+    // Antes de pasar al siguiente reto, guarda las posiciones para mostrar quién subió o bajó.
+    if (!roundChanged && prev.phase === 'question' && (c.q !== prev.q || c.phase !== prev.phase)) prevRanks = rankMap(LIVE.teams);
+    if (c.revealed && !prev.revealed) winnerDismissed = false;
+    LIVE.cfg = c;
+    LIVE.round = c.round;
+    LIVE.cfgLoaded = true;
+    if (LIVE.status === 'connecting' || LIVE.status === 'off') LIVE.status = LIVE.writable ? 'live' : 'readonly';
+    if (roundChanged) {
+      LIVE.teams = [];
+      prevRanks = null;
+      subscribeTeams();
+    }
+    onRoundKnown();
+    updateSyncUI();
+  }
+
+  // --- modo artifact (claude.ai) ---
+  function subscribeTeams() {
+    if (LIVE.unsubTeams) LIVE.unsubTeams();
+    LIVE.unsubTeams = null;
+    if (LIVE.mode === 'artifact') {
+      LIVE.unsubTeams = LIVE.db.collection(`rounds/${LIVE.round}/teams`).limit(300).onSnapshot(snap => {
+        LIVE.teams = snap.docs.filter(d => d.exists).map(d => cleanTeam(d.id, d.data() || {}));
+        renderAll();
+      }, () => { renderTV(); });
+    } else if (LIVE.mode === 'firebase') {
+      const m = FB.m;
+      LIVE.unsubTeams = m.onValue(m.ref(FB.db, `rounds/${LIVE.round}/teams`), snap => {
+        const v = snap.val() || {};
+        LIVE.teams = Object.keys(v).map(id => cleanTeam(id, v[id] || {}));
+        renderAll();
+      }, () => { renderTV(); });
+    }
+  }
+  async function startArtifact() {
+    let db = null;
+    try { db = await window.claude.use('db'); } catch { db = null; }
+    if (!db) return false;
+    LIVE.db = db;
+    LIVE.mode = 'artifact';
+    LIVE.offset = 0;
+    try {
+      const user = await window.claude.use('user');
+      if (user) {
+        const w = await user.can('data.write');
+        if (w === false) LIVE.writable = false;
+        LIVE.isAdmin = !!(await user.canEdit());
+      }
+    } catch {}
+    if (!LIVE.writable) LIVE.status = 'readonly';
+    updateSyncUI();
+    db.doc('live/config').onSnapshot(snap => {
+      applyConfig((snap.exists && snap.data()) || {});
+      renderAll();
+    }, () => { LIVE.status = 'off'; LIVE.mode = null; updateSyncUI(); renderAll(); });
+    return true;
+  }
+
+  // --- modo web: Firebase Realtime Database (los datos del proyecto van en config.js) ---
+  const FB_SDK = 'https://www.gstatic.com/firebasejs/10.12.2/';
+  const FB = { cfg: window.BATALLA_FIREBASE || null, m: null, auth: null, db: null, uid: null };
+  function firebaseConfigured() {
+    const c = FB.cfg;
+    return !!(c && c.apiKey && c.databaseURL && !/PEGA_AQUI|TU_PROYECTO/.test(`${c.apiKey} ${c.databaseURL}`));
+  }
+  function hostEmail() { return String((FB.cfg && FB.cfg.hostEmail) || '').trim().toLowerCase(); }
+  async function startFirebase() {
+    const base = FB.cfg.sdkBase || FB_SDK;
+    const [appM, authM, dbM] = await Promise.all(['firebase-app.js', 'firebase-auth.js', 'firebase-database.js'].map(f => import(base + f)));
+    const m = FB.m = { ...appM, ...authM, ...dbM };
+    const app = m.initializeApp(FB.cfg);
+    FB.auth = m.getAuth(app);
+    FB.db = m.getDatabase(app);
+    // Cada celular entra con una sesión anónima; la TV entra con el usuario anfitrión.
+    const ready = await new Promise(resolve => {
+      let settled = false;
+      const done = v => { if (!settled) { settled = true; resolve(v); } };
+      m.onAuthStateChanged(FB.auth, user => {
+        if (!user) {
+          m.signInAnonymously(FB.auth).catch(e => { LIVE.fbError = (e && e.code) || 'auth'; done(false); });
+          return;
+        }
+        FB.uid = user.uid;
+        LIVE.isAdmin = !!user.email && user.email.toLowerCase() === hostEmail();
+        // Las reglas de Firebase solo dejan escribir el puntaje en la ruta de tu propia sesión.
+        if (G && G.teamId !== user.uid) { G.teamId = user.uid; G.ver = (G.ver || 0) + 1; persist(); saveTeam(); }
+        renderAll();
+        done(true);
+      });
+    });
+    if (!ready) return false;
+    LIVE.mode = 'firebase';
+    m.onValue(m.ref(FB.db, '.info/serverTimeOffset'), s => { LIVE.offset = Number(s.val()) || 0; });
+    m.onValue(m.ref(FB.db, '.info/connected'), s => { LIVE.netDown = s.val() === false && LIVE.cfgLoaded; renderTV(); });
+    m.onValue(m.ref(FB.db, 'live/config'), snap => {
+      applyConfig(snap.val() || {});
+      renderAll();
+    }, () => { LIVE.fbError = 'rules'; LIVE.mode = null; LIVE.status = 'off'; updateSyncUI(); renderAll(); });
+    return true;
+  }
+
+  // --- guardar el puntaje del jugador ---
+  async function writeTeamRemote(round, id, body) {
+    if (LIVE.mode === 'artifact') return LIVE.db.doc(`rounds/${round}/teams/${id}`).set(body);
+    // Firebase no guarda valores vacíos en listas, así que los resultados viajan como texto: "10-" = acierto, error, sin jugar.
+    const m = FB.m;
+    const data = { ...body, results: body.results.map(r => (r === 1 ? '1' : r === 0 ? '0' : '-')).join('') };
+    try { await m.set(m.ref(FB.db, `rounds/${round}/teams/${FB.uid}`), data); }
+    catch { const e = new Error('firebase'); e.code = 'rejected'; throw e; }
+  }
+  function teamBody() {
+    const results = resultsOf(G);
+    return {
+      name: G.name, caseId: G.caseId, score: G.score, correct: G.correct, results, timeMs: G.timeMs,
+      status: results.every(x => x !== null) ? 'done' : 'playing',
+      joinedAt: G.joinedAt, updatedAt: Date.now()
+    };
+  }
+  let writeChain = Promise.resolve();
+  function saveTeam() {
+    if (!LIVE.mode || !LIVE.writable || !G || !G.teamId || !LIVE.cfgLoaded) return;
+    const round = G.round, id = G.teamId, body = teamBody(), ver = G.ver, g = G;
+    writeChain = writeChain.then(() => writeTeam(round, id, body, ver, g));
+  }
+  async function writeTeam(round, id, body, ver, g) {
+    const ok = () => { if (g === G && G.ver === ver) { G.synced = ver; persist(); } LIVE.status = 'live'; };
+    try {
+      await writeTeamRemote(round, id, body);
+      ok();
+    } catch (e) {
+      const code = e && e.code;
+      if (code === 'unavailable' || code === 'resource_exhausted') {
+        await sleep(700 + Math.random() * 900);
+        try { await writeTeamRemote(round, id, body); ok(); } catch { LIVE.status = 'retry'; }
+      } else if (LIVE.mode === 'artifact' && (code === 'invalid_argument' || code === 'not_granted' || code === 'revoked' || code === 'capability_disabled')) {
+        LIVE.writable = false; LIVE.status = 'readonly';
+      } else {
+        LIVE.status = 'retry';
+      }
+    }
+    updateSyncUI();
+  }
+
+  function onRoundKnown() {
+    if (!G) return;
+    if (G.round === LIVE.round) {
+      if (G.provisional) { G.provisional = false; persist(); }
+      if (G.synced !== G.ver) saveTeam();
+      return;
+    }
+    if (G.provisional) {
+      G.round = LIVE.round; G.provisional = false; G.ver = (G.ver || 0) + 1; persist(); saveTeam();
+      return;
+    }
+    // El anfitrión empezó una nueva partida.
+    stopTimer();
+    G = null; clearSaved();
+    if (current !== 'tv') show('home');
+    updateSyncUI();
+    toast('El anfitrión empezó una nueva partida. Ya puedes jugar de nuevo.');
+  }
+
+  // --- acciones del anfitrión ---
+  function canAdmin() {
+    return (LIVE.mode === 'artifact' || LIVE.mode === 'firebase') && LIVE.isAdmin;
+  }
+  async function checkPwLocal(v) {
+    if (!PW || !(window.crypto && crypto.subtle)) return false;
+    try {
+      const enc = new TextEncoder();
+      const salt = new Uint8Array(PW.salt.match(/../g).map(h => parseInt(h, 16)));
+      const key = await crypto.subtle.importKey('raw', enc.encode(v), 'PBKDF2', false, ['deriveBits']);
+      const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations: PW.iter, hash: 'SHA-256' }, key, 256);
+      return [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2, '0')).join('') === PW.hash;
+    } catch { return false; }
+  }
+  async function unlockTV(pw) {
+    await liveReady;
+    if (LIVE.mode === 'firebase') {
+      if (!hostEmail() || /tu_correo/.test(hostEmail())) return 'noemail';
+      try { await FB.m.signInWithEmailAndPassword(FB.auth, hostEmail(), pw); }
+      catch (e) {
+        const c = String((e && e.code) || '');
+        if (c.includes('too-many-requests')) return 'slow';
+        if (c.includes('network')) return 'net';
+        if (c.includes('operation-not-allowed')) return 'nopass';
+        return 'bad';
+      }
+      LIVE.isAdmin = true;
+      return 'ok';
+    }
+    if (!PW) return 'nocheck';
+    return (await checkPwLocal(pw)) ? 'ok' : 'bad';
+  }
+  // Mismas reglas que el servidor (api/admin.js) para pasar de una fase a otra.
+  function nextConfig(c, action, fromQ) {
+    const base = { round: LIVE.round, phase: c.phase, q: c.q, startedAt: c.startedAt, closed: c.closed, revealed: c.revealed, updatedAt: Date.now() };
+    if (action === 'start' && c.phase === 'lobby') return { ...base, phase: 'question', q: 0, startedAt: Date.now(), closed: false, revealed: false };
+    if (action === 'close' && c.phase === 'question' && fromQ === c.q) return { ...base, closed: true };
+    if (action === 'next' && c.phase === 'question' && fromQ === c.q && c.q < Q_COUNT - 1) return { ...base, q: c.q + 1, startedAt: Date.now(), closed: false };
+    if (action === 'final' && c.phase === 'question') return { ...base, phase: 'final', closed: true, revealed: true };
+    if (action === 'newRound') return { round: 'r-' + rid(), ...FRESH_CFG, updatedAt: Date.now() };
+    return null;
+  }
+  async function adminAction(action) {
+    const fromQ = LIVE.cfg.q;
+    if (!canAdmin()) return false;
+    const next = nextConfig(LIVE.cfg, action, fromQ);
+    if (!next) return true;
+    if (LIVE.mode === 'artifact') { await LIVE.db.doc('live/config').set(next); return true; }
+    const m = FB.m;
+    const oldRound = LIVE.round;
+    // La hora de inicio del reto la pone el servidor de Firebase, igual para todos los celulares.
+    if (action === 'start' || action === 'next') next.startedAt = m.serverTimestamp();
+    next.updatedAt = m.serverTimestamp();
+    await m.set(m.ref(FB.db, 'live/config'), next);
+    // Al empezar una partida nueva se borran los puntajes de la anterior.
+    if (action === 'newRound') m.remove(m.ref(FB.db, `rounds/${oldRound}`)).catch(() => {});
+    return true;
+  }
+
+  // ---------- inicio / intro ----------
+  $('#btn-begin').addEventListener('click', () => { show('intro'); $('#team-name').focus(); });
+  $('#btn-back-home').addEventListener('click', () => show('home'));
+  $('#name-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('#team-name').value.replace(/\s+/g, ' ').trim();
+    const err = $('#name-err');
+    if (name.length < 2) { err.textContent = 'Escribe un nombre de al menos 2 letras.'; err.hidden = false; $('#team-name').focus(); return; }
+    if (isLive() && LIVE.cfg.phase === 'final') { err.textContent = 'Esta batalla ya terminó. Espera a que el anfitrión abra una nueva partida.'; err.hidden = false; return; }
+    err.hidden = true;
+    startDraw(name);
+  });
+
+  // ---------- sorteo ----------
+  let drawing = false;
+  function renderBrands(hot, picked) {
+    $('#brands').innerHTML = CASES.map((c, i) => `
+      <div class="brand${i === hot ? ' hot' : ''}${picked != null ? (i === picked ? ' picked' : ' out') : ''}" style="--c:${c.color}">
+        ${picked === i ? '<span class="stamp">Te tocó</span>' : ''}
+        <div class="mono-tile">${c.mono}</div>
+        <div><b>${esc(c.brand)}</b><small>${esc(c.type)}</small></div>
+      </div>`).join('');
+  }
+  function fillBrief() {
+    const c = caseOf(G);
+    const b = $('#brief');
+    b.style.setProperty('--c', c.color);
+    $('#brief-name').textContent = c.brand;
+    $('#brief-type').textContent = c.type;
+    $('#brief-nets').textContent = c.nets;
+    $('#brief-goal').textContent = c.goal;
+    $('#btn-ready').textContent = isLive() ? 'Estoy listo' : 'Empezar los retos';
+    b.hidden = false;
+    $('#draw-title').textContent = `${G.name}, esta es tu marca`;
+  }
+  function showBrief() {
+    show('draw');
+    renderBrands(-1, CASES.findIndex(c => c.id === G.caseId));
+    fillBrief();
+  }
+  async function startDraw(name) {
+    const ci = Math.floor(Math.random() * CASES.length);
+    const c = CASES[ci];
+    const order = shuffle(c.qs.map((_, i) => i)).slice(0, Q_COUNT);
+    const slots = correctSlots(order.length);
+    const plan = order.map((qi, k) => {
+      const q = c.qs[qi];
+      const ds = shuffle(q.d);
+      const opts = [];
+      let di = 0;
+      for (let i = 0; i < 4; i++) opts.push(i === slots[k] ? q.a : ds[di++]);
+      return { qi, opts, ans: slots[k] };
+    });
+    G = {
+      v: 3, teamId: (LIVE.mode === 'firebase' && FB.uid) || rid(), name, caseId: c.id, plan, picks: Array(Q_COUNT).fill(null),
+      score: 0, correct: 0, timeMs: 0, ready: false, joinedAt: now(), solo: null,
+      round: LIVE.round, provisional: !LIVE.cfgLoaded, ver: 0, synced: -1
+    };
+    touch();
+    drawing = true;
+    show('draw');
+    $('#brief').hidden = true;
+    $('#draw-title').textContent = 'Sorteando tu marca…';
+    if (!RM) {
+      const steps = CASES.length * 2 + ci;
+      for (let s = 0; s <= steps; s++) {
+        renderBrands(s % CASES.length, null);
+        await sleep(45 + Math.pow(s / steps, 3) * 320);
+      }
+    }
+    drawing = false;
+    if (!G) return;
+    renderBrands(-1, ci);
+    fillBrief();
+    $('#btn-ready').focus();
+  }
+  $('#btn-ready').addEventListener('click', () => {
+    if (!G) return;
+    G.ready = true;
+    if (!isLive()) G.solo = { q: 0, startedAt: now(), done: false };
+    G.ver++; persist();
+    syncPlayer();
+  });
+
+  // ---------- flujo del jugador ----------
+  // stage(): en qué reto va la batalla. En vivo lo decide el anfitrión; sin conexión, el propio jugador.
+  function stage() {
+    if (isLive()) return LIVE.cfg;
+    if (!G || !G.solo) return { ...FRESH_CFG };
+    if (G.solo.done) return { phase: 'final', q: Q_COUNT - 1, startedAt: 0, closed: true, revealed: false };
+    return { phase: 'question', q: G.solo.q, startedAt: G.solo.startedAt, closed: false, revealed: false };
+  }
+  let shownQ = -1, shownMode = '';
+  function syncPlayer() {
+    if (current === 'tv' || drawing) return;
+    if (!G) {
+      if (['draw', 'wait', 'quiz', 'end'].includes(current)) show('home');
+      return;
+    }
+    if (!G.ready) {
+      // El texto del botón depende de si ya hay conexión con la pantalla del salón.
+      if (current !== 'draw') showBrief();
+      else $('#btn-ready').textContent = isLive() ? 'Estoy listo' : 'Empezar los retos';
+      return;
+    }
+    if (!isLive() && !G.solo) G.solo = { q: 0, startedAt: now(), done: false };
+    const st = stage();
+    if (st.phase === 'final') {
+      stopTimer();
+      if (current !== 'end') { show('end'); }
+      renderEnd();
+      return;
+    }
+    if (st.phase === 'lobby') {
+      stopTimer();
+      show('wait');
+      renderWait();
+      return;
+    }
+    const q = st.q;
+    const pick = G.picks[q];
+    if (!pick) {
+      const over = st.closed || now() >= st.startedAt + Q_MS;
+      if (over) {
+        // Si el jugador entró cuando este reto ya había empezado, no se le cuenta.
+        if (G.joinedAt > st.startedAt + 2000) G.picks[q] = { skipped: true };
+        else recordAnswer(q, -1, st);
+        if (G.picks[q].skipped) { recomputeTotals(); touch(); }
+        return syncPlayer();
+      }
+      if (current !== 'quiz' || shownQ !== q || shownMode !== 'question') { show('quiz'); renderQuestion(q); }
+      if (!raf) raf = requestAnimationFrame(tick);
+    } else {
+      stopTimer();
+      if (current !== 'quiz' || shownQ !== q || shownMode !== 'feedback') { show('quiz'); renderQuestion(q); renderFeedback(q, false); }
+      renderPlace();
+    }
+  }
+
+  // ---------- retos ----------
+  let raf = 0;
+  function stopTimer() { cancelAnimationFrame(raf); raf = 0; }
+  function tick() {
+    raf = 0;
+    if (!G || current !== 'quiz' || shownMode !== 'question') return;
+    const st = stage();
+    const left = Math.max(0, st.startedAt + Q_MS - now());
+    $('#timer i').style.transform = `scaleX(${Math.min(1, left / Q_MS)})`;
+    $('#timer').classList.toggle('low', left < 8000);
+    $('#timer').setAttribute('aria-valuenow', String(Math.ceil(left / 1000)));
+    $('#secs').textContent = `${Math.ceil(left / 1000)} s`;
+    if (left <= 0 || st.closed || st.q !== shownQ) { syncPlayer(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+  function renderHeader(q) {
+    const c = caseOf(G);
+    const chip = $('#q-brand');
+    chip.style.setProperty('--c', c.color);
+    chip.querySelector('span').textContent = c.brand;
+    $('#q-num').textContent = `Reto ${pad(q + 1)}/${pad(Q_COUNT)}`;
+    $('#q-score').textContent = G.score;
+  }
+  function renderQuestion(q) {
+    const c = caseOf(G);
+    const p = G.plan[q];
+    const item = c.qs[p.qi];
+    shownQ = q; shownMode = 'question';
+    renderHeader(q);
+    $('#q-sit').textContent = item.s;
+    $('#q-text').textContent = item.q || DEFAULT_Q;
+    $('#opts').innerHTML = p.opts.map((o, i) =>
+      `<button class="opt" type="button" data-i="${i}"><span class="key">${LETTERS[i]}</span><span>${esc(o)}</span></button>`).join('');
+    $('#fb').hidden = true;
+    $('#timer').classList.remove('low');
+    window.scrollTo(0, 0);
+  }
+  $('#opts').addEventListener('click', e => {
+    const b = e.target.closest('.opt');
+    if (b && !b.disabled) answer(Number(b.dataset.i));
+  });
+  document.addEventListener('keydown', e => {
+    if (current !== 'quiz' || shownMode !== 'question' || e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    let i = ['a', 'b', 'c', 'd'].indexOf(k);
+    if (i < 0) i = ['1', '2', '3', '4'].indexOf(k);
+    if (i >= 0) { e.preventDefault(); answer(i); }
+  });
+  function recordAnswer(q, pick, st) {
+    const p = G.plan[q];
+    const elapsed = pick < 0 ? Q_MS : Math.min(Q_MS, Math.max(0, now() - st.startedAt));
+    const ok = pick >= 0 && pick === p.ans;
+    const pts = ok ? BASE + Math.round(BONUS * (1 - elapsed / Q_MS)) : 0;
+    G.picks[q] = { pick, ok, pts, elapsed, timeout: pick < 0 };
+    recomputeTotals();
+    touch();
+  }
+  function answer(i) {
+    if (!G || shownMode !== 'question') return;
+    const st = stage();
+    const q = shownQ;
+    if (st.q !== q || G.picks[q]) return;
+    stopTimer();
+    const over = st.closed || now() >= st.startedAt + Q_MS;
+    recordAnswer(q, over ? -1 : i, st);
+    renderFeedback(q, true);
+    renderPlace();
+  }
+  function renderFeedback(q, fresh) {
+    const c = caseOf(G);
+    const p = G.plan[q];
+    const item = c.qs[p.qi];
+    const L = G.picks[q] || { skipped: true };
+    shownQ = q; shownMode = 'feedback';
+    renderHeader(q);
+    document.querySelectorAll('#opts .opt').forEach((b, i) => {
+      b.disabled = true;
+      b.classList.toggle('is-correct', i === p.ans);
+      b.classList.toggle('is-wrong', !L.skipped && i === L.pick && !L.ok);
+      b.classList.toggle('is-dim', i !== p.ans && (L.skipped || i !== L.pick));
+    });
+    const left = L.skipped || L.timeout ? 0 : Math.max(0, 1 - L.elapsed / Q_MS);
+    $('#timer i').style.transform = `scaleX(${left})`;
+    $('#secs').textContent = `${Math.ceil(left * Q_MS / 1000)} s`;
+    const fb = $('#fb');
+    fb.classList.toggle('ok', !!L.ok);
+    fb.classList.toggle('no', !L.ok && !L.skipped);
+    fb.classList.toggle('skip', !!L.skipped);
+    $('#fb-title').textContent = L.skipped ? 'Llegaste con el reto en curso' : L.ok ? '¡Correcto!' : (L.timeout ? 'Se acabó el tiempo' : 'No era ese');
+    $('#fb-pts').textContent = L.skipped ? '' : `+${L.pts} pts`;
+    $('#fb-ans').innerHTML = L.ok ? `Bono por rapidez: <b>+${L.pts - BASE} pts</b>` : `El KPI indicado era <b>${esc(item.a)}</b>.`;
+    $('#fb-why').textContent = item.why;
+    const f = $('#fb-f');
+    f.hidden = !item.f;
+    f.textContent = item.f ? `Fórmula: ${item.f}` : '';
+    const live = isLive();
+    $('#btn-next').hidden = live;
+    $('#btn-next').textContent = q >= Q_COUNT - 1 ? 'Ver mi resultado' : 'Siguiente reto';
+    $('#fb-wait').hidden = !live;
+    fb.hidden = false;
+    if (fresh && L.ok && !RM) { const s = $('#q-score'); s.classList.remove('pop'); void s.offsetWidth; s.classList.add('pop'); }
+    if (fresh) {
+      fb.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'nearest' });
+      if (!live) $('#btn-next').focus({ preventScroll: true });
+    }
+  }
+  // Mensaje de espera y puesto actual mientras el anfitrión pasa al siguiente reto.
+  function renderPlace() {
+    if (current !== 'quiz' || shownMode !== 'feedback' || !isLive() || !G) return;
+    const st = LIVE.cfg;
+    const teams = LIVE.teams;
+    const answered = teams.filter(t => t.results[st.q] !== null).length;
+    const over = st.closed || now() >= st.startedAt + Q_MS || (teams.length > 0 && answered >= teams.length);
+    $('#fb-wait-msg').textContent = over
+      ? (st.q >= Q_COUNT - 1 ? 'Último reto cerrado. El anfitrión va a anunciar al ganador.' : 'Reto cerrado. Mira las posiciones en la pantalla del salón; el anfitrión pasará al siguiente reto.')
+      : 'Respuesta enviada. Espera a que el resto del salón termine este reto.';
+    const ranks = rankMap(teams);
+    const r = ranks.get(G.teamId);
+    const place = $('#fb-place');
+    if (r) {
+      place.innerHTML = `<span class="mono">Tu puesto ahora</span><b>#${r}</b><span class="muted">de ${plural(teams.length, 'jugador', 'jugadores')}</span>`;
+      place.hidden = false;
+    } else place.hidden = true;
+  }
+  $('#btn-next').addEventListener('click', () => {
+    if (!G || isLive() || !G.solo) return;
+    if (G.solo.q >= Q_COUNT - 1) { G.solo.done = true; G.finishedAt = now(); }
+    else { G.solo.q++; G.solo.startedAt = now(); }
+    G.ver++; persist();
+    syncPlayer();
+  });
+
+  // ---------- sala de espera ----------
+  function renderWait() {
+    if (!G) return;
+    const c = caseOf(G);
+    $('#wait-title').textContent = `¡Listo, ${G.name}!`;
+    const chip = $('#wait-brand');
+    chip.style.setProperty('--c', c.color);
+    chip.querySelector('span').textContent = c.brand;
+    const n = LIVE.teams.length;
+    $('#wait-count').textContent = n ? `${plural(n, 'jugador conectado', 'jugadores conectados')} en la sala.` : '';
+  }
+
+  // ---------- final ----------
+  function renderEnd() {
+    if (!G) return;
+    const c = caseOf(G);
+    $('#end-name').textContent = G.name;
+    $('#end-score').textContent = G.score;
+    const played = G.picks.filter(p => p && !p.skipped).length;
+    $('#end-correct').textContent = `${G.correct} de ${played || Q_COUNT}`;
+    $('#end-time').textContent = fmtTime(G.timeMs);
+    $('#end-brand').textContent = c.brand;
+    $('#end-dots').innerHTML = G.picks.map(p => `<i class="${p && !p.skipped ? (p.ok ? 'ok' : 'no') : ''}"></i>`).join('');
+    const pos = $('#end-pos');
+    const win = $('#end-winner');
+    if (isLive() && G.round === LIVE.round) {
+      const ranked = rankTeams(LIVE.teams);
+      const i = ranked.findIndex(t => t.id === G.teamId);
+      if (i >= 0) {
+        pos.innerHTML = `<span class="mono">Puesto final</span><b>#${i + 1}</b><span class="muted">de ${plural(ranked.length, 'jugador', 'jugadores')}</span>`;
+        pos.hidden = false;
+      } else pos.hidden = true;
+      if (LIVE.cfg.revealed && ranked.length) {
+        const w = ranked[0];
+        win.innerHTML = w.id === G.teamId
+          ? `<span class="mono">Resultado oficial</span><b>¡Ganaste la Batalla de <span class="nt">KPIs</span>!</b>`
+          : `<span class="mono">Ganador de la batalla</span><b>${esc(w.name)}</b><span>${w.score} pts · ${w.correct} aciertos</span>`;
+        win.hidden = false;
+      } else win.hidden = true;
+    } else { pos.hidden = true; win.hidden = true; }
+    updateSyncUI();
+  }
+  $('#btn-retry-send').addEventListener('click', () => { if (G) { G.ver++; persist(); saveTeam(); } });
+  $('#btn-again').addEventListener('click', () => { G = null; clearSaved(); show('intro'); updateSyncUI(); $('#team-name').focus(); });
+
+  // ---------- pantalla del salón: contraseña ----------
+  const PW_ERRORS = {
+    bad: 'Contraseña incorrecta. Intenta de nuevo.',
+    nopass: 'Activa “Correo electrónico/contraseña” en Firebase Authentication (paso 3 del README).',
+    noemail: 'Falta escribir el correo del anfitrión en config.js (paso 5 del README).',
+    slow: 'Demasiados intentos fallidos. Espera unos minutos.',
+    net: 'No se pudo conectar. Revisa internet e intenta de nuevo.',
+    nocheck: 'La pantalla del salón no está disponible: falta configurar Firebase en config.js.'
+  };
+  $('#btn-tv').addEventListener('click', () => {
+    if (ssGet(TV_KEY) === '1') { enterTV(); return; }
+    $('#pw-input').value = ''; $('#pw-err').hidden = true;
+    $('#pw').hidden = false; $('#pw-input').focus();
+  });
+  $('#pw-cancel').addEventListener('click', () => { $('#pw').hidden = true; $('#btn-tv').focus(); });
+  $('#pw-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = $('#pw-submit');
+    if (btn.disabled) return;
+    btn.disabled = true; btn.textContent = 'Verificando…';
+    $('#pw-err').hidden = true;
+    const r = await unlockTV($('#pw-input').value.trim());
+    btn.disabled = false; btn.textContent = 'Entrar';
+    if (r === 'ok') {
+      ssSet(TV_KEY, '1');
+      $('#pw').hidden = true;
+      enterTV();
+    } else {
+      $('#pw-err').textContent = PW_ERRORS[r] || PW_ERRORS.net;
+      $('#pw-err').hidden = false;
+      $('#pw-input').select();
+    }
+  });
+  let wake = null, tvTimer = 0;
+  async function keepAwake() { try { if (navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); } catch {} }
+  document.addEventListener('visibilitychange', () => { if (current === 'tv' && document.visibilityState === 'visible') keepAwake(); });
+  function enterTV() {
+    stopTimer();
+    show('tv');
+    boardKey = ''; chipsKey = '';
+    renderTV();
+    keepAwake();
+    clearInterval(tvTimer);
+    tvTimer = setInterval(renderTV, 400);
+  }
+  function lockTV() {
+    ssDel(TV_KEY);
+    clearInterval(tvTimer);
+    // Al salir, la TV deja de ser anfitrión y vuelve a una sesión anónima.
+    if (LIVE.mode === 'firebase' && LIVE.isAdmin) { LIVE.isAdmin = false; FB.m.signOut(FB.auth).catch(() => {}); }
+    try { if (wake) wake.release(); } catch {}
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    $('#winner').hidden = true;
+    current = 'none';
+    show('home');
+    syncPlayer();
+    updateSyncUI();
+  }
+  $('#tv-exit').addEventListener('click', lockTV);
+  $('#tv-fs').addEventListener('click', () => {
+    try {
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      else document.documentElement.requestFullscreen().catch(() => toast('Este navegador no permite pantalla completa aquí.'));
+    } catch { toast('Este navegador no permite pantalla completa aquí.'); }
+  });
+  document.addEventListener('fullscreenchange', () => { $('#tv-fs').textContent = document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa'; });
+
+  function confirmBox(title, msg, yes) {
+    return new Promise(resolve => {
+      $('#cf-title').textContent = title;
+      $('#cf-msg').textContent = msg;
+      $('#cf-yes').textContent = yes;
+      $('#cf').hidden = false;
+      $('#cf-yes').focus();
+      const done = v => { $('#cf').hidden = true; $('#cf-yes').onclick = null; $('#cf-no').onclick = null; resolve(v); };
+      $('#cf-yes').onclick = () => done(true);
+      $('#cf-no').onclick = () => done(false);
+    });
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!$('#cf').hidden) $('#cf-no').click();
+    else if (!$('#pw').hidden) $('#pw-cancel').click();
+    else if (!$('#winner').hidden) $('#w-close').click();
+  });
+
+  // ---------- pantalla del salón: vistas ----------
+  // lobby → question (reto en juego) → standings (pausa con posiciones) → question … → final
+  function answeredCount(teams, q) { return teams.filter(t => t.results[q] !== null).length; }
+  function tvView() {
+    const c = LIVE.cfg;
+    if (!isLive() || c.phase === 'lobby') return 'lobby';
+    if (c.phase === 'final') return 'final';
+    const teams = LIVE.teams;
+    const over = c.closed || now() >= c.startedAt + Q_MS || (teams.length > 0 && answeredCount(teams, c.q) >= teams.length);
+    return over ? 'standings' : 'question';
+  }
+  let busy = false;
+  $('#tv-main').addEventListener('click', async () => {
+    if (busy) return;
+    const view = tvView();
+    const c = LIVE.cfg;
+    if (view === 'final') { winnerDismissed = false; renderTV(); return; }
+    let action = null;
+    if (view === 'lobby') action = 'start';
+    else if (view === 'question') {
+      const left = LIVE.teams.length - answeredCount(LIVE.teams, c.q);
+      const go = await confirmBox('¿Cerrar el reto?', `Todavía ${left === 1 ? 'falta 1 jugador' : `faltan ${left} jugadores`} por responder. Si cierras ahora, su respuesta cuenta como tiempo agotado.`, 'Cerrar reto');
+      if (!go) return;
+      action = 'close';
+    } else if (view === 'standings') action = c.q >= Q_COUNT - 1 ? 'final' : 'next';
+    if (!action) return;
+    busy = true; renderTV();
+    try { await adminAction(action); }
+    catch {
+      toast(LIVE.mode === 'firebase'
+        ? 'Firebase no dejó avanzar. Revisa la conexión y que el correo del anfitrión sea el mismo en config.js y en las reglas.'
+        : 'No se pudo avanzar. Revisa la conexión e intenta otra vez.');
+    }
+    busy = false; renderTV();
+  });
+  $('#tv-new').addEventListener('click', async () => {
+    if (!canAdmin()) return;
+    const go = await confirmBox('¿Nueva partida?', 'La tabla quedará vacía y todos tendrán que volver a entrar desde el inicio. Los puntajes actuales ya no se mostrarán.', 'Empezar nueva partida');
+    if (!go) return;
+    try {
+      if (await adminAction('newRound')) { winnerDismissed = false; toast('Nueva partida lista. La sala de espera está vacía.'); }
+    } catch { toast('No se pudo empezar una nueva partida. Revisa tu conexión e intenta otra vez.'); }
+  });
+  $('#w-close').addEventListener('click', () => { winnerDismissed = true; $('#winner').hidden = true; });
+
+  let qrLoaded = false;
+  function loadQr() {
+    const url = location.href.split('#')[0];
+    $('#tv-url').textContent = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    if (qrLoaded) return;
+    qrLoaded = true;
+    const draw = () => {
+      try {
+        const qr = window.qrcode(0, 'M');
+        qr.addData(url);
+        qr.make();
+        $('#tv-qr').innerHTML = qr.createSvgTag(8, 0);
+        $('#tv-qr').hidden = false;
+      } catch {}
+    };
+    if (window.qrcode) { draw(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+    s.onload = draw;
+    document.head.appendChild(s);
+  }
+
+  const rowEls = new Map();
+  let boardKey = '', chipsKey = '';
+  const FB_ERRORS = {
+    config: 'Falta configurar Firebase: copia los datos de tu proyecto en config.js (paso 5 del README).',
+    rules: 'Firebase no deja leer la partida: pega las reglas de database.rules.json en Realtime Database (paso 2 del README).',
+    load: 'No se pudo cargar Firebase. Revisa la conexión a internet y recarga la página.'
+  };
+  function tvNoteText() {
+    if (LIVE.status === 'off' && !LIVE.mode) {
+      if (LIVE.fbError) return FB_ERRORS[LIVE.fbError] || 'No se pudo entrar a Firebase: activa el inicio de sesión “Anónimo” en Authentication (paso 3 del README).';
+      return 'La tabla en vivo no está disponible aquí. En claude.ai, abre el juego con la cuenta dueña del artifact.';
+    }
+    if (LIVE.mode === 'firebase' && LIVE.netDown) return 'Se perdió la conexión con Firebase. Reintentando…';
+    if (isLive() && !canAdmin()) return 'Puedes ver la tabla, pero solo el anfitrión puede avanzar la batalla.';
+    return '';
+  }
+  function renderTV() {
+    if (current !== 'tv') return;
+    if (LIVE.mode === 'firebase' && !qrLoaded) loadQr();
+    const view = tvView();
+    const c = LIVE.cfg;
+    const teams = LIVE.teams;
+    const ranked = rankTeams(teams);
+    const msg = tvNoteText();
+    $('#tv-note').textContent = msg;
+    $('#tv-note').hidden = !msg;
+    $('#tv-n').textContent = ranked.length;
+    $('#tv-n-label').textContent = ranked.length === 1 ? 'jugador' : 'jugadores';
+    $('#tv-stage').textContent = {
+      lobby: 'Sala de espera',
+      question: `Reto ${pad(c.q + 1)} de ${Q_COUNT} · en juego`,
+      standings: `Pausa · posiciones después del reto ${pad(c.q + 1)} de ${Q_COUNT}`,
+      final: 'Resultado final'
+    }[view];
+
+    const main = $('#tv-main');
+    main.textContent = {
+      lobby: 'Empezar la batalla',
+      question: 'Cerrar reto',
+      standings: c.q >= Q_COUNT - 1 ? 'Anunciar ganador' : `Siguiente reto (${pad(c.q + 2)})`,
+      final: 'Mostrar ganador'
+    }[view];
+    main.disabled = busy || (view !== 'final' && !canAdmin()) || (view === 'lobby' && !ranked.length);
+    $('#tv-new').disabled = !canAdmin();
+
+    $('#tv-lobby').hidden = view !== 'lobby';
+    $('#tv-question').hidden = view !== 'question';
+    $('#tv-chips').hidden = !(view === 'lobby' || view === 'question') || !ranked.length;
+    $('#tv-empty').hidden = !(view === 'lobby' && !ranked.length);
+    const showBoard = view === 'standings' || view === 'final';
+    $('#board').hidden = !showBoard || !ranked.length;
+    $('#tv-leader').hidden = !showBoard || !ranked.length;
+
+    if (view === 'question') {
+      const left = Math.max(0, c.startedAt + Q_MS - now());
+      const ans = answeredCount(teams, c.q);
+      $('#tv-q-num').textContent = pad(c.q + 1);
+      $('#tv-count').textContent = Math.ceil(left / 1000);
+      $('#tv-count-box').classList.toggle('low', left < 8000);
+      $('#tv-ans').textContent = `${ans} de ${plural(ranked.length, 'jugador respondió', 'jugadores respondieron')}`;
+      $('#tv-ans-bar').style.width = ranked.length ? `${(ans / ranked.length) * 100}%` : '0';
+    }
+    if (view === 'lobby' || view === 'question') renderChips(ranked, view);
+    if (showBoard && ranked.length) { renderLeader(ranked, view); renderBoard(ranked, view); }
+
+    const w = $('#winner');
+    if (view === 'final' && ranked.length && !winnerDismissed) {
+      const t = ranked[0], cs = CASE_BY_ID[t.caseId];
+      $('#w-name').textContent = t.name;
+      $('#w-meta').textContent = `${t.score} puntos · ${t.correct} de ${Q_COUNT} aciertos · ${cs ? cs.brand : 'Marca'}`;
+      if (w.hidden) { w.hidden = false; confetti(); $('#w-close').focus(); }
+    } else if (!w.hidden) w.hidden = true;
+  }
+  function renderChips(ranked, view) {
+    const q = LIVE.cfg.q;
+    const list = ranked.slice().sort((a, b) => a.joinedAt - b.joinedAt);
+    const key = view + q + list.map(t => t.id + (view === 'question' && t.results[q] !== null ? '1' : '0') + t.name).join('|');
+    if (key === chipsKey) return;
+    chipsKey = key;
+    $('#tv-chips').innerHTML = list.map(t => {
+      const cs = CASE_BY_ID[t.caseId];
+      const ok = view === 'question' && t.results[q] !== null;
+      return `<span class="pchip${ok ? ' ok' : ''}" style="--c:${cs ? cs.color : 'var(--muted)'}"><i></i><span>${esc(t.name)}</span></span>`;
+    }).join('');
+  }
+  function renderLeader(ranked, view) {
+    const t = ranked[0], s = ranked[1], cs = CASE_BY_ID[t.caseId];
+    $('#tv-l-label').textContent = view === 'final' ? 'Primer lugar' : 'Va ganando';
+    $('#tv-l-name').textContent = t.name;
+    $('#tv-l-pts').textContent = t.score;
+    $('#tv-l-sub').textContent = `${cs ? cs.brand : 'Marca'} · ${t.correct} aciertos · ` + (s ? `${t.score - s.score} pts de ventaja sobre ${s.name}` : 'Único jugador por ahora');
+  }
+  function renderBoard(ranked, view) {
+    const key = view + '|' + ranked.map(t => `${t.id}:${t.score}:${t.results.join('')}:${t.name}`).join('|') + '|' + (prevRanks ? [...prevRanks].join() : '');
+    if (key === boardKey) return;
+    boardKey = key;
+    const board = $('#board');
+    const first = new Map();
+    rowEls.forEach((el, id) => { const r = el.getBoundingClientRect(); if (r.width) first.set(id, r); });
+    const seen = new Set();
+    ranked.forEach((t, i) => {
+      let el = rowEls.get(t.id);
+      if (!el) {
+        el = document.createElement('div');
+        el.className = 'row';
+        el.innerHTML = '<div class="rk"><b></b><span class="delta"></span></div><div class="who"><div class="nm"></div><div class="meta"></div></div><div class="dots"></div><div class="pts"></div>';
+        rowEls.set(t.id, el);
+      }
+      const cs = CASE_BY_ID[t.caseId];
+      el.style.setProperty('--c', cs ? cs.color : 'var(--muted)');
+      el.classList.toggle('first', i === 0);
+      el.querySelector('.rk b').textContent = i + 1;
+      const delta = el.querySelector('.delta');
+      const before = prevRanks && prevRanks.get(t.id);
+      const diff = before ? before - (i + 1) : 0;
+      delta.textContent = diff > 0 ? `▲${diff}` : diff < 0 ? `▼${-diff}` : '';
+      delta.className = 'delta' + (diff > 0 ? ' up' : diff < 0 ? ' down' : '');
+      el.querySelector('.nm').textContent = t.name;
+      el.querySelector('.meta').textContent = `${cs ? cs.brand : 'Marca'} · ${t.correct} de ${t.answered} aciertos`;
+      el.querySelector('.dots').innerHTML = t.results.map(r => `<i class="${r === 1 ? 'ok' : r === 0 ? 'no' : ''}"></i>`).join('');
+      const pts = el.querySelector('.pts');
+      if (pts.textContent !== String(t.score)) {
+        const had = pts.textContent !== '';
+        pts.textContent = t.score;
+        if (had && !RM) { pts.classList.remove('pop'); void pts.offsetWidth; pts.classList.add('pop'); }
+      }
+      board.appendChild(el);
+      seen.add(t.id);
+    });
+    rowEls.forEach((el, id) => { if (!seen.has(id)) { el.remove(); rowEls.delete(id); } });
+    if (!RM) {
+      rowEls.forEach((el, id) => {
+        const f = first.get(id);
+        if (f) {
+          const l = el.getBoundingClientRect();
+          const dx = f.left - l.left, dy = f.top - l.top;
+          if (dx || dy) el.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: 700, easing: 'cubic-bezier(.2,.8,.2,1)' });
+        } else {
+          el.animate([{ opacity: 0, transform: 'scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'ease-out' });
+        }
+      });
+    }
+  }
+
+  // ---------- confeti ----------
+  function confetti() {
+    if (RM) return;
+    const cv = $('#confetti');
+    const ctx = cv.getContext('2d');
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = cv.width = Math.floor(innerWidth * dpr), H = cv.height = Math.floor(innerHeight * dpr);
+    const css = getComputedStyle(document.documentElement);
+    const cols = ['--accent', '--cyan', '--gold', '--violet', '--good'].map(v => css.getPropertyValue(v).trim());
+    const P = Array.from({ length: 180 }, () => ({
+      x: Math.random() * W, y: -Math.random() * H * 0.6, w: (6 + Math.random() * 8) * dpr, h: (8 + Math.random() * 10) * dpr,
+      vx: (Math.random() - 0.5) * 3 * dpr, vy: (2 + Math.random() * 4) * dpr, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.3,
+      c: cols[Math.floor(Math.random() * cols.length)]
+    }));
+    const t0 = performance.now();
+    (function frame(nowT) {
+      const t = nowT - t0;
+      ctx.clearRect(0, 0, W, H);
+      P.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.r += p.vr; p.vy += 0.03 * dpr;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+        ctx.globalAlpha = Math.max(0, 1 - Math.max(0, t - 4200) / 1200);
+        ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r)));
+        ctx.restore();
+      });
+      if (t < 5400 && !$('#winner').hidden) requestAnimationFrame(frame); else ctx.clearRect(0, 0, W, H);
+    })(t0);
+  }
+
+  // ---------- arranque ----------
+  function renderAll() {
+    syncPlayer();
+    renderPlace();
+    if (current === 'end') renderEnd();
+    if (current === 'wait') renderWait();
+    renderTV();
+  }
+  (function boot() {
+    try {
+      const saved = JSON.parse(lsGet(LS_KEY) || 'null');
+      if (saved && saved.v === 3 && Array.isArray(saved.plan) && Array.isArray(saved.picks) && CASE_BY_ID[saved.caseId]) G = saved;
+    } catch { G = null; }
+    if (ssGet(TV_KEY) === '1') enterTV();
+    else syncPlayer();
+    updateSyncUI();
+  })();
+
+  (async function initLive() {
+    let ok = false;
+    if (window.claude && typeof window.claude.use === 'function') {
+      ok = await startArtifact();
+    } else if (FB.cfg) {
+      if (!firebaseConfigured()) LIVE.fbError = 'config';
+      else {
+        try { ok = await startFirebase(); }
+        catch { LIVE.fbError = LIVE.fbError || 'load'; ok = false; }
+      }
+    }
+    if (!ok) { LIVE.mode = null; LIVE.status = 'off'; updateSyncUI(); renderAll(); }
+    liveReadyResolve();
+  })();
+})();
+</script>
+</body>
+</html>
