@@ -546,8 +546,31 @@ input:focus { outline: none; border-color: var(--cyan); }
 .row .pts { font: 900 2.1rem/1 var(--f-display); font-variant-numeric: tabular-nums; min-width: 3.6ch; text-align: right; }
 .row .dots { flex-wrap: nowrap; gap: 3px; }
 .row .dots i { width: 8px; height: 8px; }
+/* Salón lleno (más de 12 jugadores): filas más compactas para que la tabla quepa entera en el TV sin scroll. */
+.tv-leader.dense { padding: 12px 22px; }
+.tv-leader.dense .nm { font-size: clamp(2rem, 3.4vw, 3.4rem); }
+.tv-leader.dense .pts { font-size: clamp(2.4rem, 4vw, 4rem); }
+.board.dense { column-width: 21rem; column-gap: 12px; }
+.board.dense .row { gap: 10px; padding: 5px 12px 5px 8px; margin-bottom: 6px; grid-template-columns: 2.4rem minmax(0, 1fr) auto auto; }
+.board.dense .row .rk b { font-size: 1.5rem; }
+.board.dense .row .delta { font-size: 0.66rem; }
+.board.dense .row .nm { font-size: 1.05rem; }
+.board.dense .row .meta { font-size: 0.68rem; }
+.board.dense .row .pts { font-size: 1.6rem; }
+.board.dense .row .dots { gap: 2px; }
+.board.dense .row .dots i { width: 6px; height: 6px; }
+/* En pantallas pequeñas (proyector 1280×720) el nombre importa más que los puntos de cada reto. */
+@media (max-width: 1500px) {
+  .board.dense .row { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
+  .board.dense .row .dots { display: none; }
+}
+@media (max-height: 800px) {
+  .tv-leader.dense { padding: 8px 20px; }
+  .tv-leader.dense .nm { font-size: 2rem; }
+  .tv-leader.dense .pts { font-size: 2.6rem; }
+}
 @media (max-width: 760px) {
-  .row { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
+  .row, .board.dense .row { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
   .row .dots { display: none; }
 }
 .tv-empty { text-align: center; padding: 40px 16px; border: 2px dashed var(--line); border-radius: 18px; }
@@ -2181,7 +2204,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     $('#brief-type').textContent = c.type;
     $('#brief-nets').textContent = c.nets;
     $('#brief-goal').textContent = c.goal;
-    $('#btn-ready').textContent = isLive() ? 'Estoy listo' : 'Empezar los retos';
+    $('#btn-ready').textContent = isLive() || LIVE.status === 'connecting' ? 'Estoy listo' : 'Empezar los retos';
     b.hidden = false;
     $('#draw-title').textContent = `${G.name}, esta es tu marca`;
   }
@@ -2229,7 +2252,7 @@ input:focus { outline: none; border-color: var(--cyan); }
   $('#btn-ready').addEventListener('click', () => {
     if (!G) return;
     G.ready = true;
-    if (!isLive()) G.solo = { q: 0, startedAt: now(), done: false };
+    if (!isLive() && LIVE.status !== 'connecting') G.solo = { q: 0, startedAt: now(), done: false };
     G.ver++; persist();
     syncPlayer();
   });
@@ -2252,7 +2275,15 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (!G.ready) {
       // El texto del botón depende de si ya hay conexión con la pantalla del salón.
       if (current !== 'draw') showBrief();
-      else $('#btn-ready').textContent = isLive() ? 'Estoy listo' : 'Empezar los retos';
+      else $('#btn-ready').textContent = isLive() || LIVE.status === 'connecting' ? 'Estoy listo' : 'Empezar los retos';
+      return;
+    }
+    // Mientras se conecta con la pantalla del salón (por ejemplo, al recargar) el jugador espera:
+    // así no ve ni responde un reto en modo individual antes de tiempo.
+    if (!isLive() && !G.solo && LIVE.status === 'connecting') {
+      stopTimer();
+      show('wait');
+      renderWait();
       return;
     }
     if (!isLive() && !G.solo) G.solo = { q: 0, startedAt: now(), done: false };
@@ -2706,6 +2737,9 @@ input:focus { outline: none; border-color: var(--cyan); }
     const showBoard = (view === 'standings' && !secretView) || view === 'final';
     $('#board').hidden = !showBoard || !ranked.length;
     $('#tv-leader').hidden = !showBoard || !ranked.length;
+    const dense = ranked.length > 12;
+    $('#board').classList.toggle('dense', dense);
+    $('#tv-leader').classList.toggle('dense', dense);
     $('#tv-blind').hidden = !secretView;
     if (secretView) {
       const left = Q_COUNT - 1 - c.q;
