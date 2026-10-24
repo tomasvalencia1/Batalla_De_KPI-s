@@ -1,7 +1,8 @@
 // Convierte index.html en MP4 (1920×1080) con su música y efectos.
 //   node render.cjs                          → video completo: batalla-de-kpis-como-se-juega.mp4 (+ copia liviana)
 //   node render.cjs --stills 3,12.5,40 out   → capturas sueltas en la carpeta out (para revisar escenas)
-// Necesita Playwright (con Chromium) y ffmpeg.
+//   node render.cjs --audio out.wav          → solo la banda sonora
+// Necesita Playwright (con Chromium) y ffmpeg. Los clips del juego (clips/*.mp4) se pasan a cuadros JPG en .render/frames.
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -12,10 +13,16 @@ const FPS = 30, WORKERS = Number(process.env.WORKERS || 3);
 const OUT = path.join(__dirname, 'batalla-de-kpis-como-se-juega.mp4');
 const LIGHT = path.join(__dirname, 'batalla-de-kpis-como-se-juega-liviano.mp4');
 const TMP = path.join(__dirname, '.render');
+const CLIPS = path.join(__dirname, 'clips'), FRAMES = path.join(TMP, 'frames');
+const { execFileSync } = require('child_process');
+// Cuántos cuadros tiene cada clip (a 30 cuadros por segundo).
+const clipFrames = Object.fromEntries(fs.readdirSync(CLIPS).filter(f => f.endsWith('.mp4')).map(f => [f.slice(0, -4),
+  Number(execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=nb_frames', '-of', 'csv=p=0', path.join(CLIPS, f)]).toString().trim())]));
 
 async function open(browser) {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
   page.on('pageerror', e => console.error('error en la página:', e.message));
+  await page.addInitScript(f => { window.CLIP_FRAMES = f; }, clipFrames);
   await page.goto(PAGE);
   const D = await page.evaluate(() => window.ready);
   return { page, D };
@@ -29,10 +36,25 @@ function run(cmd, args, input) {
   });
 }
 
+// Saca de cada clip solo el tramo de cuadros que el video usa.
+async function extract(need) {
+  await Promise.all(Object.entries(need).map(async ([name, [a, b]]) => {
+    const dir = path.join(FRAMES, name);
+    fs.mkdirSync(dir, { recursive: true });
+    const have = n => fs.existsSync(path.join(dir, String(n).padStart(5, '0') + '.jpg'));
+    if (have(a) && have(b)) return;
+    await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', path.join(CLIPS, name + '.mp4'), '-vf', `select=between(n\\,${a}\\,${b})`,
+      '-fps_mode', 'passthrough', '-start_number', String(a), '-q:v', '2', path.join(dir, '%05d.jpg')]);
+  }));
+  const n = Object.values(need).reduce((s, [a, b]) => s + b - a + 1, 0);
+  console.log(`clips: ${Object.keys(need).length} · ${n} cuadros`);
+}
+
 async function stills(times, dir) {
   fs.mkdirSync(dir, { recursive: true });
   const browser = await chromium.launch();
   const { page } = await open(browser);
+  await extract(await page.evaluate(ts => window.clipPlan(ts), times));
   for (const t of times) {
     await page.evaluate(x => window.seek(x), t);
     await page.screenshot({ path: path.join(dir, `t${String(t).padStart(6, '0')}.png`) });
@@ -74,7 +96,9 @@ async function renderSegment(browser, from, to, file, label) {
 async function full() {
   fs.rmSync(TMP, { recursive: true, force: true }); fs.mkdirSync(TMP);
   const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
-  const { page, D } = await open(browser); await page.close();
+  const { page, D } = await open(browser);
+  await extract(await page.evaluate(() => window.clipPlan()));
+  await page.close();
   const frames = Math.round(D * FPS);
   console.log(`duración ${D} s · ${frames} cuadros · ${WORKERS} procesos`);
   const wav = path.join(TMP, 'audio.wav');

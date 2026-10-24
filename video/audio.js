@@ -111,8 +111,8 @@
   // [desde, hasta, canción, volumen relativo] en segundos del video. null = sin música (suspenso).
   const MUSIC = [
     [0, 9.2, 'final', 0.9], [9.2, 22, 'lobby', 1.15], [22, 39, 'standings', 1], [39, 96, 'lobby', 1.15],
-    [96, 131, 'question', 1.25], [131, 190, 'cq_standings', 1.05], [190, 248, 'st_question', 1.25],
-    [255.4, 277, 'final', 0.9]
+    [96, 131, 'question', 1.25], [131, 198, 'cq_standings', 1.05], [198, 260, 'st_question', 1.25],
+    [269.6, 289, 'final', 0.9]
   ];
   function scheduleSong(name, t0, t1, rel) {
     const song = SONGS[name], sd = 60 / song.bpm / 4;
@@ -214,6 +214,38 @@
       [60, 64, 67, 72, 76].forEach(m => brass(t + 1.1, m, 2.0, 0.035));
       noise(S(), t + 0.1, { dur: 4, gain: 0.16, type: 'bandpass', f: 1300, q: 0.5, attack: 0.6 });
       claps(t + 0.3, 24, 0.13, 0.06);
+    },
+    // --- los mismos sonidos del juego, alineados con los clips grabados de la TV ---
+    // alguien entra a la sala
+    join: t => { tone(S(), t, { type: 'triangle', f: mtof(76), dur: 0.14, gain: 0.2 }); tone(S(), t + 0.07, { type: 'triangle', f: mtof(83), dur: 0.24, gain: 0.17 }); },
+    // «¡Se acabó!»
+    timeup: t => { [[146.8, 0.2], [155.6, 0.18]].forEach(([f, g]) => tone(S(), t, { type: 'sawtooth', f, dur: 0.8, gain: g, attack: 0.01, filter: { f: 1400, f2: 500 } })); impact(t + 0.05, 1); },
+    // «¡Se acabó!» y el podio del reto, en los mismos tiempos que la TV (3.º, 2.º y 1.º)
+    showtime: t => { SFX.timeup(t); podium(t + 2.1, 3); podium(t + 3.0, 2); podium(t + 4.0, 1); },
+    // Conquista: ciudad conquistada
+    capture: t => { tone(S(), t, { type: 'triangle', f: mtof(78), dur: 0.16, gain: 0.2 }); tone(S(), t + 0.08, { type: 'triangle', f: mtof(85), dur: 0.3, gain: 0.18 }); brass(t, 66, 0.6, 0.09); tone(S(), t, { f: 160, f2: 60, dur: 0.35, gain: 0.5 }); },
+    // Bolsa: campana del cierre y caja registradora
+    market: t => {
+      [0, 0.22].forEach(o => { tone(S(), t + o, { f: mtof(88), dur: 0.9, gain: 0.13 }); tone(S(), t + o, { f: mtof(95), dur: 0.6, gain: 0.05 }); });
+      noise(S(), t + 0.55, { dur: 0.07, gain: 0.25, type: 'bandpass', f: 3600, q: 2 });
+      [84, 88, 91, 96].forEach((m, i) => tone(S(), t + 0.6 + i * 0.06, { type: 'triangle', f: mtof(m), dur: 0.35, gain: 0.12 }));
+    },
+    // la revelación del ganador completa (t = cuando el anfitrión toca «Revelar ganador»), igual que en la TV
+    reveal: t => {
+      [[45, -8], [46, 8]].forEach(([m, d]) => tone(S(), t, { type: 'sawtooth', f: mtof(m), dur: 9, gain: 0.045, attack: 2, detune: d, filter: { f: 500, f2: 2200, q: 1.5 } }));
+      tone(S(), t, { type: 'triangle', f: mtof(81), dur: 9, gain: 0.018, attack: 2.5 });
+      thump(t, 90, 30, 0.6, 0.7);
+      noise(S(), t + 0.6, { dur: 0.5, gain: 0.12, type: 'bandpass', f: 300, f2: 2500, attack: 0.3 });
+      tone(S(), t + 0.8, { type: 'triangle', f: mtof(69), dur: 0.8, gain: 0.12 }); tone(S(), t + 0.95, { type: 'triangle', f: mtof(72), dur: 0.9, gain: 0.1 });
+      [0.9, 1.15, 2.0, 2.25, 4.0, 4.25].forEach(b => thump(t + b, 70, 38, 0.22, 0.55));
+      [2.4, 2.55, 2.7].forEach(b => noise(S(), t + b, { dur: 0.35, gain: 0.1, type: 'bandpass', f: 600, f2: 3000, attack: 0.15 }));
+      [[3.2, 67], [5.0, 72]].forEach(([b, m]) => { tone(S(), t + b, { f: 180, f2: 70, dur: 0.4, gain: 0.6 }); brass(t + b, m, 0.6, 0.1); brass(t + b, m - 12, 0.6, 0.06); noise(S(), t + b, { dur: 0.25, gain: 0.15, type: 'bandpass', f: 1500 }); });
+      for (let x = 6.4; x < 9;) { const k = (x - 6.4) / 2.6; noise(S(), t + x, { dur: 0.07, gain: 0.07 + 0.25 * k, type: 'bandpass', f: 1800, q: 0.7 }); x += 0.12 - 0.09 * k; }
+      noise(S(), t + 6.4, { dur: 2.6, gain: 0.2, type: 'bandpass', f: 200, f2: 5000, q: 1.2, attack: 2.4 });
+      tone(S(), t + 6.4, { type: 'sawtooth', f: 110, f2: 520, dur: 2.6, gain: 0.07, attack: 2.4, filter: { f: 500, f2: 3500 } });
+      SFX.boom(t + 9);
+      [0.5, 1.3, 2.1, 2.8, 3.6, 4.5, 5.3, 6.2].forEach(b => { thump(t + 9 + b, 80, 40, 0.5, 0.3); for (let i = 0; i < 10; i++) noise(S(), t + 9 + b + 0.15 + rnd() * 0.6, { dur: 0.03, gain: 0.04 + rnd() * 0.05, type: 'highpass', f: 4000 }); });
+      podium(t + 13.4, 3); podium(t + 14.1, 2); podium(t + 14.9, 1); claps(t + 15.1, 16, 0.14, 0.06);
     }
   };
 

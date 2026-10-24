@@ -30,6 +30,7 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; 
 .scene { position: absolute; inset: 0; display: none; }
 [data-t] { will-change: transform, opacity; }
 .abs { position: absolute; }
+.cue { display: none; }
 
 /* tipografía */
 .eyebrow { font: 600 26px/1 var(--f-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
@@ -49,6 +50,9 @@ b, .b { font-weight: 700; }
 .step.on .n { background: var(--gold); color: var(--ink); }
 .step .ic { width: 78px; height: 78px; border-radius: 16px; display: grid; place-items: center; background: var(--panel-2); }
 .step .ic svg { width: 44px; height: 44px; }
+.steps.sm .step { grid-template-columns: 64px 1fr; gap: 22px; font-size: 38px; }
+.steps.sm .step .n { width: 64px; height: 64px; font-size: 38px; }
+.steps.fin .step { font-size: 42px; }
 
 /* tarjetas de los 3 juegos */
 .gcard { position: absolute; top: 380px; width: 520px; height: 470px; border-radius: 28px; background: var(--panel); border: 3px solid var(--line); border-top: 12px solid var(--c); padding: 40px 40px; display: flex; flex-direction: column; gap: 22px; }
@@ -210,21 +214,27 @@ b, .b { font-weight: 700; }
     </div>
     <!-- marcador del paso actual -->
     <div class="abs" id="stepmark" style="left: 110px; width: 10px; height: 78px; border-radius: 5px; background: var(--gold)" data-t="0.8" data-fx="fade"></div>
+    <!-- la sala se llena: cada jugador aparece en la TV al entrar -->
     <div class="tv" style="left: 1010px; top: 250px; width: 860px" data-t="0.8,7.2" data-fx="right">
-      <div class="scr"><img src="img/tv-sala.jpg" data-kb="0.8,7.2,0.5,0.5,1,0.17,0.25,2.1"></div>
+      <div class="scr"><img data-clip="cq-tv-sala" data-cm="0.8@0*0.85" data-kb="0.8,3.6,0.3,0.33,1.7,0.4,0.55,1.25"></div>
     </div>
-    <div class="cap" style="left: 1080px; top: 830px; --c: var(--cyan)" data-t="3.0,7.2" data-fx="up">Apunta la cámara del celular al QR</div>
+    <i class="cue" data-t="1.54" data-sfx="join"></i><i class="cue" data-t="2.48" data-sfx="join"></i><i class="cue" data-t="3.42" data-sfx="join"></i>
+    <i class="cue" data-t="4.36" data-sfx="join"></i><i class="cue" data-t="5.31" data-sfx="join"></i>
+    <div class="cap" style="left: 1080px; top: 830px; --c: var(--cyan)" data-t="1.0,4.0" data-fx="up">Apunta la cámara del celular al QR</div>
+    <div class="cap" style="left: 1080px; top: 830px; --c: var(--good)" data-t="4.2,7.2" data-fx="up">Cada jugador aparece en la sala</div>
+    <!-- celular: nombre, sorteo de la marca y sala de espera -->
     <div class="phone" style="left: 1240px; top: 140px" data-t="7.5,26.6" data-fx="right">
       <div class="scr">
-        <img src="img/ph-nombre.jpg" data-t="7.5">
-        <img src="img/ph-sorteo.jpg" data-t="13.5" data-fx="fade">
-        <img src="img/ph-marca.jpg" data-t="17.2" data-fx="fade" data-sfx="ding">
-        <img src="img/ph-sala.jpg" data-t="21" data-fx="fade">
+        <img data-clip="ph-entrar" data-t="7.5,21.6" data-cm="7.5@0*0.474 13.3@2.75">
+        <img data-clip="ph-sala" data-t="21" data-fx="fade" data-cm="21@0*0.8">
       </div>
     </div>
+    <i class="cue" data-t="17.05" data-sfx="ding"></i>
+    <!-- el anfitrión pone el juego que ganó -->
     <div class="tv" style="left: 1010px; top: 250px; width: 860px" data-t="27" data-fx="right">
-      <div class="scr"><img src="img/tv-sala-juegos.jpg" data-kb="27,33,0.5,0.5,1,0.5,0.55,1.3"></div>
+      <div class="scr"><img data-clip="cq-tv-sala" data-cm="27@3*0.7" data-kb="27,32,0.5,0.5,1,0.5,0.6,1.25"></div>
     </div>
+    <i class="cue" data-t="30.8" data-sfx="pop"></i>
   </section>
 
   <!-- ============ 4 · REGLAS COMUNES ============ -->
@@ -236,15 +246,20 @@ b, .b { font-weight: 700; }
       <div class="step" data-t="3.2" data-fx="left" data-sfx="pop"><span class="ic cy" data-icon="target"></span><span>Cada reto es una situación de tu marca y <b>4 KPIs</b>: solo uno es el correcto.</span></div>
       <div class="step" data-t="6.2" data-fx="left" data-sfx="tick"><span class="ic acc" data-icon="clock"></span><span>Tienes <b>35 segundos</b>. Responder rápido da ventaja.</span></div>
       <div class="step" data-t="9.4" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="tv"></span><span>Después de cada reto, la pantalla del salón muestra qué pasó.</span></div>
-      <div class="step" data-t="12.4" data-fx="left" data-sfx="lock"><span class="ic vi" data-icon="lock"></span><span>Desde el <b>reto 12</b> todo se oculta: nadie sabe quién va ganando.</span></div>
-      <div class="step" data-t="15.4" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="trophy"></span><span>Al final se revela al <b class="gd">campeón</b> con suspenso.</span></div>
+      <div class="step" data-t="12.4" data-fx="left" data-sfx="pop"><span class="ic vi" data-icon="lock"></span><span>Desde el <b>reto 12</b> todo se oculta: nadie sabe quién va ganando.</span></div>
+      <div class="step" data-t="15.4" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="trophy"></span><span>Al final se revela al <b class="gd">campeón</b>.</span></div>
     </div>
     <div class="phone" style="left: 1340px; top: 140px" data-t="0.8,12.2" data-fx="right">
-      <div class="scr"><img src="img/ph-reto.jpg"><img src="img/ph-correcto.jpg" data-t="7.0" data-fx="fade" data-sfx="ding"></div>
+      <div class="scr"><img data-clip="ph-reto" data-cm="0.8@0.33*0.5 6.47@3.17"></div>
     </div>
+    <i class="cue" data-t="6.6" data-sfx="ding"></i>
     <div class="tv" style="left: 1150px; top: 300px; width: 700px" data-t="12.4" data-fx="right">
-      <div class="scr"><img src="img/tv-aviso-ultimos.jpg"><img src="img/tv-rv-campeon.jpg" data-t="15.4" data-fx="fade"></div>
+      <div class="scr">
+        <img data-clip="tv-ultimos" data-t="12.4,16" data-cm="12.4@0.2">
+        <img data-clip="tv-revelacion" data-t="15.4" data-fx="fade" data-cm="15.4@8.4">
+      </div>
     </div>
+    <i class="cue" data-t="14.43" data-sfx="lock"></i><i class="cue" data-t="16.33" data-sfx="boom"></i><i class="cue" data-t="20.53" data-sfx="podium3"></i>
   </section>
 
   <!-- ============ 5 · JUEGO 1: BATALLA DE KPIs ============ -->
@@ -268,21 +283,22 @@ b, .b { font-weight: 700; }
       <div style="display: flex; align-items: baseline; gap: 26px"><b style="font: 900 160px/0.9 var(--f-display); color: var(--gold)">+<span data-count="2.7,3.3,0,50" data-sfx="ding">0</span></b><span class="lede">de bono si respondes <b>rápido</b></span></div>
     </div>
     <p class="abs lede" style="left: 140px; top: 760px; width: 1000px" data-t="4.6,8.6" data-fx="up" data-sfx="buzz"><b class="no">Error o tiempo agotado: 0 puntos.</b></p>
-    <div class="phone" style="left: 1340px; top: 140px" data-t="0.6,8.6" data-fx="right"><div class="scr"><img src="img/ph-correcto.jpg"></div></div>
+    <div class="phone" style="left: 1340px; top: 140px" data-t="0.6,8.6" data-fx="right"><div class="scr"><img data-clip="ph-reto" data-cm="0.6@2.4"></div></div>
     <!-- B: después de cada reto -->
     <div class="abs h2" style="left: 135px; top: 140px" data-t="9,24.4" data-fx="pop" data-sfx="whoosh">Después de cada reto</div>
     <div class="steps" style="left: 140px; top: 330px; width: 620px; gap: 30px">
       <div class="step" data-t="9.4,24.4" data-fx="left"><span class="n">1</span><span><b>¡Se acabó!</b> y el podio de los 3 primeros.</span></div>
-      <div class="step" data-t="14.6,24.4" data-fx="left" data-sfx="pop"><span class="n">2</span><span>La tabla: quién subió <b class="ok">▲</b> y quién bajó <b class="no">▼</b>.</span></div>
-      <div class="step" data-t="19.6,24.4" data-fx="left" data-sfx="lock"><span class="n">3</span><span>Retos 12 a 15: la tabla <b class="vi">se oculta</b>.</span></div>
+      <div class="step" data-t="17.9,24.4" data-fx="left" data-sfx="pop"><span class="n">2</span><span>La tabla: quién subió <b class="ok">▲</b> y quién bajó <b class="no">▼</b>.</span></div>
+      <div class="step" data-t="20.4,24.4" data-fx="left"><span class="n">3</span><span>Retos 12 a 15: la tabla <b class="vi">se oculta</b>.</span></div>
     </div>
     <div class="tv" style="left: 820px; top: 250px; width: 1000px" data-t="9.4,24.4" data-fx="right">
       <div class="scr">
-        <img src="img/tv-podio.jpg" data-kb="9.4,14.6,0.5,0.5,1,0.5,0.42,1.12" data-sfx="podium3">
-        <img src="img/tv-tabla.jpg" data-t="14.6" data-fx="fade" data-kb="14.6,19.6,0.5,0.3,1.05,0.5,0.28,1.3">
-        <img src="img/tv-tabla-oculta.jpg" data-t="19.6" data-fx="fade">
+        <img data-clip="tv-reto" data-t="9.4,21" data-cm="9.4@5.6">
+        <img data-clip="tv-ultimos" data-t="20.4" data-fx="fade" data-cm="20.4@10.3">
       </div>
     </div>
+    <i class="cue" data-t="9.87" data-sfx="showtime"></i><i class="cue" data-t="18.07" data-sfx="whoosh"></i>
+    <i class="cue" data-t="20.6" data-sfx="timeup"></i><i class="cue" data-t="22.1" data-sfx="lock"></i>
     <!-- C: cómo ganar -->
     <div class="abs h2" style="left: 135px; top: 140px" data-t="24.8" data-fx="pop">Cómo ganar</div>
     <div class="win" style="left: 140px; top: 330px; width: 820px" data-t="25.2" data-fx="pop" data-sfx="win">
@@ -291,8 +307,9 @@ b, .b { font-weight: 700; }
       <p>Si hay empate: gana quien tenga más aciertos y, después, quien haya respondido en menos tiempo.</p>
     </div>
     <div class="tv" style="left: 1040px; top: 300px; width: 780px" data-t="25.6" data-fx="right">
-      <div class="scr"><img src="img/tv-final.jpg"></div>
+      <div class="scr"><img data-clip="tv-revelacion" data-cm="25.6@13.0"></div>
     </div>
+    <i class="cue" data-t="26.13" data-sfx="podium3"></i>
   </section>
 
   <!-- ============ 6 · JUEGO 2: CONQUISTA ============ -->
@@ -305,7 +322,7 @@ b, .b { font-weight: 700; }
       <div class="s" data-t="1.6" data-fx="up">La guerra por el mercado</div>
     </div></div>
   </section>
-  <section class="scene" data-t="136.4,190.4" data-sfx="whoosh">
+  <section class="scene" data-t="136.4,198.4" data-sfx="whoosh">
     <p class="eyebrow abs" style="left: 140px; top: 100px; color: var(--cyan)" data-t="0.2" data-fx="fade">Juego 2 · Conquista</p>
     <!-- A: el mapa -->
     <div class="abs h2" style="left: 135px; top: 140px" data-t="0.3,10.6" data-fx="pop">El mapa de Colombia</div>
@@ -319,7 +336,7 @@ b, .b { font-weight: 700; }
       <span class="chip" style="--c: var(--muted)">… Leticia <b class="gd">1</b></span>
     </div>
     <div class="tv" style="left: 860px; top: 250px; width: 960px" data-t="0.6,10.6" data-fx="right">
-      <div class="scr"><img src="img/cq-tv-mapa.jpg" data-kb="0.6,10.6,0.36,0.55,1.45,0.32,0.6,1.7"></div>
+      <div class="scr"><img data-clip="cq-tv-reto" data-cm="0.6@0.4*0.4" data-kb="0.6,10.6,0.36,0.55,1.45,0.32,0.6,1.7"></div>
     </div>
     <!-- B: cada acierto es una jugada -->
     <div class="abs h2" style="left: 135px; top: 140px" data-t="11,23.4" data-fx="pop" data-sfx="whoosh">Cada acierto es una jugada</div>
@@ -330,8 +347,9 @@ b, .b { font-weight: 700; }
       <div class="step" data-t="19.4,23.4" data-fx="left" data-sfx="buzz"><span class="ic no" data-icon="x"></span><span>Si fallas, no atacas ni blindas.</span></div>
     </div>
     <div class="phone" style="left: 1340px; top: 140px" data-t="11.4,23.4" data-fx="right">
-      <div class="scr"><img src="img/cq-ph-ciudad.jpg"><img src="img/cq-ph-elegida.jpg" data-t="15.6" data-fx="fade" data-sfx="pop"></div>
+      <div class="scr"><img data-clip="cq-ph-reto" data-cm="11.4@0.8*0.6"></div>
     </div>
+    <i class="cue" data-t="13.45" data-sfx="ding"></i><i class="cue" data-t="15.2" data-sfx="pop"></i>
     <!-- C: las batallas -->
     <div class="abs h2" style="left: 135px; top: 140px" data-t="23.8,35.4" data-fx="pop" data-sfx="whoosh">Las batallas</div>
     <div class="bt" style="left: 140px; top: 290px" data-t="24.4,35.4" data-fx="up">
@@ -350,30 +368,43 @@ b, .b { font-weight: 700; }
       <p>Resiste <b>todos los ataques</b>.</p>
     </div>
     <p class="abs lede" style="left: 140px; top: 870px; width: 1640px; font-size: 36px" data-t="33,35.4" data-fx="up" data-sfx="pop">Todas las jugadas se resuelven a la vez cuando se cierra el reto. La TV muestra las batallas una por una.</p>
+    <!-- C2: las batallas en la pantalla del salón -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="35.8,43.4" data-fx="pop" data-sfx="whoosh">Así se ve en la TV</div>
+    <div class="tv" style="left: 140px; top: 290px; width: 1180px" data-t="35.9,43.4" data-fx="up">
+      <div class="scr"><img data-clip="cq-tv-reto" data-cm="35.8@3.8"></div>
+    </div>
+    <div class="steps sm" style="left: 1380px; top: 330px; width: 440px; gap: 34px">
+      <div class="step" data-t="36.4,43.4" data-fx="left"><span class="n">1</span><span><b>¡Se acabó!</b> Se cierra el reto.</span></div>
+      <div class="step" data-t="38.6,43.4" data-fx="left"><span class="n">2</span><span>Las batallas, <b>una por una</b>.</span></div>
+      <div class="step" data-t="42.0,43.4" data-fx="left"><span class="n">3</span><span>Se suman las <b class="gd">ventas</b>.</span></div>
+    </div>
+    <i class="cue" data-t="36.47" data-sfx="timeup"></i><i class="cue" data-t="38.88" data-sfx="capture"></i><i class="cue" data-t="39.73" data-sfx="capture"></i>
+    <i class="cue" data-t="40.58" data-sfx="shield"></i><i class="cue" data-t="41.43" data-sfx="steal"></i>
     <!-- D: eventos -->
-    <div class="abs h2" style="left: 135px; top: 140px" data-t="35.8,47.4" data-fx="pop" data-sfx="whoosh">Eventos especiales</div>
-    <div class="ev" style="--c: var(--gold); left: 140px; top: 300px" data-t="36.4,47.4" data-fx="up" data-sfx="warm">
-      <div class="shot"><img src="img/cq-aviso5.jpg"></div><p class="k">Reto 5</p><p class="t">Black Friday</p><p>Las ventas valen el doble.</p></div>
-    <div class="ev" style="--c: var(--bad); left: 980px; top: 300px" data-t="39,47.4" data-fx="up" data-sfx="alarm">
-      <div class="shot"><img src="img/cq-aviso8.jpg"></div><p class="k">Reto 8</p><p class="t">Crisis de reputación</p><p>El que va ganando no puede blindar.</p></div>
-    <div class="ev" style="--c: var(--violet); left: 140px; top: 640px" data-t="41.6,47.4" data-fx="up" data-sfx="lock">
-      <div class="shot"><img src="img/cq-aviso12.jpg"></div><p class="k">Retos 12 a 15</p><p class="t">Niebla de guerra</p><p>El mapa se oculta.</p></div>
-    <div class="ev" style="--c: var(--gold); left: 980px; top: 640px" data-t="44.2,47.4" data-fx="up" data-sfx="warm">
-      <div class="shot"><img src="img/cq-aviso15.jpg"></div><p class="k">Reto 15</p><p class="t">Gran Lanzamiento</p><p>Las ventas valen el triple.</p></div>
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="43.8,55.4" data-fx="pop" data-sfx="whoosh">Eventos especiales</div>
+    <div class="ev" style="--c: var(--gold); left: 140px; top: 300px" data-t="44.4,55.4" data-fx="up" data-sfx="warm">
+      <div class="shot"><img data-clip="cq-aviso5" data-cm="44.4@0.2"></div><p class="k">Reto 5</p><p class="t">Black Friday</p><p>Las ventas valen el doble.</p></div>
+    <div class="ev" style="--c: var(--bad); left: 980px; top: 300px" data-t="47,55.4" data-fx="up" data-sfx="alarm">
+      <div class="shot"><img data-clip="cq-aviso8" data-cm="47@0.2"></div><p class="k">Reto 8</p><p class="t">Crisis de reputación</p><p>El que va ganando no puede blindar.</p></div>
+    <div class="ev" style="--c: var(--violet); left: 140px; top: 640px" data-t="49.6,55.4" data-fx="up" data-sfx="lock">
+      <div class="shot"><img data-clip="cq-aviso12" data-cm="49.6@0.2"></div><p class="k">Retos 12 a 15</p><p class="t">Niebla de guerra</p><p>El mapa se oculta.</p></div>
+    <div class="ev" style="--c: var(--gold); left: 980px; top: 640px" data-t="52.2,55.4" data-fx="up" data-sfx="warm">
+      <div class="shot"><img data-clip="cq-aviso15" data-cm="52.2@0.2"></div><p class="k">Reto 15</p><p class="t">Gran Lanzamiento</p><p>Las ventas valen el triple.</p></div>
     <!-- E: cómo ganar -->
-    <div class="abs h2" style="left: 135px; top: 140px" data-t="47.8" data-fx="pop">Cómo ganar</div>
-    <div class="win" style="left: 140px; top: 330px; width: 820px" data-t="48.2" data-fx="pop" data-sfx="win">
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="55.8" data-fx="pop">Cómo ganar</div>
+    <div class="win" style="left: 140px; top: 330px; width: 820px" data-t="56.2" data-fx="pop" data-sfx="pop">
       <div class="k">El campeón</div>
       <div class="t">Gana quien <span class="gd">más venda</span></div>
       <p>Si hay empate: más cuota de mercado, más aciertos y menos tiempo.</p>
     </div>
-    <div class="tv" style="left: 1040px; top: 300px; width: 780px" data-t="48.6" data-fx="right">
-      <div class="scr"><img src="img/cq-tv-final.jpg"></div>
+    <div class="tv" style="left: 1040px; top: 300px; width: 780px" data-t="56.6" data-fx="right">
+      <div class="scr"><img data-clip="cq-tv-final" data-cm="56.6@8.6*0.8"></div>
     </div>
+    <i class="cue" data-t="57.51" data-sfx="boom"></i>
   </section>
 
   <!-- ============ 7 · JUEGO 3: BOLSA DE VALORES ============ -->
-  <section class="scene" data-t="190,195.6" data-sfx="title">
+  <section class="scene" data-t="198,203.6" data-sfx="title">
     <div class="glow" style="left: 560px; top: 160px; width: 800px; height: 800px; background: #FFC93D; opacity: 0.2"></div>
     <div class="tcard" style="--c: var(--gold)"><div>
       <div class="big-ico" data-icon="chart" data-t="0.2" data-fx="pop"></div>
@@ -382,7 +413,7 @@ b, .b { font-weight: 700; }
       <div class="s" data-t="1.6" data-fx="up">Invierte en lo que sabes</div>
     </div></div>
   </section>
-  <section class="scene" data-t="195.4,248.4" data-sfx="whoosh">
+  <section class="scene" data-t="203.4,260.4" data-sfx="whoosh">
     <p class="eyebrow abs" style="left: 140px; top: 100px; color: var(--gold)" data-t="0.2" data-fx="fade">Juego 3 · Bolsa de Valores</p>
     <!-- A: tu capital -->
     <div class="abs h2" style="left: 135px; top: 140px" data-t="0.3,10.6" data-fx="pop">Tu capital</div>
@@ -394,7 +425,8 @@ b, .b { font-weight: 700; }
       <span class="pct" data-t="5.0,10.6" data-fx="pop" data-sfx="pop">50 %<small>$500</small></span>
       <span class="pct all" data-t="5.4,10.6" data-fx="pop" data-sfx="pop">Todo<small>$1.000</small></span>
     </div>
-    <div class="phone" style="left: 1340px; top: 140px" data-t="0.6,10.6" data-fx="right"><div class="scr"><img src="img/st-ph-invertir.jpg"></div></div>
+    <div class="phone" style="left: 1340px; top: 140px" data-t="0.6,10.6" data-fx="right"><div class="scr"><img data-clip="st-ph-reto" data-cm="0.6@0.4*0.4 5.6@2.4"></div></div>
+    <i class="cue" data-t="5.6" data-sfx="ding"></i><i class="cue" data-t="8.87" data-sfx="coin"></i>
     <!-- B: si aciertas / si fallas -->
     <div class="abs h2" style="left: 135px; top: 140px" data-t="11,26.4" data-fx="pop" data-sfx="whoosh">Un ejemplo: inviertes $500</div>
     <div class="panel" style="--c: var(--good); left: 140px; top: 290px; width: 760px" data-t="11.6,26.4" data-fx="up">
@@ -413,61 +445,60 @@ b, .b { font-weight: 700; }
     <div class="cap" style="left: 140px; top: 860px; width: 760px; --c: var(--gold); font-size: 36px" data-t="22.6,26.4" data-fx="up" data-sfx="pop">Mientras <b>menos acierten</b>, más gana cada acierto.</div>
     <div class="cap" style="left: 940px; top: 860px; width: 840px; --c: var(--cyan); font-size: 36px" data-t="24.0,26.4" data-fx="up" data-sfx="pop">Si quedas con menos de $100, el <b>banco te rescata</b> con $100.</div>
     <!-- C: la pantalla -->
-    <div class="abs h2" style="left: 135px; top: 140px" data-t="26.8,34.4" data-fx="pop" data-sfx="whoosh">La pantalla del salón</div>
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="26.8,38.4" data-fx="pop" data-sfx="whoosh">La pantalla del salón</div>
     <div class="steps" style="left: 140px; top: 330px; width: 600px; gap: 30px">
-      <div class="step" data-t="27.4,34.4" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="chart"></span><span>La <b>gráfica</b> del capital de todos.</span></div>
-      <div class="step" data-t="29.4,34.4" data-fx="left" data-sfx="coin"><span class="ic cy" data-icon="list"></span><span>La <b>pizarra</b>: quién sube <b class="ok">▲</b> y quién baja <b class="no">▼</b>.</span></div>
+      <div class="step" data-t="27.4,38.4" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="chart"></span><span>La <b>gráfica</b> del capital de todos.</span></div>
+      <div class="step" data-t="29.4,38.4" data-fx="left" data-sfx="coin"><span class="ic cy" data-icon="list"></span><span>La <b>pizarra</b>: quién sube <b class="ok">▲</b> y quién baja <b class="no">▼</b>.</span></div>
+      <div class="step" data-t="34.4,38.4" data-fx="left"><span class="ic acc" data-icon="clock"></span><span>Al cerrar el reto, <b class="gd">el mercado se mueve</b>.</span></div>
     </div>
-    <div class="tv" style="left: 800px; top: 250px; width: 1020px" data-t="27.2,34.4" data-fx="right">
-      <div class="scr"><img src="img/st-tv-grafica.jpg" data-kb="27.2,34.4,0.5,0.5,1,0.62,0.5,1.25"></div>
+    <div class="tv" style="left: 800px; top: 250px; width: 1020px" data-t="27.2,38.4" data-fx="right">
+      <div class="scr"><img data-clip="st-tv-reto" data-cm="27.2@0.4*0.6 31.53@3.0"></div>
     </div>
+    <i class="cue" data-t="32.66" data-sfx="timeup"></i><i class="cue" data-t="34.6" data-sfx="market"></i>
     <!-- D: eventos -->
-    <div class="abs h2" style="left: 135px; top: 140px" data-t="34.8,46.4" data-fx="pop" data-sfx="whoosh">Eventos especiales</div>
-    <div class="ev" style="--c: var(--gold); left: 140px; top: 300px" data-t="35.4,46.4" data-fx="up" data-sfx="warm">
-      <div class="shot"><img src="img/st-aviso5.jpg"></div><p class="k">Reto 5</p><p class="t">Mercado alcista</p><p>Las ganancias valen el doble.</p></div>
-    <div class="ev" style="--c: var(--bad); left: 980px; top: 300px" data-t="38,46.4" data-fx="up" data-sfx="alarm">
-      <div class="shot"><img src="img/st-aviso8.jpg"></div><p class="k">Reto 8</p><p class="t">Pánico en la bolsa</p><p>Nadie invierte menos del 50 %.</p></div>
-    <div class="ev" style="--c: var(--violet); left: 140px; top: 640px" data-t="40.6,46.4" data-fx="up" data-sfx="lock">
-      <div class="shot"><img src="img/st-aviso12.jpg"></div><p class="k">Retos 12 a 15</p><p class="t">Bolsa a ciegas</p><p>La pizarra se apaga.</p></div>
-    <div class="ev" style="--c: var(--gold); left: 980px; top: 640px" data-t="43.2,46.4" data-fx="up" data-sfx="warm">
-      <div class="shot"><img src="img/st-aviso15.jpg"></div><p class="k">Reto 15</p><p class="t">Campanazo final</p><p>Las ganancias valen el triple.</p></div>
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="38.8,50.4" data-fx="pop" data-sfx="whoosh">Eventos especiales</div>
+    <div class="ev" style="--c: var(--gold); left: 140px; top: 300px" data-t="39.4,50.4" data-fx="up" data-sfx="warm">
+      <div class="shot"><img data-clip="st-aviso5" data-cm="39.4@0.2"></div><p class="k">Reto 5</p><p class="t">Mercado alcista</p><p>Las ganancias valen el doble.</p></div>
+    <div class="ev" style="--c: var(--bad); left: 980px; top: 300px" data-t="42,50.4" data-fx="up" data-sfx="alarm">
+      <div class="shot"><img data-clip="st-aviso8" data-cm="42@0.2"></div><p class="k">Reto 8</p><p class="t">Pánico en la bolsa</p><p>Nadie invierte menos del 50 %.</p></div>
+    <div class="ev" style="--c: var(--violet); left: 140px; top: 640px" data-t="44.6,50.4" data-fx="up" data-sfx="lock">
+      <div class="shot"><img data-clip="st-aviso12" data-cm="44.6@0.2"></div><p class="k">Retos 12 a 15</p><p class="t">Bolsa a ciegas</p><p>La pizarra se apaga.</p></div>
+    <div class="ev" style="--c: var(--gold); left: 980px; top: 640px" data-t="47.2,50.4" data-fx="up" data-sfx="warm">
+      <div class="shot"><img data-clip="st-aviso15" data-cm="47.2@0.2"></div><p class="k">Reto 15</p><p class="t">Campanazo final</p><p>Las ganancias valen el triple.</p></div>
     <!-- E: cómo ganar -->
-    <div class="abs h2" style="left: 135px; top: 140px" data-t="46.8" data-fx="pop">Cómo ganar</div>
-    <div class="win" style="left: 140px; top: 330px; width: 820px" data-t="47.2" data-fx="pop" data-sfx="win">
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="50.8" data-fx="pop">Cómo ganar</div>
+    <div class="win" style="left: 140px; top: 330px; width: 820px" data-t="51.2" data-fx="pop" data-sfx="pop">
       <div class="k">El campeón</div>
       <div class="t">Gana quien termine con <span class="gd">más capital</span></div>
       <p>Invierte con cabeza: ir con todo puede hacerte ganar… o quebrar.</p>
     </div>
-    <div class="tv" style="left: 1040px; top: 300px; width: 780px" data-t="47.6" data-fx="right">
-      <div class="scr"><img src="img/st-tv-final.jpg"></div>
+    <div class="tv" style="left: 1040px; top: 300px; width: 780px" data-t="51.6" data-fx="right">
+      <div class="scr"><img data-clip="st-tv-final" data-cm="51.6@8.9*0.8"></div>
     </div>
+    <i class="cue" data-t="52.14" data-sfx="boom"></i>
   </section>
 
   <!-- ============ 8 · EL GRAN FINAL ============ -->
-  <section class="scene" data-t="248,266.4" data-sfx="whoosh">
+  <section class="scene" data-t="260,278.4" data-sfx="whoosh">
     <p class="eyebrow abs" style="left: 140px; top: 100px" data-t="0.2" data-fx="fade">En los 3 juegos</p>
     <div class="abs h2" style="left: 135px; top: 140px" data-t="0.3" data-fx="pop">El gran final</div>
-    <div class="steps" style="left: 140px; top: 330px; width: 520px; gap: 30px">
-      <div class="step" data-t="0.8" data-fx="left"><span class="n">1</span><span>¿Quién ganó? Se destapan el <b>3.º</b> y el <b>2.º</b>.</span></div>
-      <div class="step" data-t="4.6" data-fx="left"><span class="n">2</span><span>Redoble… y <b class="gd">¡el campeón!</b></span></div>
-      <div class="step" data-t="11.4" data-fx="left"><span class="n">3</span><span>El <b>podio</b> de los 3 primeros.</span></div>
-      <div class="step" data-t="14" data-fx="left"><span class="n">4</span><span>Cada celular muestra su <b>puesto final</b>.</span></div>
+    <div class="tv" style="left: 120px; top: 280px; width: 1240px" data-t="0.4" data-fx="up">
+      <div class="scr"><img data-clip="tv-revelacion" data-cm="0.6@0.33"></div>
     </div>
-    <div class="tv" style="left: 700px; top: 270px; width: 880px" data-t="0.6" data-fx="right">
-      <div class="scr">
-        <img src="img/tv-rv-tarjetas.jpg" data-sfx="tension">
-        <img src="img/tv-rv-redoble.jpg" data-t="4.6" data-fx="fade" data-sfx="roll">
-        <img src="img/tv-rv-campeon.jpg" data-t="7.4" data-fx="fade" data-sfx="boom">
-        <img src="img/tv-rv-podio.jpg" data-t="11.4" data-fx="fade" data-sfx="podium">
-      </div>
+    <i class="cue" data-t="0.6" data-sfx="reveal"></i>
+    <div class="steps sm fin" style="left: 1410px; top: 310px; width: 450px; gap: 40px">
+      <div class="step" data-t="3.0,15.2" data-fx="left"><span class="n">1</span><span>Se destapan el <b>3.º</b> y el <b>2.º</b>.</span></div>
+      <div class="step" data-t="7.0,15.2" data-fx="left"><span class="n">2</span><span>Redoble… y <b class="gd">¡el campeón!</b></span></div>
+      <div class="step" data-t="13.6,15.2" data-fx="left"><span class="n">3</span><span>El <b>podio</b> de los 3 primeros.</span></div>
     </div>
-    <div class="phone" style="left: 1610px; top: 300px; width: 280px; padding: 10px; border-radius: 42px" data-t="14" data-fx="up" data-sfx="pop">
-      <div class="scr" style="width: 260px; height: 563px; border-radius: 32px"><img src="img/ph-campeon.jpg"></div>
+    <p class="abs" style="left: 1400px; top: 290px; width: 460px; font-size: 34px; line-height: 1.25; text-align: center" data-t="15.6" data-fx="fade">Cada celular muestra <b class="gd">su puesto final</b></p>
+    <div class="phone" style="left: 1490px; top: 400px; width: 280px; padding: 10px; border-radius: 42px" data-t="15.6" data-fx="up">
+      <div class="scr" style="width: 260px; height: 563px; border-radius: 32px"><img data-clip="ph-revelacion" data-cm="15.6@11"></div>
     </div>
   </section>
 
   <!-- ============ 9 · CIERRE ============ -->
-  <section class="scene" data-t="266,277" data-sfx="whoosh">
+  <section class="scene" data-t="278,289" data-sfx="whoosh">
     <div class="glow" style="left: 360px; top: 80px; width: 1200px; height: 900px; background: #FF5B3A; opacity: 0.22"></div>
     <div class="abs" style="left: 0; right: 0; top: 140px; text-align: center">
       <div class="h1" style="font-size: 170px" data-t="0.2" data-fx="pop" data-sfx="hit">¿Listos?</div>
@@ -533,7 +564,7 @@ function fxStyle(el, fx, v, out) {
     pop: `scale(${0.55 + 0.45 * e})`, zoom: `scale(${1.25 - 0.25 * e})`, fade: ''
   }[fx] || '';
 }
-function seek(t) {
+function layout(t) {
   for (const s of scenes) {
     const on = t >= s.a - 0.001 && t < s.b;
     s.el.style.display = on ? 'block' : 'none';
@@ -635,8 +666,50 @@ hooks.push(t => { const tr = document.getElementById('ticker'); tr.style.transfo
   });
 })();
 
+// clips grabados del juego real, cuadro a cuadro: <img data-clip="nombre" data-cm="s@c*r …">
+// s = segundo de la escena, c = segundo del clip en ese momento, r = velocidad (1 si no se pone). Cada tramo manda desde su s.
+// El renderizador saca los cuadros de clips/nombre.mp4 a .render/frames/nombre/NNNNN.jpg y pasa cuántos tiene cada clip.
+const FPS = 30, CLIP_FRAMES = window.CLIP_FRAMES || {};
+const clips = [...document.querySelectorAll('img[data-clip]')].map(img => {
+  const sc = sceneOf(img);
+  const segs = (img.dataset.cm || '0@0').trim().split(/\s+/).map(tok => {
+    const m = tok.match(/^([\d.]+)@([\d.]+)(?:\*([\d.]+))?$/);
+    return { s: sc.a + Number(m[1]), c: Number(m[2]), r: m[3] === undefined ? 1 : Number(m[3]) };
+  });
+  return { img, sc, segs, name: img.dataset.clip };
+});
+function clipFrame(c, t) {
+  let g = c.segs[0];
+  for (const x of c.segs) if (t >= x.s) g = x;
+  const n = CLIP_FRAMES[c.name] || 1e9;
+  return Math.max(0, Math.min(n - 1, Math.round((g.c + Math.max(0, t - g.s) * g.r) * FPS)));
+}
+// Qué cuadro de qué clip se ve en el instante t (solo los que están en pantalla).
+function clipsAt(t) {
+  return clips.filter(c => c.sc.el.style.display !== 'none' && c.img.checkVisibility({ opacityProperty: true, visibilityProperty: true }))
+    .map(c => [c, clipFrame(c, t)]);
+}
+async function seek(t) {
+  layout(t);
+  const loads = [];
+  for (const [c, f] of clipsAt(t)) {
+    const src = `.render/frames/${c.name}/${String(f).padStart(5, '0')}.jpg`;
+    if (c.img.getAttribute('src') !== src) { c.img.src = src; loads.push(c.img.decode().catch(() => {})); }
+  }
+  await Promise.all(loads);
+}
+// Para el renderizador: los cuadros que necesita cada clip en todo el video (o en los instantes dados).
+window.clipPlan = function (times) {
+  const need = {};
+  for (const t of times || Array.from({ length: Math.round(D * FPS) }, (_, i) => i / FPS)) {
+    layout(t);
+    for (const [c, f] of clipsAt(t)) { const r = need[c.name] || (need[c.name] = [f, f]); r[0] = Math.min(r[0], f); r[1] = Math.max(r[1], f); }
+  }
+  return need;
+};
+
 // carga: espera fuentes e imágenes antes de dibujar (el renderizador lo llama antes del primer cuadro)
-window.ready = Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))]).then(() => { seek(0); return D; });
+window.ready = Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))]).then(() => { layout(0); return D; });
 window.seek = seek;
 window.DURATION = D;
 // Marcas de sonido: cada elemento con data-sfx suena cuando aparece (tiempo absoluto, segundos).
