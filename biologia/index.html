@@ -1,0 +1,1029 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}img{max-width:100%}body{margin:0}</style></head><body>
+<title>Cuerpo en Equilibrio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500..800&family=Caveat:wght@500;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: portafolio con estética de fanzine risográfico; cada actividad es una banda con su etiqueta escrita a mano */
+:root{
+  --bg:#eef0f5; --surface:#ffffff; --surface-2:#f5f6fa; --ink:#1c1d33; --muted:#585b73; --line:#d5d8e3;
+  --accent:#d6247a; --accent-2:#2457d6; --heat:#d9441b; --cold:#1f6fd0; --ok:#147a55; --pos:#8a3ffc;
+  --hi:#ffd84a; --hi-ink:#1d1b33;
+  /* el fanzine es un objeto de papel: mismos colores en ambos temas */
+  --z-paper:#fcfbf8; --z-ink:#1d1b33; --z-pink:#ff4fa3; --z-blue:#2e6bff; --z-yellow:#ffe14d; --z-green:#18a874; --z-orange:#ff7a2e; --z-purple:#7b4dff; --z-skin:#f2c19c; --z-muted:#5d5a72;
+  --f-display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-hand:"Caveat", "Comic Sans MS", cursive;
+  --f-mono:"DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11131f; --surface:#1a1d2e; --surface-2:#22263a; --ink:#ecebf5; --muted:#a3a6bf; --line:#33374e;
+    --accent:#ff5ca8; --accent-2:#7aa2ff; --heat:#ff7b52; --cold:#62a8ff; --ok:#3ccf91; --pos:#b48cff;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11131f; --surface:#1a1d2e; --surface-2:#22263a; --ink:#ecebf5; --muted:#a3a6bf; --line:#33374e;
+  --accent:#ff5ca8; --accent-2:#7aa2ff; --heat:#ff7b52; --cold:#62a8ff; --ok:#3ccf91; --pos:#b48cff;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:72px}
+body{background:var(--bg); color:var(--ink); font:16px/1.6 var(--f-body); -webkit-font-smoothing:antialiased}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:10; background:var(--surface)}
+h1,h2,h3,h4{font-family:var(--f-display); line-height:1.1; text-wrap:balance; margin:0}
+p{margin:0}
+a{color:var(--accent-2)}
+button{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--accent); outline-offset:3px; border-radius:6px}
+.wrap{max-width:1120px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono); font-variant-numeric:tabular-nums}
+.hand{font-family:var(--f-hand)}
+
+/* ---------- barra superior ---------- */
+.topbar{position:sticky; top:env(safe-area-inset-top,0px); z-index:9; background:var(--surface); border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex; align-items:center; gap:12px; padding-block:10px; overflow-x:auto; scrollbar-width:none}
+.topbar .wrap::-webkit-scrollbar{display:none}
+.brand{font:800 17px/1 var(--f-display); white-space:nowrap; margin-right:auto; letter-spacing:-.01em}
+.brand b{color:var(--accent)}
+.topbar nav{display:flex; gap:6px}
+.topbar nav a{white-space:nowrap; text-decoration:none; color:var(--ink); font-size:14px; padding:6px 12px; border-radius:999px; border:1px solid var(--line); background:var(--surface-2)}
+.topbar nav a:hover{border-color:var(--accent); color:var(--accent)}
+
+/* ---------- portada ---------- */
+.hero{padding-block:44px 28px}
+.hero .eyebrow{font:500 13px/1 var(--f-mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.hero h1{font-size:clamp(44px, 9vw, 104px); font-weight:800; font-stretch:80%; letter-spacing:-.03em; margin-top:10px}
+.hero h1 .scribble{position:relative; color:var(--accent); white-space:nowrap}
+.hero h1 .scribble svg{position:absolute; left:-2%; bottom:-.12em; width:104%; height:.32em; overflow:visible}
+.hero h1 .scribble path{fill:none; stroke:var(--hi); stroke-width:7; stroke-linecap:round; stroke-dasharray:420; stroke-dashoffset:0; animation:draw 1.4s .3s ease-out both}
+@keyframes draw{from{stroke-dashoffset:420}}
+.hero .lead{max-width:62ch; margin-top:18px; font-size:18px; color:var(--muted)}
+.meta{display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:20px; font-size:14px}
+.meta span{color:var(--muted)} .meta strong{color:var(--ink)}
+.index{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:14px; margin-top:30px}
+.index a{display:flex; flex-direction:column; gap:8px; padding:16px 18px; border-radius:var(--r); background:var(--surface); border:1px solid var(--line); text-decoration:none; color:var(--ink); transition:transform .2s, border-color .2s}
+.index a:hover{transform:translateY(-3px); border-color:var(--accent)}
+.index .num{font:700 30px/1 var(--f-hand); color:var(--accent)}
+.index h3{font-size:19px}
+.index p{font-size:14px; color:var(--muted)}
+.chip{display:inline-flex; align-items:center; gap:6px; align-self:flex-start; font:500 12px/1 var(--f-mono); padding:5px 9px; border-radius:999px; border:1px solid currentColor}
+.chip::before{content:""; width:7px; height:7px; border-radius:50%; background:currentColor}
+.chip.done{color:var(--ok)} .chip.class{color:var(--accent-2)} .chip.you{color:var(--heat)}
+
+/* ---------- secciones ---------- */
+.band{padding-block:56px; border-top:1px solid var(--line)}
+.band.alt{background:var(--surface-2)}
+.sec-head{display:grid; grid-template-columns:auto 1fr; gap:4px 18px; align-items:end; margin-bottom:28px}
+.sec-tag{grid-row:span 2; font:700 clamp(54px,9vw,88px)/.8 var(--f-hand); color:var(--accent); transform:rotate(-6deg)}
+.sec-head h2{font-size:clamp(28px,4.6vw,46px); font-weight:800; font-stretch:85%; letter-spacing:-.02em}
+.sec-head p{color:var(--muted); max-width:70ch}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:22px}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:18px}
+.grid2 > *{min-width:0}
+.act-title{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+.act-title .n{flex:none; width:32px; height:32px; border-radius:50%; display:grid; place-items:center; background:var(--ink); color:var(--surface); font:700 15px/1 var(--f-display)}
+.act-title h3{font-size:21px}
+.note{font-size:14px; color:var(--muted); border-left:3px solid var(--hi); padding:6px 0 6px 12px; margin-top:14px}
+.qa{display:grid; gap:14px; counter-reset:q; padding:0; margin:0; list-style:none}
+.qa li{counter-increment:q; display:grid; grid-template-columns:28px 1fr; gap:4px 10px}
+.qa li::before{content:counter(q); grid-row:span 2; font:700 15px/1.6 var(--f-mono); color:var(--accent)}
+.qa .q{font-weight:700}
+.qa .a{color:var(--ink)}
+.subhead{font:700 13px/1 var(--f-mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:26px 0 12px}
+
+/* ---------- FANZINE ---------- */
+.zine-layout{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,320px); gap:28px; align-items:start}
+@media (max-width:860px){.zine-layout{grid-template-columns:1fr}}
+.stage{overflow:clip; padding:18px 0 6px}
+.book{position:relative; width:min(100%, 470px); aspect-ratio:5/7; margin:0 auto; perspective:2200px; container-type:inline-size}
+.book::before,.book::after{content:""; position:absolute; inset:0; border-radius:4px; background:var(--z-paper); box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.book::before{transform:translate(7px,7px) rotate(1.2deg); background:#e9e6df}
+.book::after{transform:translate(3px,3px) rotate(.4deg); background:#f3f1ec}
+.zpage{position:absolute; inset:0; z-index:1; overflow:hidden auto; background:var(--z-paper); color:var(--z-ink); border-radius:4px; box-shadow:0 18px 40px -18px rgba(20,20,50,.45), 0 2px 6px rgba(20,20,50,.12);
+  transform-origin:left center; transition:transform .9s cubic-bezier(.35,.75,.2,1), opacity .35s .55s, visibility 0s .9s; backface-visibility:hidden;
+  padding:6cqw; font-size:3.45cqw; line-height:1.38; scrollbar-width:thin}
+.zpage.flipped{transform:rotateY(-170deg); opacity:0; visibility:hidden; pointer-events:none}
+.zpage:not(.flipped){transition:transform .9s cubic-bezier(.35,.75,.2,1), opacity .2s, visibility 0s}
+.zpage::after{content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(0,0,0,.09), transparent 7%); border-radius:4px}
+.book.list{aspect-ratio:auto; perspective:none; display:grid; gap:22px}
+.book.list::before,.book.list::after{display:none}
+.book.list .zpage{position:relative; inset:auto; aspect-ratio:5/7; transform:none!important; opacity:1!important; visibility:visible!important; pointer-events:auto!important; transition:none}
+.zfolio{position:absolute; bottom:3cqw; right:5cqw; font:500 2.6cqw/1 var(--f-mono); color:var(--z-muted)}
+.zpage h3{font-family:var(--f-display); font-weight:800; font-stretch:80%; letter-spacing:-.02em; line-height:.95}
+.tape{position:absolute; width:22cqw; height:6cqw; background:rgba(255,225,77,.75); transform:rotate(-8deg)}
+.zhand{font-family:var(--f-hand); font-weight:700; line-height:1}
+.halftone{background-image:radial-gradient(var(--z-pink) 22%, transparent 24%); background-size:3.2cqw 3.2cqw}
+
+/* portada */
+.cover{background:var(--z-yellow); display:flex; flex-direction:column; padding:0}
+.cover .top{padding:6cqw 6cqw 0; display:flex; justify-content:space-between; font:500 2.8cqw/1 var(--f-mono)}
+.cover .mi{font:800 15cqw/.85 var(--f-display); font-stretch:75%; letter-spacing:-.04em; padding:3cqw 6cqw 0; color:var(--z-ink)}
+.cover .mi span{display:block; color:var(--z-pink); -webkit-text-stroke:.5cqw var(--z-ink)}
+.cover .art{position:relative; flex:1; margin:3cqw 6cqw; border:.6cqw solid var(--z-ink); border-radius:2cqw; overflow:hidden; background:var(--z-paper)}
+.cover .art .halftone{position:absolute; inset:0; opacity:.55}
+.cover .art svg{position:absolute; inset:0; width:100%; height:100%}
+.cover .bubble{position:absolute; right:4cqw; top:4cqw; background:var(--z-paper); border:.5cqw solid var(--z-ink); border-radius:50% 50% 50% 8%; padding:2.5cqw 3.5cqw; font:700 6cqw/1 var(--f-hand); transform:rotate(6deg); animation:wobble 2.6s ease-in-out infinite}
+@keyframes wobble{50%{transform:rotate(-2deg) scale(1.06)}}
+.cover .foot{padding:0 6cqw 6cqw; display:grid; gap:1.2cqw}
+.cover .foot h3{font-size:6.4cqw}
+.cover .foot p{font-size:3cqw}
+.sticker{position:absolute; left:4cqw; bottom:4cqw; background:var(--z-blue); color:#fff; font:700 3.4cqw/1 var(--f-hand); padding:2cqw 3cqw; border-radius:2cqw; transform:rotate(-7deg)}
+
+/* página 2: arco */
+.p-arc h3{font-size:8cqw; color:var(--z-blue)}
+.p-arc .sub{font:700 4.6cqw/1 var(--f-hand); color:var(--z-pink); margin:1cqw 0 1cqw}
+.arc-svg{width:auto; height:58cqw; max-width:100%; display:block; margin:0 auto}
+.arc-legend{list-style:none; margin:1cqw 0 0; padding:0; display:grid; gap:1.1cqw; font-size:2.95cqw}
+.arc-legend li{display:grid; grid-template-columns:5cqw 1fr; gap:1.5cqw; align-items:start; padding:.6cqw 1cqw; border-radius:1.5cqw; transition:background .3s}
+.arc-legend li.lit{background:var(--z-yellow)}
+.dotn{width:4.6cqw; height:4.6cqw; border-radius:50%; display:grid; place-items:center; color:#fff; font:700 2.8cqw/1 var(--f-mono)}
+.fire{display:flex; justify-content:space-between; align-items:center; gap:2cqw; margin-top:1.5cqw}
+.fire button{border:.5cqw solid var(--z-ink); background:var(--z-pink); color:var(--z-ink); font:800 3.2cqw/1 var(--f-display); padding:1.8cqw 3cqw; border-radius:999px; cursor:pointer; box-shadow:.8cqw .8cqw 0 var(--z-ink); transition:transform .1s, box-shadow .1s}
+.fire button:active{transform:translate(.6cqw,.6cqw); box-shadow:.2cqw .2cqw 0 var(--z-ink)}
+.fire small{font:500 2.5cqw/1.3 var(--f-mono); color:var(--z-muted); text-align:right}
+#forearm{transform-box:view-box; transform-origin:150px 205px; transition:transform .25s cubic-bezier(.2,1.6,.4,1)}
+.withdraw #forearm{transform:rotate(-22deg)}
+#ay{opacity:0; transform-box:fill-box; transform-origin:center; transition:opacity .2s, transform .3s}
+.withdraw-ay #ay{opacity:1; transform:scale(1.1)}
+.steam path{animation:steam 2.4s ease-in-out infinite}
+.steam path:nth-child(2){animation-delay:.6s} .steam path:nth-child(3){animation-delay:1.2s}
+@keyframes steam{0%{opacity:0; transform:translateY(6px)} 40%{opacity:.9} 100%{opacity:0; transform:translateY(-10px)}}
+#impulse{opacity:0} .firing #impulse{opacity:1}
+
+/* página 3: tabla */
+.p-table h3{font-size:7.4cqw}
+.p-table h3 .h{color:var(--z-orange)} .p-table h3 .c{color:var(--z-blue)}
+.ztable{width:100%; border-collapse:separate; border-spacing:0 1cqw; margin-top:2cqw; font-size:2.75cqw; line-height:1.28}
+.ztable th{font:800 3.4cqw/1 var(--f-display); padding:1.5cqw; color:#fff}
+.ztable th.h{background:var(--z-orange); border-radius:1.5cqw 0 0 1.5cqw} .ztable th.c{background:var(--z-blue); border-radius:0 1.5cqw 1.5cqw 0}
+.ztable th.k{background:none}
+.ztable td{padding:1.2cqw 1.4cqw; vertical-align:top; background:#fff3ea}
+.ztable td.c{background:#eaf1ff}
+.ztable td.k{background:none; font:500 2.4cqw/1.2 var(--f-mono); text-transform:uppercase; color:var(--z-muted); padding-left:0; width:17%}
+.ztable td.both{text-align:center; background:var(--z-yellow); font-weight:700}
+.ztable b{font-weight:700}
+
+/* página 4 */
+.p-risk{padding:0; display:grid; grid-template-rows:1fr 1fr}
+.risk{padding:4.8cqw 6cqw 3cqw; position:relative}
+.risk.hot{background:linear-gradient(160deg,#ffe2cf,#ffd0b5)}
+.risk.cold{background:linear-gradient(160deg,#dbe8ff,#c9dcff)}
+.risk h3{font-size:7cqw}
+.risk.hot h3{color:#c2410c} .risk.cold h3{color:#1d4fd8}
+.risk .def{font-weight:700; margin:1cqw 0 1.6cqw; font-size:3.1cqw}
+.risk .cols{display:grid; grid-template-columns:1fr 1fr; gap:3cqw; font-size:2.7cqw; line-height:1.3}
+.risk h4{font:500 2.4cqw/1 var(--f-mono); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.8cqw}
+.risk ul{margin:0; padding-left:3.2cqw}
+.risk .big{position:absolute; right:5cqw; top:3.5cqw; font:500 6cqw/1 var(--f-mono); opacity:.85}
+.risk.hot .big{color:#c2410c} .risk.cold .big{color:#1d4fd8}
+
+/* página 5 */
+.p-camp{background:var(--z-ink); color:#fff; display:flex; flex-direction:column; gap:2.2cqw}
+.p-camp::after{display:none}
+.p-camp .tag{font:500 2.8cqw/1 var(--f-mono); color:var(--z-yellow)}
+.p-camp h3{font-size:10.5cqw; color:#fff}
+.p-camp h3 em{font-style:normal; color:var(--z-pink)}
+.p-camp .lede{font:700 4.6cqw/1.05 var(--f-hand); color:var(--z-yellow)}
+.tips{display:grid; grid-template-columns:1fr 1fr; gap:2.4cqw}
+.tip{border-radius:2cqw; padding:2.6cqw; font-size:2.75cqw; line-height:1.3; color:var(--z-ink)}
+.tip.h{background:var(--z-orange)} .tip.c{background:#8fb6ff}
+.tip strong{display:block; font:800 3.8cqw/1 var(--f-display); margin-bottom:1.2cqw}
+.tip ol{margin:0; padding-left:3.4cqw; display:grid; gap:.8cqw}
+.sos{margin-top:auto; display:flex; align-items:center; gap:3cqw; border:.5cqw dashed var(--z-yellow); border-radius:2cqw; padding:2.4cqw 3cqw}
+.sos .num{font:800 11cqw/1 var(--f-display); color:var(--z-pink); animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.sos p{font-size:2.9cqw}
+
+.zine-controls{display:flex; align-items:center; justify-content:center; gap:10px; margin-top:18px; flex-wrap:wrap}
+.btn{border:1px solid var(--line); background:var(--surface); color:var(--ink); padding:9px 16px; border-radius:999px; cursor:pointer; font-size:14px; font-weight:700; transition:border-color .2s, background .2s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--ink); color:var(--surface); border-color:var(--ink)}
+.btn:disabled{opacity:.4; cursor:default}
+.dots{display:flex; gap:6px}
+.dots button{width:10px; height:10px; padding:0; border-radius:50%; border:0; background:var(--line); cursor:pointer}
+.dots button[aria-current="true"]{background:var(--accent); width:24px; border-radius:6px}
+.pageinfo{font:500 13px/1 var(--f-mono); color:var(--muted); min-width:50px; text-align:center}
+
+/* termostato */
+.thermo{--t:0.5}
+.thermo-top{display:flex; align-items:center; gap:18px}
+.tube{position:relative; width:30px; height:170px; flex:none; border-radius:15px; border:3px solid var(--ink); background:var(--surface-2); overflow:hidden}
+.tube .fill{position:absolute; left:0; right:0; bottom:0; height:calc(var(--t)*100%); background:linear-gradient(to top, var(--cold), var(--accent) 60%, var(--heat)); transition:height .3s}
+.tube .ref{position:absolute; left:-3px; right:-3px; border-top:2px dashed var(--ink); bottom:51%}
+.tempread{font:500 46px/1 var(--f-mono); letter-spacing:-.03em}
+.state{display:inline-block; margin-top:8px; padding:4px 10px; border-radius:999px; font-weight:700; font-size:14px; color:var(--surface)}
+.thermo input[type=range]{width:100%; margin-top:16px; accent-color:var(--accent)}
+.scale{display:flex; justify-content:space-between; font:500 11px/1 var(--f-mono); color:var(--muted)}
+.mechs{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px}
+.mech{font-size:13px; padding:8px 10px; border-radius:10px; border:1px dashed var(--line); color:var(--muted); transition:all .25s}
+.mech.on{border-style:solid; color:var(--ink); background:var(--surface-2); border-color:currentColor}
+.mech.on.h{color:var(--heat)} .mech.on.c{color:var(--cold)}
+.mech.on b{color:var(--ink)}
+.mech b{display:block; font-size:14px}
+.thermo-msg{margin-top:12px; font-size:14px; color:var(--muted); min-height:4.5em}
+
+/* ---------- HOMEOSTASIS ---------- */
+.chain{display:flex; flex-wrap:wrap; gap:8px; align-items:stretch}
+.link-card{flex:1 1 130px; min-width:0; position:relative; padding:12px; border-radius:12px; border:2px solid var(--line); background:var(--surface); text-align:center; display:flex; flex-direction:column; align-items:center; gap:6px}
+.link-card svg{width:44px; height:44px}
+.link-card .lbl{font:500 11px/1.2 var(--f-mono); letter-spacing:.06em; text-transform:uppercase}
+.link-card .val{font-size:13.5px; line-height:1.35}
+.link-card.lit{border-color:var(--accent); box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent); transform:translateY(-3px)}
+.link-card{transition:border-color .3s, box-shadow .3s, transform .3s}
+.arrow{flex:0 0 18px; align-self:center; color:var(--muted); font:700 18px/1 var(--f-mono)}
+@media (max-width:720px){.chain{flex-direction:column} .arrow{transform:rotate(90deg); flex-basis:auto} .link-card{flex-basis:auto}}
+.loopback{margin-top:10px; font:500 13px/1.4 var(--f-mono); color:var(--muted); text-align:center; border:2px dashed var(--line); border-top:0; border-radius:0 0 14px 14px; padding:8px}
+
+table.cls{width:100%; border-collapse:collapse; font-size:15px}
+.cls th,.cls td{text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:top}
+.cls th{font:500 12px/1 var(--f-mono); text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+.tbl-wrap{overflow-x:auto}
+.pill{display:inline-block; min-width:30px; text-align:center; padding:3px 9px; border-radius:999px; font:700 13px/1.3 var(--f-mono); color:var(--surface)}
+.pill.N{background:var(--ok)} .pill.P{background:var(--pos)}
+
+.cases{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px}
+.case{border-radius:12px; padding:16px; background:var(--surface-2); border:1px solid var(--line)}
+.case h4{font-size:17px; margin-bottom:4px}
+.case .sit{font-size:14px; color:var(--muted); margin-bottom:10px}
+.case dl{margin:0; display:grid; gap:8px}
+.case dt{font-weight:700; font-size:14px}
+.case dd{margin:0; font-size:14.5px}
+
+.roles{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px}
+@media (max-width:820px){.roles{grid-template-columns:1fr}}
+.role{position:relative; border:2px solid var(--line); border-radius:12px; padding:12px; background:var(--surface); transition:border-color .3s, transform .3s}
+.role .who{font:500 11px/1.2 var(--f-mono); text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+.role h4{font-size:16px; margin:2px 0 6px}
+.role p{font-size:14px; font-style:italic}
+.role .ball{position:absolute; top:-10px; right:-8px; width:22px; height:22px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #fff 0 12%, var(--hi) 14%); border:2px solid var(--hi-ink); opacity:0; transform:scale(.3); transition:all .35s cubic-bezier(.2,1.6,.4,1)}
+.role.has .ball{opacity:1; transform:scale(1)}
+.role.has{border-color:var(--accent); transform:translateY(-3px)}
+
+.situ{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
+.situ button{border:1px solid var(--line); background:var(--surface); padding:7px 13px; border-radius:999px; cursor:pointer; font-size:14px}
+.situ button[aria-pressed="true"]{background:var(--ink); color:var(--surface); border-color:var(--ink)}
+.diagram{display:flex; gap:8px; flex-wrap:wrap}
+.dbox{flex:1 1 150px; min-width:0; border-radius:12px; padding:12px; color:var(--hi-ink); animation:pop .45s both}
+.dbox .lbl{font:500 11px/1 var(--f-mono); text-transform:uppercase; letter-spacing:.06em; opacity:.75; margin-bottom:6px}
+.dbox p{font-size:14px; line-height:1.35}
+.dbox:nth-of-type(1){background:#d9dcea} .dbox:nth-of-type(2){background:#ffe2a3} .dbox:nth-of-type(3){background:#b9d7ff} .dbox:nth-of-type(4){background:#d7c9ff} .dbox:nth-of-type(5){background:#ffc7dc}
+@keyframes pop{from{opacity:0; transform:translateY(10px) scale(.96)}}
+.diagram .arrow{flex:0 0 14px}
+@media (max-width:720px){.diagram{flex-direction:column} .dbox{flex-basis:auto}}
+.dexp{margin-top:14px}
+.dtype{margin-top:10px}
+
+.tf{display:grid; gap:12px; list-style:none; padding:0; margin:0}
+.tf li{display:grid; grid-template-columns:auto 1fr; gap:4px 12px; padding:12px; border-radius:12px; background:var(--surface-2)}
+.tf .v{grid-row:span 2; align-self:start; font:800 18px/1 var(--f-display); width:34px; height:34px; display:grid; place-items:center; border-radius:8px; background:var(--heat); color:var(--surface)}
+.tf .stmt{font-weight:700}
+.tf .why{font-size:14.5px; color:var(--muted)}
+
+/* ---------- PRESIÓN: mapa conceptual ---------- */
+.cmap{display:grid; justify-items:center; gap:0}
+.node{position:relative; background:var(--surface); border:2px solid var(--ink); border-radius:12px; padding:10px 14px; text-align:center; max-width:520px; transition:box-shadow .3s, transform .3s, background .3s}
+.node h4{font-size:16px}
+.node p{font-size:13.5px; color:var(--muted); margin-top:3px}
+.node.root{background:var(--ink); color:var(--surface); border-color:var(--ink); padding:14px 22px}
+.node.root h4{font-size:22px}
+.node.def{border-color:var(--accent)}
+.node.nerv{border-color:var(--accent-2)} .node.horm{border-color:var(--pos)}
+.node.end{border-color:var(--ok); border-width:3px}
+.node.lit{box-shadow:0 0 0 5px var(--hi); transform:scale(1.03)}
+.link{position:relative; display:flex; justify-content:center; padding:16px 0 22px; width:100%}
+.link::before{content:""; position:absolute; left:50%; top:0; bottom:9px; border-left:2px solid var(--muted)}
+.link::after{content:""; position:absolute; left:50%; bottom:0; transform:translateX(-50%); border:7px solid transparent; border-bottom:0; border-top:9px solid var(--muted)}
+.link span{position:relative; background:var(--bg-sec, var(--surface-2)); padding:1px 9px; font:italic 13.5px/1.4 var(--f-body); color:var(--ink); border-radius:6px}
+.branches{display:grid; grid-template-columns:1fr 1fr; gap:22px; width:100%}
+@media (max-width:760px){.branches{grid-template-columns:1fr}}
+.branch{display:grid; justify-items:center; align-content:start; min-width:0; padding:14px 10px 6px; border-radius:16px}
+.branch.nerv{background:color-mix(in srgb, var(--accent-2) 8%, transparent)}
+.branch.horm{background:color-mix(in srgb, var(--pos) 8%, transparent)}
+.branch .bh{font:500 12px/1 var(--f-mono); text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px}
+.branch.nerv .bh{color:var(--accent-2)} .branch.horm .bh{color:var(--pos)}
+.split{display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%}
+.split .node{max-width:none}
+.split .node ul{margin:4px 0 0; padding-left:16px; text-align:left; font-size:13px; color:var(--muted)}
+.node.up{border-color:var(--heat)} .node.down{border-color:var(--cold)}
+.sim{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:22px}
+.sim-msg{text-align:center; min-height:1.6em; font:500 14px/1.5 var(--f-mono); color:var(--accent); margin-bottom:10px}
+.examples{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; width:100%; margin-top:8px}
+.examples .node{max-width:none; border-style:dashed; text-align:left}
+
+/* ---------- GLUCOSA ---------- */
+.gluco{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); gap:20px}
+@media (max-width:820px){.gluco{grid-template-columns:1fr}}
+.gauge{text-align:center}
+.gauge .val{font:500 56px/1 var(--f-mono)}
+.gauge .unit{font:500 14px/1 var(--f-mono); color:var(--muted)}
+.gbar{position:relative; height:14px; border-radius:7px; margin:18px 0 6px; background:linear-gradient(90deg, var(--cold) 0 18%, var(--ok) 18% 45%, var(--hi) 45% 70%, var(--heat) 70%)}
+.gbar i{position:absolute; top:-6px; width:4px; height:26px; background:var(--ink); border-radius:2px; transition:left .25s}
+.gsteps{list-style:none; padding:0; margin:14px 0 0; display:grid; gap:8px}
+.gsteps li{padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:14.5px; opacity:.45; transition:opacity .3s, border-color .3s, background .3s}
+.gsteps li.lit{opacity:1; border-color:var(--accent); background:var(--surface-2)}
+.keys{display:grid; gap:10px; padding:0; margin:0; list-style:none}
+.keys li{padding-left:16px; position:relative; font-size:15px}
+.keys li::before{content:""; position:absolute; left:0; top:.6em; width:7px; height:7px; border-radius:50%; background:var(--accent)}
+textarea{width:100%; min-height:190px; resize:vertical; padding:14px; border-radius:12px; border:1px solid var(--line); background:var(--surface-2); color:var(--ink); font:16px/1.6 var(--f-body)}
+.checks{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px}
+.checks span{font:500 12px/1 var(--f-mono); padding:6px 9px; border-radius:999px; border:1px dashed var(--line); color:var(--muted)}
+.checks span.ok{border-style:solid; border-color:var(--ok); color:var(--ok)}
+.wc{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:10px; font:500 13px/1.4 var(--f-mono); color:var(--muted)}
+.warn{border:2px solid var(--heat); border-radius:var(--r); padding:16px 18px; background:var(--surface)}
+.warn strong{color:var(--heat)}
+
+footer{padding-block:40px 60px; border-top:1px solid var(--line); text-align:center; color:var(--muted); font-size:14px}
+footer .hand{font-size:26px; color:var(--accent)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important; transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <span class="brand">Cuerpo en <b>Equilibrio</b></span>
+    <nav aria-label="Actividades">
+      <a href="#fanzine">Fanzine</a>
+      <a href="#homeostasis">Homeostasis</a>
+      <a href="#presion">Presión arterial</a>
+      <a href="#glucosa">Glucosa</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero wrap">
+  <p class="eyebrow">Biología · Grado 10° · Portafolio digital</p>
+  <h1>Cuerpo en <span class="scribble">equilibrio<svg viewBox="0 0 400 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 20 C 80 4, 160 28, 240 14 S 360 8, 396 18"/></svg></span></h1>
+  <p class="lead">Cómo el sistema nervioso y el sistema endocrino detectan cambios, deciden y responden para mantener estables la temperatura, la presión arterial y la glucosa. Todas las actividades de la unidad de homeostasis en un solo lugar.</p>
+  <div class="meta">
+    <div><span>Estudiante: </span><strong>Tomás Valencia</strong></div>
+    <div><span>Docente: </span><strong>Diana Cristina Bedoya</strong></div>
+    <div><span>Unidad: </span><strong>Homeostasis y regulación</strong></div>
+  </div>
+  <div class="index">
+    <a href="#fanzine"><span class="num">1</span><h3>Fanzine: arcos reflejos y termorregulación</h3><p>Producto final de 5 páginas con esquema animado del arco reflejo.</p><span class="chip done">Completo</span></a>
+    <a href="#homeostasis"><span class="num">2</span><h3>Ficha: ¿Qué es la homeostasis?</h3><p>Actividades 1 a 8: conceptos, ciclo, clasificación, casos y diagramas.</p><span class="chip done">Completo</span></a>
+    <a href="#presion"><span class="num">3</span><h3>Mapa conceptual: presión arterial</h3><p>Barorreceptores y sistema renina-angiotensina-aldosterona.</p><span class="chip class">Base para la clase 27/10</span></a>
+    <a href="#glucosa"><span class="num">4</span><h3>Regulación de la glucosa</h3><p>Repaso interactivo de insulina y glucagón, y espacio para la síntesis del video.</p><span class="chip you">Síntesis: escríbela tú</span></a>
+  </div>
+</section>
+
+<!-- ======================= 1. FANZINE ======================= -->
+<section class="band alt" id="fanzine">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-tag" aria-hidden="true">1</span>
+      <h2>El sistema nervioso como centro de control</h2>
+      <p>Arcos reflejos y termorregulación. Pasa las páginas con las flechas, deslizando el dedo o con el teclado.</p>
+    </div>
+
+    <div class="grid2" style="margin-bottom:26px">
+      <div class="card">
+        <div class="act-title"><span class="n">1</span><h3>Exploración: reflejo en acción</h3></div>
+        <ol class="qa">
+          <li><span class="q">¿Qué pasó con tu cuerpo antes de que pensaras en reaccionar?</span><span class="a">En el reflejo patelar la pierna se estiró sola al recibir el golpe debajo de la rodilla. Al "tocar algo caliente" la mano se retiró antes de decidir moverla. La respuesta fue automática e involuntaria: el cuerpo reaccionó primero y después sentí el golpe o el "calor".</span></li>
+          <li><span class="q">¿Qué estructuras crees que participaron?</span><span class="a">Receptores (en la piel o en el tendón), una neurona sensitiva, la médula espinal como centro integrador, una neurona motora y un músculo efector: el cuádriceps en el patelar y el bíceps en el de retirada. El cerebro recibe el aviso después, por eso el dolor se siente un instante más tarde.</span></li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="act-title"><span class="n">2</span><h3>¿Qué son?</h3></div>
+        <ol class="qa">
+          <li><span class="q">Golpe de calor</span><span class="a">Elevación peligrosa de la temperatura corporal (≥ 40 °C) porque la sudoración y la vasodilatación ya no alcanzan a enfriar el cuerpo. Puede causar deshidratación, desmayo y daño en órganos vitales.</span></li>
+          <li><span class="q">Hipotermia</span><span class="a">Descenso de la temperatura corporal por debajo de 35 °C, cuando el cuerpo pierde calor más rápido de lo que lo produce. Causa confusión, somnolencia, fallo de órganos y, en casos graves, la muerte.</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="zine-layout">
+      <div>
+        <div class="stage">
+          <div class="book" id="book" tabindex="0" aria-roledescription="fanzine" aria-label="Fanzine de 5 páginas">
+
+            <!-- Página 1: portada -->
+            <article class="zpage cover" aria-label="Página 1: portada">
+              <div class="top"><span>N.º 1 · OCT 2026</span><span>BIOLOGÍA 10°</span></div>
+              <div class="mi">MI<span>FANZINE</span></div>
+              <div class="art">
+                <div class="halftone"></div>
+                <svg viewBox="0 0 200 130" aria-hidden="true">
+                  <g fill="none" stroke="#1d1b33" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M70 92c-14 2-26-8-24-22-10-4-10-20 2-24 0-14 16-20 26-12 8-10 26-8 30 4 12-4 26 6 22 18 10 6 8 22-4 26 0 12-14 18-24 12-8 8-22 6-28-2z" fill="#ff9ccb"/>
+                    <path d="M74 50c6 4 6 12 0 16M92 44c-4 8 2 14 8 14M110 58c-6 4-4 14 4 16M84 72c4 6 14 6 18 0M66 70c6 0 8 6 6 10"/>
+                    <path d="M100 92v20" stroke-width="5" stroke="#2e6bff"/>
+                    <path d="M28 30l8 6M24 48h10M30 66l8-4M168 30l-8 6M172 48h-10M166 66l-8-4"/>
+                  </g>
+                  <g fill="#ff7a2e" stroke="#1d1b33" stroke-width="2"><path d="M150 96c6-10 2-16-4-20 2 8-6 10-8 18-2 6 4 12 12 2z"/></g>
+                  <g fill="#2e6bff" stroke="#1d1b33" stroke-width="2"><path d="M40 104l4-8 4 8-8 0zM44 88v8"/></g>
+                </svg>
+                <div class="bubble">¡Me quema!</div>
+                <div class="sticker">¡Sé creativo!</div>
+              </div>
+              <div class="foot">
+                <h3>Arcos reflejos y termorregulación</h3>
+                <p>El sistema nervioso como centro de control · Por Tomás Valencia · Docente: Diana Cristina Bedoya</p>
+              </div>
+            </article>
+
+            <!-- Página 2: arco reflejo -->
+            <article class="zpage p-arc" aria-label="Página 2: esquema del arco reflejo">
+              <h3>El arco reflejo</h3>
+              <p class="sub">Esquema rotulado del reflejo de retirada</p>
+              <svg class="arc-svg" id="arcSvg" viewBox="0 0 320 250" role="img" aria-label="Esquema: la mano toca una taza caliente, el impulso viaja por la neurona sensitiva a la médula espinal, pasa por una interneurona y vuelve por la neurona motora al bíceps, que retira la mano">
+                <!-- médula espinal -->
+                <ellipse cx="245" cy="72" rx="44" ry="36" fill="#ffe9f2" stroke="#1d1b33" stroke-width="2"/>
+                <path d="M226 52c10 6 12 12 6 18-6 7-2 16 8 20 3-5 5-8 5-10 0 2 2 5 5 10 10-4 14-13 8-20-6-6-4-12 6-18-10 0-16 6-19 13-3-7-9-13-19-13z" fill="#d9c9ee" stroke="#1d1b33" stroke-width="1.2"/>
+                <circle cx="245" cy="72" r="2.4" fill="#1d1b33"/>
+                <text x="245" y="124" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="#1d1b33">MÉDULA ESPINAL</text>
+                <!-- taza caliente -->
+                <g>
+                  <rect x="4" y="204" width="32" height="36" rx="5" fill="#d9381e" stroke="#1d1b33" stroke-width="2"/>
+                  <path d="M36 212c10 0 10 18 0 18" fill="none" stroke="#1d1b33" stroke-width="3"/>
+                  <g class="steam" fill="none" stroke="#ff7a2e" stroke-width="2.4" stroke-linecap="round">
+                    <path d="M12 196c-4-6 4-10 0-16"/><path d="M20 196c-4-6 4-10 0-16"/><path d="M28 196c-4-6 4-10 0-16"/>
+                  </g>
+                </g>
+                <!-- brazo -->
+                <path d="M150 205 L215 158 L250 150" fill="none" stroke="#f2c19c" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M150 205 L215 158 L250 150" fill="none" stroke="#1d1b33" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".25"/>
+                <ellipse cx="186" cy="176" rx="24" ry="11" transform="rotate(-36 186 176)" fill="#ff7a2e" stroke="#1d1b33" stroke-width="1.6"/>
+                <g id="forearm">
+                  <path d="M150 205 L72 190" fill="none" stroke="#f2c19c" stroke-width="20" stroke-linecap="round"/>
+                  <ellipse cx="62" cy="190" rx="15" ry="12" fill="#f2c19c"/>
+                  <g stroke="#f2c19c" stroke-width="7" stroke-linecap="round"><path d="M52 192 L40 200"/><path d="M55 197 L43 207"/><path d="M60 200 L50 211"/><path d="M64 180 L56 171"/></g>
+                  <circle cx="40" cy="200" r="5" fill="#ff4fa3" stroke="#1d1b33" stroke-width="1.4"/>
+                </g>
+                <!-- neuronas -->
+                <path d="M40 200 C70 150 150 40 205 50 L232 60" fill="none" stroke="#2e6bff" stroke-width="3.2" stroke-linecap="round"/>
+                <ellipse cx="205" cy="50" rx="7" ry="4.5" fill="#2e6bff" stroke="#1d1b33" stroke-width="1"/>
+                <path d="M232 60 L246 86" fill="none" stroke="#7b4dff" stroke-width="3.2" stroke-linecap="round"/>
+                <path d="M246 86 C272 132 232 168 196 172" fill="none" stroke="#18a874" stroke-width="3.2" stroke-linecap="round"/>
+                <!-- impulso -->
+                <circle id="impulse" r="6" fill="#ffe14d" stroke="#1d1b33" stroke-width="1.6">
+                  <animateMotion id="impulseAnim" begin="indefinite" dur="1.3s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".4 0 .6 1" path="M40 200 C70 150 150 40 205 50 L232 60 L246 86 C272 132 232 168 196 172"/>
+                </circle>
+                <!-- números -->
+                <g font-family="DM Mono, monospace" font-size="10" font-weight="500" text-anchor="middle" fill="#fff">
+                  <circle cx="22" cy="176" r="9" fill="#ff4fa3"/><text x="22" y="179.5">1</text>
+                  <circle cx="112" cy="96" r="9" fill="#2e6bff"/><text x="112" y="99.5">2</text>
+                  <circle cx="276" cy="44" r="9" fill="#7b4dff"/><text x="276" y="47.5">3</text>
+                  <circle cx="276" cy="128" r="9" fill="#18a874"/><text x="276" y="131.5">4</text>
+                  <circle cx="200" cy="208" r="9" fill="#ff7a2e"/><text x="200" y="211.5">5</text>
+                </g>
+                <g id="ay"><path d="M96 12h70v30h-46l-10 10 2-10h-16z" fill="#fff" stroke="#1d1b33" stroke-width="2"/><text x="131" y="34" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="20" fill="#d9381e">¡AY!</text></g>
+              </svg>
+              <ol class="arc-legend" id="arcLegend">
+                <li data-s="1"><span class="dotn" style="background:var(--z-pink)">1</span><span><b>Receptor:</b> termorreceptores y receptores de dolor de la piel detectan el calor.</span></li>
+                <li data-s="2"><span class="dotn" style="background:var(--z-blue)">2</span><span><b>Neurona sensitiva:</b> lleva el impulso nervioso a la médula.</span></li>
+                <li data-s="3"><span class="dotn" style="background:var(--z-purple)">3</span><span><b>Centro integrador:</b> una interneurona en la médula espinal conecta la señal sin esperar al cerebro.</span></li>
+                <li data-s="4"><span class="dotn" style="background:var(--z-green)">4</span><span><b>Neurona motora:</b> lleva la orden al músculo.</span></li>
+                <li data-s="5"><span class="dotn" style="background:var(--z-orange)">5</span><span><b>Efector:</b> el bíceps se contrae y retira la mano.</span></li>
+              </ol>
+              <div class="fire"><button type="button" id="fireBtn">▶ Tocar la taza</button><small>Todo ocurre en ~0,05 s.<br>El cerebro se entera después.</small></div>
+              <span class="zfolio">2</span>
+            </article>
+
+            <!-- Página 3: cuadro comparativo -->
+            <article class="zpage p-table" aria-label="Página 3: cuadro comparativo frío y calor">
+              <h3><span class="h">Calor</span> vs. <span class="c">frío</span></h3>
+              <p class="zhand" style="font-size:4.4cqw;color:var(--z-pink);margin-top:1cqw">¿Qué hace el cuerpo para seguir en 37 °C?</p>
+              <table class="ztable">
+                <thead><tr><th class="k"></th><th class="h">Calor</th><th class="c">Frío</th></tr></thead>
+                <tbody>
+                  <tr><td class="k">Detecta</td><td class="both" colspan="2">Termorreceptores de la piel y del hipotálamo</td></tr>
+                  <tr><td class="k">Decide</td><td class="both" colspan="2">Hipotálamo: el "termostato" del cuerpo</td></tr>
+                  <tr><td class="k">Vasos de la piel</td><td><b>Vasodilatación:</b> se ensanchan, la piel se enrojece y suelta calor.</td><td class="c"><b>Vasoconstricción:</b> se estrechan, la piel palidece y guarda el calor.</td></tr>
+                  <tr><td class="k">Sudor</td><td><b>Sudoración:</b> el sudor se evapora y enfría.</td><td class="c">Casi no se suda.</td></tr>
+                  <tr><td class="k">Músculos</td><td>Relajados, menos actividad.</td><td class="c"><b>Escalofríos:</b> contracciones rápidas que producen calor.</td></tr>
+                  <tr><td class="k">Vello</td><td>Liso, pegado a la piel.</td><td class="c"><b>Piloerección:</b> "piel de gallina" que atrapa aire.</td></tr>
+                  <tr><td class="k">Conducta</td><td>Buscar sombra, beber agua, ropa ligera.</td><td class="c">Abrigarse, encogerse, bebidas calientes.</td></tr>
+                  <tr><td class="k">Si falla</td><td><b>Golpe de calor</b> (≥ 40 °C)</td><td class="c"><b>Hipotermia</b> (&lt; 35 °C)</td></tr>
+                </tbody>
+              </table>
+              <span class="zfolio">3</span>
+            </article>
+
+            <!-- Página 4: hipotermia y golpe de calor -->
+            <article class="zpage p-risk" aria-label="Página 4: hipotermia y golpe de calor">
+              <div class="risk hot">
+                <span class="big">≥ 40 °C</span>
+                <h3>Golpe de calor</h3>
+                <p class="def">La temperatura sube sin freno porque el sudor y la vasodilatación ya no alcanzan a enfriar el cuerpo.</p>
+                <div class="cols">
+                  <div><h4>Causas</h4><ul><li>Ejercicio intenso al sol</li><li>Poca agua</li><li>Ropa gruesa, encierro en un carro</li></ul></div>
+                  <div><h4>Señales</h4><ul><li>Piel caliente y roja</li><li>Dolor de cabeza, mareo, confusión</li><li>Pulso rápido, desmayo</li></ul></div>
+                </div>
+                <p style="font-size:2.7cqw;margin-top:1.4cqw"><b>Qué hacer:</b> llevar a la sombra, enfriar con paños húmedos, abanicar, dar agua si está consciente y llamar al 123.</p>
+              </div>
+              <div class="risk cold">
+                <span class="big">&lt; 35 °C</span>
+                <h3>Hipotermia</h3>
+                <p class="def">El cuerpo pierde calor más rápido de lo que lo produce y el hipotálamo no logra compensar.</p>
+                <div class="cols">
+                  <div><h4>Causas</h4><ul><li>Frío intenso o viento</li><li>Ropa mojada, agua fría</li><li>Páramo o alta montaña</li></ul></div>
+                  <div><h4>Señales</h4><ul><li>Escalofríos fuertes que luego paran</li><li>Piel pálida o azulada</li><li>Habla lenta, somnolencia</li></ul></div>
+                </div>
+                <p style="font-size:2.7cqw;margin-top:1.4cqw"><b>Qué hacer:</b> lugar seco, quitar ropa mojada, cubrir con mantas, bebida tibia si está consciente, no frotar fuerte y llamar al 123.</p>
+              </div>
+              <span class="zfolio">4</span>
+            </article>
+
+            <!-- Página 5: campaña -->
+            <article class="zpage p-camp" aria-label="Página 5: campaña de prevención">
+              <span class="tag">CAMPAÑA DE PREVENCIÓN · #TermostatoInterno</span>
+              <h3>Tu hipotálamo hace su parte. <em>¡Haz la tuya!</em></h3>
+              <p class="lede">Ni muy caliente, ni muy frío: 37 °C es tu número.</p>
+              <div class="tips">
+                <div class="tip h"><strong>Contra el calor</strong><ol><li>Bebe agua aunque no tengas sed.</li><li>Evita el sol fuerte de 10 a. m. a 3 p. m.</li><li>Ropa clara, ligera y gorra.</li><li>Nunca dejes personas ni mascotas en un carro cerrado.</li></ol></div>
+                <div class="tip c"><strong>Contra el frío</strong><ol><li>Abrígate por capas.</li><li>Cámbiate la ropa mojada.</li><li>Cubre cabeza, manos y pies.</li><li>Si vas al páramo, lleva impermeable y bebida caliente.</li></ol></div>
+              </div>
+              <div class="sos"><span class="num">123</span><p>¿Alguien está confundido, muy caliente o muy frío? Llama a la línea de emergencias y no lo dejes solo.</p></div>
+              <span class="zfolio" style="color:var(--z-yellow)">5</span>
+            </article>
+          </div>
+        </div>
+        <div class="zine-controls">
+          <button class="btn" id="prevBtn" type="button" aria-label="Página anterior">← Anterior</button>
+          <div class="dots" id="dots" role="group" aria-label="Ir a la página"></div>
+          <span class="pageinfo" id="pageInfo" aria-live="polite">1 / 5</span>
+          <button class="btn primary" id="nextBtn" type="button" aria-label="Página siguiente">Siguiente →</button>
+          <button class="btn" id="listBtn" type="button" aria-pressed="false">Ver todas las páginas</button>
+        </div>
+      </div>
+
+      <aside class="card thermo" id="thermo">
+        <div class="act-title"><span class="n">+</span><h3>Termostato interactivo</h3></div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Mueve la temperatura corporal y mira qué mecanismos activa el hipotálamo.</p>
+        <div class="thermo-top">
+          <div class="tube" aria-hidden="true"><div class="fill"></div><div class="ref"></div></div>
+          <div>
+            <div class="tempread" id="tRead">37,0 °C</div>
+            <span class="state" id="tState">Normal</span>
+          </div>
+        </div>
+        <label for="tRange" class="mono" style="display:block;margin-top:14px;font-size:12px;color:var(--muted)">TEMPERATURA CORPORAL</label>
+        <input type="range" id="tRange" min="32" max="42" step="0.1" value="37">
+        <div class="scale"><span>32</span><span>35</span><span>37</span><span>40</span><span>42</span></div>
+        <div class="mechs">
+          <div class="mech h" data-m="sudor"><b>Sudoración</b>glándulas sudoríparas</div>
+          <div class="mech h" data-m="vdil"><b>Vasodilatación</b>vasos de la piel</div>
+          <div class="mech c" data-m="vcon"><b>Vasoconstricción</b>vasos de la piel</div>
+          <div class="mech c" data-m="esc"><b>Escalofríos</b>músculos</div>
+          <div class="mech c" data-m="pilo"><b>Piloerección</b>piel de gallina</div>
+          <div class="mech" data-m="eq"><b>Equilibrio</b>sin corrección</div>
+        </div>
+        <p class="thermo-msg" id="tMsg"></p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 2. HOMEOSTASIS ======================= -->
+<section class="band" id="homeostasis">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-tag" aria-hidden="true">2</span>
+      <h2>¿Qué es la homeostasis?</h2>
+      <p>Actividades a partir de la ficha educativa. Retroalimentación negativa y positiva.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="act-title"><span class="n">1</span><h3>Identificación de conceptos clave</h3></div>
+        <ol class="qa">
+          <li><span class="q">¿Qué es la homeostasis?</span><span class="a">Es la capacidad del organismo para mantener estables las condiciones de su medio interno (temperatura, glucosa, agua, presión) aunque cambie el ambiente externo o interno.</span></li>
+          <li><span class="q">¿Por qué la homeostasis no significa mantener una condición completamente fija?</span><span class="a">Porque las variables se mueven dentro de un rango estrecho compatible con la vida, por ejemplo la temperatura entre 36,1 y 37,2 °C. El cuerpo está siempre detectando y corrigiendo: es un equilibrio dinámico.</span></li>
+          <li><span class="q">¿Cuáles son los tres componentes de un sistema de control homeostático?</span><span class="a">Receptor, centro de control y efector.</span></li>
+          <li><span class="q">¿Qué función cumple cada componente?</span><span class="a"><b>Receptor:</b> detecta el cambio en la variable (termorreceptores de la piel). <b>Centro de control:</b> recibe la información, la compara con el valor de referencia y decide la respuesta (hipotálamo). <b>Efector:</b> ejecuta la respuesta y modifica la variable (glándulas sudoríparas, músculos).</span></li>
+          <li><span class="q">¿Cuál es la diferencia principal entre retroalimentación negativa y positiva?</span><span class="a">En la negativa la respuesta contrarresta el cambio y devuelve la variable a su valor normal (temperatura). En la positiva la respuesta amplifica el cambio hasta un desenlace y luego el ciclo se apaga (parto). La negativa busca estabilidad; la positiva, terminar un proceso.</span></li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="act-title"><span class="n">8</span><h3>Detectives de errores conceptuales</h3></div>
+        <ul class="tf">
+          <li><span class="v">F</span><span class="stmt">La homeostasis significa que la temperatura corporal nunca cambia.</span><span class="why">La temperatura cambia todo el tiempo (al hacer ejercicio, al dormir, con fiebre). La homeostasis la mantiene dentro de un rango, no fija.</span></li>
+          <li><span class="v">F</span><span class="stmt">Retroalimentación negativa significa algo perjudicial.</span><span class="why">"Negativa" quiere decir que la respuesta va en sentido contrario al cambio. Es el mecanismo más común y es beneficioso porque da estabilidad.</span></li>
+          <li><span class="v">F</span><span class="stmt">El efector es quien toma las decisiones.</span><span class="why">Quien decide es el centro de control, como el hipotálamo. El efector solo ejecuta la orden.</span></li>
+          <li><span class="v">F</span><span class="stmt">La retroalimentación positiva es siempre mejor que la negativa.</span><span class="why">Ninguna es mejor: la negativa mantiene la estabilidad y la positiva sirve para procesos puntuales como el parto o la coagulación. Una positiva sin freno sería peligrosa.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="act-title"><span class="n">2</span><h3>Construcción del sistema homeostático</h3></div>
+      <div class="chain" id="chain">
+        <div class="link-card" data-i="0"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="19" y="4" width="10" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="38" r="7" fill="var(--heat)"/><rect x="22" y="16" width="4" height="18" fill="var(--heat)"/><path d="M36 10l4-4M36 18h6" stroke="var(--heat)" stroke-width="3" stroke-linecap="round"/></svg><span class="lbl">Cambio / estímulo</span><span class="val">La temperatura corporal sube</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="link-card" data-i="1"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 24c8-12 32-12 40 0-8 12-32 12-40 0z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="24" r="6" fill="var(--accent-2)"/></svg><span class="lbl">Receptor</span><span class="val">Termorreceptores de la piel</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="link-card" data-i="2"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 36c-7 0-10-8-6-12-4-6 2-14 8-12 2-6 12-8 16-2 6-2 12 4 10 10 4 4 2 12-4 14-2 6-10 6-14 2-4 2-8 2-10 0z" fill="var(--accent)" opacity=".85"/><path d="M18 20c3 2 3 6 0 8M28 16c-2 4 1 7 4 7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span class="lbl">Centro de control</span><span class="val">Hipotálamo compara con 37 °C</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="link-card" data-i="3"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 30c6-10 14-14 22-12l6-8 6 4-4 8c4 6 2 14-6 16H12c-4 0-8-4-6-8z" fill="var(--heat)" opacity=".85"/></svg><span class="lbl">Efector</span><span class="val">Glándulas sudoríparas y vasos de la piel</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="link-card" data-i="4"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4C18 16 12 22 12 30a12 12 0 0024 0c0-8-6-14-12-26z" fill="var(--cold)"/></svg><span class="lbl">Respuesta</span><span class="val">Sudoración y vasodilatación</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="link-card" data-i="5"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 6v34M10 40h28M8 14h32M8 14l-5 12h10zM40 14l-5 12h10z" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linejoin="round"/><path d="M3 26a5 3 0 0010 0zM35 26a5 3 0 0010 0z" fill="var(--ok)"/></svg><span class="lbl">Retorno al equilibrio</span><span class="val">La temperatura baja a ~37 °C</span></div>
+      </div>
+      <p class="loopback">↺ Al volver al valor normal la señal se apaga: retroalimentación negativa</p>
+      <p style="margin-top:16px;max-width:80ch"><b>Recorrido de la información:</b> cuando la temperatura del cuerpo aumenta (estímulo), los termorreceptores de la piel lo detectan y envían la señal por los nervios hasta el hipotálamo. El hipotálamo compara la temperatura con su valor de referencia (unos 37 °C), nota que está por encima y envía una orden a las glándulas sudoríparas y a los vasos sanguíneos de la piel (efectores). Se produce sudor y los vasos se dilatan; al evaporarse el sudor la piel se enfría (respuesta) y la temperatura regresa a su valor normal. Cuando eso ocurre, el ciclo se detiene.</p>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="act-title"><span class="n">3</span><h3>Clasificación: ¿negativa o positiva?</h3></div>
+      <div class="tbl-wrap">
+        <table class="cls">
+          <thead><tr><th>Situación</th><th>Tipo</th><th>Justificación</th></tr></thead>
+          <tbody>
+            <tr><td>1. Sudoración por aumento de temperatura</td><td><span class="pill N">N</span></td><td>El sudor enfría el cuerpo: contrarresta el aumento.</td></tr>
+            <tr><td>2. Escalofríos por disminución de temperatura</td><td><span class="pill N">N</span></td><td>Los músculos generan calor: contrarrestan el descenso.</td></tr>
+            <tr><td>3. Contracciones durante el parto</td><td><span class="pill P">P</span></td><td>La oxitocina hace las contracciones cada vez más fuertes hasta el nacimiento.</td></tr>
+            <tr><td>4. Coagulación sanguínea</td><td><span class="pill P">P</span></td><td>Cada factor activado activa a más factores y la respuesta crece hasta formar el coágulo.</td></tr>
+            <tr><td>5. Regulación de glucosa en sangre</td><td><span class="pill N">N</span></td><td>La insulina la baja cuando sube; el glucagón la sube cuando baja.</td></tr>
+            <tr><td>6. Regulación de la presión arterial</td><td><span class="pill N">N</span></td><td>Los barorreceptores provocan respuestas que devuelven la presión a su valor normal.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="act-title"><span class="n">4</span><h3>Análisis de casos</h3></div>
+      <div class="cases">
+        <div class="case">
+          <h4>Caso 1</h4>
+          <p class="sit">Una estudiante corre durante varios minutos y su temperatura corporal aumenta.</p>
+          <dl>
+            <dt>¿Cuál es la variable que cambió?</dt><dd>La temperatura corporal.</dd>
+            <dt>¿Quién detecta el cambio?</dt><dd>Los termorreceptores de la piel y del hipotálamo.</dd>
+            <dt>¿Cuál es el centro de control?</dt><dd>El hipotálamo.</dd>
+            <dt>¿Qué efectores participan?</dt><dd>Las glándulas sudoríparas y los vasos sanguíneos de la piel.</dd>
+            <dt>¿Qué ocurre finalmente?</dt><dd>Suda, la piel se enrojece y pierde calor; la temperatura vuelve a unos 37 °C y el ciclo se apaga.</dd>
+            <dt>¿Es retroalimentación negativa o positiva?</dt><dd><span class="pill N">N</span> Negativa, porque la respuesta contrarresta el aumento.</dd>
+          </dl>
+        </div>
+        <div class="case">
+          <h4>Caso 2</h4>
+          <p class="sit">Una persona sufre una herida y comienza el proceso de coagulación.</p>
+          <dl>
+            <dt>¿El proceso contrarresta o amplifica la respuesta?</dt><dd>La amplifica: las plaquetas que llegan liberan sustancias que atraen más plaquetas y activan más factores de coagulación.</dd>
+            <dt>¿Por qué es necesario?</dt><dd>Para cerrar la herida rápido y evitar perder mucha sangre. Cuando se forma el coágulo, el estímulo desaparece y el ciclo se detiene.</dd>
+            <dt>¿Qué tipo de retroalimentación representa?</dt><dd><span class="pill P">P</span> Positiva.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="act-title"><span class="n">5</span><h3>Juego de roles: "Yo soy parte del sistema"</h3></div>
+      <p style="margin-bottom:14px;color:var(--muted);max-width:75ch">Guion para representar el sistema en grupo. La pelota pasa de un rol al siguiente igual que la información.</p>
+      <div class="roles" id="roles">
+        <div class="role"><span class="ball"></span><span class="who">Estímulo</span><h4>Calor</h4><p>"¡Subió la temperatura! Hace sol y estuve corriendo."</p></div>
+        <div class="role"><span class="ball"></span><span class="who">Receptor</span><h4>Termorreceptor de la piel</h4><p>"Detecté el calor. Aviso al centro de control."</p></div>
+        <div class="role"><span class="ball"></span><span class="who">Centro de control</span><h4>Hipotálamo</h4><p>"Estamos por encima de 37 °C. Ordeno sudar y abrir los vasos."</p></div>
+        <div class="role"><span class="ball"></span><span class="who">Efector</span><h4>Glándulas sudoríparas</h4><p>"Orden recibida. Produzco sudor."</p></div>
+        <div class="role"><span class="ball"></span><span class="who">Respuesta</span><h4>Sudoración</h4><p>"El sudor se evapora y enfría. Volvimos a 37 °C: ciclo apagado."</p></div>
+      </div>
+      <p class="note">Objetivo: comprender el recorrido de la información en el ciclo. Esta actividad se hace en grupo durante la clase.</p>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="act-title"><span class="n">6</span><h3>Completar un diagrama</h3></div>
+      <div class="situ" id="situ" role="group" aria-label="Situación"></div>
+      <div class="diagram" id="diagram" aria-live="polite"></div>
+      <p class="dtype" id="dtype"></p>
+      <p class="dexp" id="dexp"></p>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="act-title"><span class="n">?</span><h3>Piensa y responde</h3></div>
+      <ol class="qa">
+        <li><span class="q">¿Qué pasaría si los mecanismos de homeostasis no existieran o no funcionaran correctamente?</span><span class="a">Cualquier cambio del ambiente nos desequilibraría: con el sol la temperatura subiría sin freno, después de comer la glucosa se dispararía y al levantarnos la presión caería. Las enzimas y los órganos dejarían de funcionar, aparecerían enfermedades como la diabetes y, en casos extremos, la muerte.</span></li>
+        <li><span class="q">Da un ejemplo de cómo tu cuerpo mantiene estable una condición importante para la vida.</span><span class="a">Cuando juego fútbol al mediodía sudo y la cara se me pone roja: el hipotálamo activa la sudoración y la vasodilatación para que mi temperatura siga cerca de 37 °C.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 3. PRESIÓN ======================= -->
+<section class="band alt" id="presion" style="--bg-sec:var(--surface-2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-tag" aria-hidden="true">3</span>
+      <h2>Regulación de la presión arterial</h2>
+      <p>Mapa conceptual: barorreceptores y sistema renina-angiotensina-aldosterona (SRAA). Las palabras en cursiva son los conectores.</p>
+    </div>
+
+    <div class="card">
+      <div class="sim">
+        <button class="btn" type="button" data-sim="nerv">▶ Simular: me levanto rápido</button>
+        <button class="btn" type="button" data-sim="horm">▶ Simular: deshidratación o hemorragia</button>
+      </div>
+      <p class="sim-msg" id="simMsg" aria-live="polite"></p>
+
+      <div class="cmap">
+        <div class="node root"><h4>Regulación de la presión arterial</h4></div>
+        <div class="link"><span>mantiene estable la</span></div>
+        <div class="node def" data-k="def"><h4>Presión arterial</h4><p>Fuerza que ejerce la sangre contra las paredes de las arterias. Se mide en mmHg; normal en adultos ≈ <span class="mono">120/80 mmHg</span>. Depende del volumen de sangre y de la resistencia de los vasos.</p></div>
+        <div class="link"><span>se regula por dos mecanismos</span></div>
+
+        <div class="branches">
+          <div class="branch nerv">
+            <span class="bh">Nervioso · rápido (segundos)</span>
+            <div class="node nerv" data-k="n1"><h4>Barorreceptores</h4><p>Terminaciones nerviosas en el seno carotídeo y el arco aórtico.</p></div>
+            <div class="link"><span>detectan la distensión de las arterias y envían señales por los nervios glosofaríngeo y vago al</span></div>
+            <div class="node nerv" data-k="n2"><h4>Bulbo raquídeo</h4><p>Centro cardiovascular</p></div>
+            <div class="link"><span>activa el</span></div>
+            <div class="node nerv" data-k="n3"><h4>Sistema nervioso autónomo</h4></div>
+            <div class="link"><span>que actúa sobre el corazón y los vasos</span></div>
+            <div class="split">
+              <div class="node up" data-k="n4a"><h4>Si la presión aumenta</h4><ul><li>Baja la frecuencia cardíaca</li><li>Vasodilatación</li><li>Menos fuerza de contracción</li></ul></div>
+              <div class="node down" data-k="n4b"><h4>Si la presión disminuye</h4><ul><li>Sube la frecuencia cardíaca</li><li>Vasoconstricción</li><li>Más fuerza de contracción</li></ul></div>
+            </div>
+          </div>
+          <div class="branch horm">
+            <span class="bh">Hormonal · lento y sostenido (SRAA)</span>
+            <div class="node horm" data-k="h1"><h4>Riñón</h4><p>Células yuxtaglomerulares</p></div>
+            <div class="link"><span>detecta la disminución de presión o volumen y libera</span></div>
+            <div class="node horm" data-k="h2"><h4>Renina</h4></div>
+            <div class="link"><span>convierte el angiotensinógeno (hígado) en</span></div>
+            <div class="node horm" data-k="h3"><h4>Angiotensina I</h4></div>
+            <div class="link"><span>la enzima ECA (pulmones) la transforma en</span></div>
+            <div class="node horm" data-k="h4"><h4>Angiotensina II</h4><p>Provoca vasoconstricción</p></div>
+            <div class="link"><span>estimula la liberación de</span></div>
+            <div class="node horm" data-k="h5"><h4>Aldosterona</h4><p>Glándulas suprarrenales</p></div>
+            <div class="link"><span>aumenta la reabsorción de sodio y agua y da lugar a</span></div>
+            <div class="node horm" data-k="h6"><h4>Más volumen de sangre</h4></div>
+          </div>
+        </div>
+
+        <div class="link"><span>ambos actúan por retroalimentación negativa y dan como resultado</span></div>
+        <div class="node end" data-k="end"><h4>Presión arterial estable</h4><p>Homeostasis: la sangre llega a todos los órganos</p></div>
+        <div class="link"><span>por ejemplo</span></div>
+        <div class="examples">
+          <div class="node"><h4>Me levanto rápido</h4><p>La presión baja un momento y me mareo. Los barorreceptores lo detectan, el bulbo acelera el corazón y contrae los vasos en segundos. No me desmayo.</p></div>
+          <div class="node"><h4>Deshidratación</h4><p>Baja el volumen de sangre. El riñón libera renina, se forma angiotensina II y aldosterona, se retiene agua y la presión sube en horas.</p></div>
+        </div>
+      </div>
+    </div>
+    <p class="note">En clase este mapa se hace en parejas sobre un pliego de papel bond. Esta versión sirve como base para copiarlo.</p>
+  </div>
+</section>
+
+<!-- ======================= 4. GLUCOSA ======================= -->
+<section class="band" id="glucosa">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-tag" aria-hidden="true">4</span>
+      <h2>Regulación de la glucosa</h2>
+      <p>Insulina, glucagón y homeostasis energética. Repaso interactivo y espacio para escribir la síntesis del video con tus propias palabras.</p>
+    </div>
+
+    <div class="gluco">
+      <div class="card">
+        <div class="act-title"><span class="n">+</span><h3>Simulador</h3></div>
+        <div class="gauge">
+          <div><span class="val" id="gVal">90</span> <span class="unit">mg/dL</span></div>
+          <div class="gbar" aria-hidden="true"><i id="gMark"></i></div>
+          <div class="scale"><span>40</span><span>70</span><span>110</span><span>140</span><span>180</span></div>
+        </div>
+        <div class="sim" style="margin:16px 0 0">
+          <button class="btn" type="button" id="eatBtn">▶ Acabo de comer</button>
+          <button class="btn" type="button" id="fastBtn">▶ Llevo horas sin comer</button>
+        </div>
+        <ol class="gsteps" id="gSteps"><li>Elige una situación para ver cómo responde el páncreas.</li></ol>
+      </div>
+      <div class="card">
+        <div class="act-title"><span class="n">+</span><h3>Ideas clave para repasar</h3></div>
+        <ul class="keys">
+          <li>La glucosa es la principal fuente de energía de las células. En ayunas su valor normal está entre 70 y 100 mg/dL.</li>
+          <li>El páncreas es una glándula endocrina: en los islotes de Langerhans tiene células beta y células alfa.</li>
+          <li>Las células beta liberan <b>insulina</b> cuando la glucosa sube. Ayuda a que las células la absorban y a que el hígado y los músculos la guarden como glucógeno.</li>
+          <li>Las células alfa liberan <b>glucagón</b> cuando la glucosa baja. El hígado rompe el glucógeno y libera glucosa a la sangre.</li>
+          <li>Son hormonas antagonistas que viajan por la sangre hasta órganos diana: retroalimentación negativa.</li>
+          <li>Si falla: diabetes tipo 1 (no se produce insulina) o tipo 2 (las células no responden bien a ella).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="act-title"><span class="n">✎</span><h3>Mi síntesis del video</h3></div>
+      <p style="color:var(--muted);margin-bottom:12px;max-width:80ch">Mira el <a href="https://www.youtube.com/watch?v=h7fyo6vH6Bs" target="_blank" rel="noopener">video de la actividad</a> y escribe aquí tu párrafo. Preguntas guía: ¿de qué trata el video en una frase?, ¿qué hormonas y qué glándula aparecen?, ¿qué pasa después de comer y en ayunas?, ¿por qué esto es parte del sistema endocrino?</p>
+      <label for="synth" class="mono" style="font-size:12px;color:var(--muted)">TU PÁRRAFO (se guarda solo en este navegador)</label>
+      <textarea id="synth" placeholder="Escribe aquí con tus propias palabras…"></textarea>
+      <div class="checks" id="checks" aria-label="Conceptos mencionados"></div>
+      <div class="wc"><span id="wc">0 palabras</span><button class="btn" type="button" id="copyBtn">Copiar texto</button></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="hand">¡Tu creatividad también es ciencia!</p>
+    <p>La ciencia nos ayuda a entender nuestro cuerpo y cuidarlo. · Biología 10° · 2026</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+
+  /* ---------- Fanzine ---------- */
+  const book = $('#book'), pages = $$('.zpage', book), dots = $('#dots');
+  let cur = 0;
+  pages.forEach((p, i) => {
+    p.style.zIndex = pages.length - i;
+    const d = document.createElement('button');
+    d.type = 'button'; d.setAttribute('aria-label', 'Página ' + (i + 1));
+    d.onclick = () => go(i);
+    dots.appendChild(d);
+  });
+  function go(n) {
+    cur = Math.max(0, Math.min(pages.length - 1, n));
+    pages.forEach((p, i) => p.classList.toggle('flipped', i < cur));
+    $$('button', dots).forEach((d, i) => d.setAttribute('aria-current', i === cur));
+    $('#pageInfo').textContent = (cur + 1) + ' / ' + pages.length;
+    $('#prevBtn').disabled = cur === 0;
+    $('#nextBtn').disabled = cur === pages.length - 1;
+    if (cur === 1 && !book.classList.contains('list')) setTimeout(fire, 700);
+  }
+  $('#prevBtn').onclick = () => go(cur - 1);
+  $('#nextBtn').onclick = () => go(cur + 1);
+  book.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') go(cur + 1);
+    if (e.key === 'ArrowLeft') go(cur - 1);
+  });
+  let sx = null;
+  book.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  book.addEventListener('touchend', e => {
+    if (sx === null || book.classList.contains('list')) return;
+    const dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 45) go(cur + (dx < 0 ? 1 : -1));
+    sx = null;
+  });
+  $('#listBtn').onclick = function () {
+    const on = book.classList.toggle('list');
+    this.setAttribute('aria-pressed', on);
+    this.textContent = on ? 'Ver como libro' : 'Ver todas las páginas';
+    ['prevBtn', 'nextBtn'].forEach(id => $('#' + id).hidden = on);
+    dots.hidden = on; $('#pageInfo').hidden = on;
+  };
+  go(0);
+
+  /* Arco reflejo */
+  const svg = $('#arcSvg'), legend = $$('#arcLegend li');
+  let firing = false;
+  async function fire() {
+    if (firing) return; firing = true;
+    svg.classList.remove('withdraw', 'withdraw-ay');
+    svg.classList.add('firing');
+    const anim = $('#impulseAnim');
+    if (!reduce && anim.beginElement) anim.beginElement();
+    const t = [0, 250, 650, 850, 1250];
+    for (let i = 0; i < 5; i++) {
+      await wait(i ? t[i] - t[i - 1] : 0);
+      legend.forEach((l, j) => l.classList.toggle('lit', j === i));
+    }
+    await wait(120);
+    svg.classList.add('withdraw');
+    await wait(450);
+    svg.classList.add('withdraw-ay');
+    await wait(1800);
+    legend.forEach(l => l.classList.remove('lit'));
+    svg.classList.remove('withdraw', 'withdraw-ay', 'firing');
+    firing = false;
+  }
+  $('#fireBtn').onclick = e => { e.stopPropagation(); fire(); };
+
+  /* ---------- Termostato ---------- */
+  const tr = $('#tRange'), mechs = $$('.mech');
+  function thermo() {
+    const t = +tr.value;
+    $('#thermo').style.setProperty('--t', ((t - 32) / 10).toFixed(3));
+    $('#tRead').textContent = t.toFixed(1).replace('.', ',') + ' °C';
+    let on = [], st, col, msg;
+    if (t < 32) { st = 'Hipotermia grave'; col = 'var(--cold)'; on = ['vcon', 'pilo']; msg = 'Los escalofríos se detienen porque el cuerpo ya no tiene energía para producirlos. Hay confusión y riesgo de muerte: emergencia.'; }
+    else if (t < 35) { st = 'Hipotermia'; col = 'var(--cold)'; on = ['vcon', 'esc', 'pilo']; msg = 'El cuerpo pierde calor más rápido de lo que lo produce. Los escalofríos son fuertes y aparecen torpeza y somnolencia.'; }
+    else if (t < 36.1) { st = 'Frío'; col = 'var(--cold)'; on = ['vcon', 'esc', 'pilo']; msg = 'El hipotálamo conserva calor: estrecha los vasos de la piel, activa los escalofríos y eriza el vello.'; }
+    else if (t <= 37.2) { st = 'Normal'; col = 'var(--ok)'; on = ['eq']; msg = 'Dentro del rango normal (36,1 a 37,2 °C). Los receptores siguen vigilando, pero no hace falta corregir.'; }
+    else if (t < 40) { st = 'Calor'; col = 'var(--heat)'; on = ['sudor', 'vdil']; msg = 'El hipotálamo libera calor: dilata los vasos de la piel (se enrojece) y activa el sudor, que enfría al evaporarse.'; }
+    else { st = 'Golpe de calor'; col = 'var(--heat)'; on = ['vdil']; msg = 'Los mecanismos ya no alcanzan: el sudor puede detenerse, hay confusión y daño a órganos. Emergencia: enfriar y llamar al 123.'; }
+    mechs.forEach(m => m.classList.toggle('on', on.includes(m.dataset.m)));
+    const s = $('#tState'); s.textContent = st; s.style.background = col;
+    $('#tMsg').textContent = msg;
+  }
+  tr.addEventListener('input', thermo); thermo();
+
+  /* ---------- Cadena homeostática ---------- */
+  const links = $$('#chain .link-card');
+  if (!reduce) {
+    let k = 0;
+    setInterval(() => { links.forEach((l, i) => l.classList.toggle('lit', i === k)); k = (k + 1) % links.length; }, 1100);
+  }
+
+  /* ---------- Juego de roles ---------- */
+  const roles = $$('#roles .role');
+  if (reduce) roles[0].classList.add('has');
+  else { let r = 0; setInterval(() => { roles.forEach((x, i) => x.classList.toggle('has', i === r)); r = (r + 1) % roles.length; }, 1400); }
+
+  /* ---------- Diagrama (actividad 6) ---------- */
+  const SITU = {
+    'Aumento de temperatura': { t: 'N', b: ['La temperatura corporal sube (ejercicio, sol)', 'Termorreceptores de la piel', 'Hipotálamo', 'Glándulas sudoríparas y vasos de la piel', 'Sudoración y vasodilatación: la temperatura baja a ~37 °C'],
+      e: 'Al subir la temperatura, los termorreceptores avisan al hipotálamo, que ordena sudar y dilatar los vasos de la piel. El sudor al evaporarse se lleva calor y la temperatura regresa a lo normal.' },
+    'Disminución de temperatura': { t: 'N', b: ['La temperatura corporal baja (frío, lluvia)', 'Termorreceptores de la piel', 'Hipotálamo', 'Músculos esqueléticos, vasos de la piel y músculos del vello', 'Escalofríos, vasoconstricción y piel de gallina: la temperatura sube'],
+      e: 'El frío es detectado por los termorreceptores. El hipotálamo ordena a los músculos temblar para producir calor y estrecha los vasos de la piel para no perderlo. La temperatura vuelve a unos 37 °C.' },
+    'Regulación de la glucosa': { t: 'N', b: ['La glucosa en sangre sube después de comer', 'Células beta del páncreas', 'Páncreas (islotes de Langerhans)', 'Hígado, músculos y tejido graso (por acción de la insulina)', 'Las células captan glucosa y el hígado la guarda: la glucosa baja a lo normal'],
+      e: 'Después de comer las células beta detectan más glucosa y liberan insulina a la sangre. La insulina hace que las células absorban glucosa y que el hígado la almacene como glucógeno, así la glucosa regresa a su rango.' },
+    'Sed y regulación del agua': { t: 'N', b: ['Falta agua: la sangre está más concentrada', 'Osmorreceptores del hipotálamo', 'Hipotálamo (hipófisis libera ADH)', 'Riñones y sensación de sed', 'Se retiene agua, la orina se concentra y bebemos: el agua corporal se recupera'],
+      e: 'Si nos deshidratamos, el hipotálamo detecta la sangre más concentrada, produce sed y hace que la hipófisis libere la hormona antidiurética (ADH). Los riñones devuelven agua a la sangre y el equilibrio se recupera.' },
+    'Parto': { t: 'P', b: ['La cabeza del bebé presiona el cuello uterino', 'Receptores de presión del cuello uterino', 'Hipotálamo e hipófisis (liberan oxitocina)', 'Músculo del útero', 'Contracciones más fuertes, más presión y más oxitocina hasta el nacimiento'],
+      e: 'Cada contracción empuja al bebé, aumenta la presión y provoca más oxitocina, así que las contracciones se refuerzan. El ciclo solo se detiene cuando nace el bebé y desaparece el estímulo.' },
+    'Coagulación sanguínea': { t: 'P', b: ['Una herida rompe un vaso sanguíneo', 'Plaquetas que entran en contacto con la pared dañada', 'Plaquetas activadas que liberan sustancias químicas', 'Más plaquetas y factores de coagulación', 'El coágulo crece hasta cerrar la herida y el proceso se detiene'],
+      e: 'Las primeras plaquetas que llegan liberan sustancias que atraen a muchas más y activan los factores de coagulación. La respuesta crece rápido hasta formar el coágulo que detiene el sangrado.' }
+  };
+  const LBL = ['Cambio inicial', 'Receptor', 'Centro de control', 'Efector', 'Respuesta'];
+  const situ = $('#situ');
+  function draw(name) {
+    const s = SITU[name];
+    $$('button', situ).forEach(b => b.setAttribute('aria-pressed', b.textContent === name));
+    $('#diagram').innerHTML = s.b.map((v, i) =>
+      (i ? '<span class="arrow" aria-hidden="true">→</span>' : '') +
+      '<div class="dbox" style="animation-delay:' + (i * 90) + 'ms"><div class="lbl">' + LBL[i] + '</div><p>' + v + '</p></div>').join('');
+    $('#dtype').innerHTML = '<span class="pill ' + s.t + '">' + s.t + '</span> Retroalimentación ' + (s.t === 'N' ? 'negativa' : 'positiva');
+    $('#dexp').textContent = s.e;
+  }
+  Object.keys(SITU).forEach(n => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = n; b.onclick = () => draw(n); situ.appendChild(b);
+  });
+  draw('Disminución de temperatura');
+
+  /* ---------- Mapa conceptual: simulación ---------- */
+  const SIMS = {
+    nerv: { msg: ['La presión baja al levantarte…', 'Los barorreceptores lo detectan', 'Avisan al bulbo raquídeo', 'Se activa el sistema nervioso autónomo', 'Sube la frecuencia cardíaca y se contraen los vasos', 'Presión estable en segundos'], keys: ['def', 'n1', 'n2', 'n3', 'n4b', 'end'] },
+    horm: { msg: ['Baja el volumen de sangre…', 'El riñón lo detecta y libera renina', 'Se forma angiotensina I', 'La ECA la convierte en angiotensina II', 'Se libera aldosterona', 'Se retiene sodio y agua', 'Presión estable en horas'], keys: ['def', 'h1', 'h2|h3', 'h4', 'h5', 'h6', 'end'] }
+  };
+  let simRun = 0;
+  $$('[data-sim]').forEach(b => b.onclick = async () => {
+    const id = ++simRun, s = SIMS[b.dataset.sim];
+    for (let i = 0; i < s.keys.length; i++) {
+      if (id !== simRun) return;
+      $$('.cmap .node').forEach(n => n.classList.remove('lit'));
+      s.keys[i].split('|').forEach(k => { const n = $('.cmap [data-k="' + k + '"]'); n && n.classList.add('lit'); });
+      $('#simMsg').textContent = (i + 1) + '. ' + s.msg[i];
+      await wait(1300);
+    }
+    if (id === simRun) setTimeout(() => { if (id === simRun) $$('.cmap .node').forEach(n => n.classList.remove('lit')); }, 1500);
+  });
+
+  /* ---------- Glucosa ---------- */
+  let g = 90, gRun = 0;
+  const gSet = v => { g = v; $('#gVal').textContent = Math.round(v); $('#gMark').style.left = 'calc(' + Math.max(0, Math.min(100, (v - 40) / 1.4)) + '% - 2px)'; };
+  async function tween(to, ms, id) {
+    const from = g, steps = reduce ? 1 : 24;
+    for (let i = 1; i <= steps; i++) { if (id !== gRun) return; gSet(from + (to - from) * i / steps); await wait(ms / steps); }
+  }
+  const GS = {
+    eat: { peak: 150, steps: ['Comes y la glucosa en sangre sube.', 'Las células beta del páncreas detectan el aumento.', 'Liberan insulina a la sangre.', 'Hígado, músculos y tejido graso captan glucosa y la guardan como glucógeno.', 'La glucosa vuelve a su rango normal (retroalimentación negativa).'] },
+    fast: { peak: 62, steps: ['Pasan horas sin comer y la glucosa baja.', 'Las células alfa del páncreas detectan el descenso.', 'Liberan glucagón a la sangre.', 'El hígado rompe el glucógeno y libera glucosa.', 'La glucosa vuelve a su rango normal (retroalimentación negativa).'] }
+  };
+  async function gRunSim(kind) {
+    const id = ++gRun, s = GS[kind], list = $('#gSteps');
+    list.innerHTML = s.steps.map(t => '<li>' + t + '</li>').join('');
+    const li = $$('li', list);
+    li[0].classList.add('lit'); await tween(s.peak, 900, id);
+    for (let i = 1; i < 4; i++) { if (id !== gRun) return; await wait(700); li[i].classList.add('lit'); }
+    await tween(90, 1300, id);
+    if (id === gRun) li[4].classList.add('lit');
+  }
+  $('#eatBtn').onclick = () => gRunSim('eat');
+  $('#fastBtn').onclick = () => gRunSim('fast');
+  gSet(90);
+
+  /* ---------- Síntesis ---------- */
+  const ta = $('#synth'), KEY = 'sintesis-glucosa';
+  const TERMS = [['páncreas', /p[aá]ncreas/i], ['insulina', /insulina/i], ['glucagón', /glucag[oó]n/i], ['hígado', /h[ií]gado/i], ['hormonas', /hormona/i], ['sistema endocrino', /endocrin/i], ['sangre', /sangre|sangu[ií]ne/i], ['homeostasis', /homeostasis|equilibrio/i]];
+  const checks = $('#checks');
+  checks.innerHTML = TERMS.map(t => '<span>' + t[0] + '</span>').join('');
+  function upd() {
+    const v = ta.value, n = (v.trim().match(/\S+/g) || []).length;
+    $('#wc').textContent = n + (n === 1 ? ' palabra' : ' palabras') + (n && n < 80 ? ' · un buen párrafo tiene entre 80 y 150' : '');
+    $$('span', checks).forEach((s, i) => s.classList.toggle('ok', TERMS[i][1].test(v)));
+    try { localStorage.setItem(KEY, v); } catch (e) {}
+  }
+  try { ta.value = localStorage.getItem(KEY) || ''; } catch (e) {}
+  ta.addEventListener('input', upd); upd();
+  $('#copyBtn').onclick = function () {
+    const done = () => { this.textContent = 'Copiado'; setTimeout(() => this.textContent = 'Copiar texto', 1600); };
+    navigator.clipboard.writeText(ta.value).then(done).catch(() => { ta.select(); this.textContent = 'Seleccionado: usa Copiar'; });
+  };
+})();
+</script>
+</body></html>
