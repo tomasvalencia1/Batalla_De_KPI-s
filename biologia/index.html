@@ -129,7 +129,7 @@ button{font:inherit; color:inherit}
 .acc-cam{position:absolute; left:0; top:0; width:0; height:0; transform-style:preserve-3d; transform-origin:0 0}
 .panel{position:absolute; left:0; top:0; width:var(--w); height:var(--h); transform-style:preserve-3d; transform-origin:0 50%}
 .panel .panel{left:var(--w)}
-.face{position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden; background:var(--z-paper)}
+.face{container-type:inline-size; position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden; background:var(--z-paper)}
 .face.back{transform:rotateY(180deg); background:var(--z-back)}
 .face::after{content:""; position:absolute; inset:0; pointer-events:none; z-index:3;
   background:linear-gradient(90deg, rgba(0,0,0,.07), transparent 4%, transparent 96%, rgba(0,0,0,.07)),
@@ -158,7 +158,7 @@ button{font:inherit; color:inherit}
 .scrub .ticks{display:flex; justify-content:space-between; font:500 11px/1 var(--f-mono); color:var(--muted)}
 
 /* páginas del fanzine (también funcionan como lista si no hay JavaScript) */
-.zine-src{display:grid; gap:22px; justify-items:center; padding-block:20px}
+.zine-src{display:grid; gap:22px; justify-items:center; padding-block:20px; container-type:inline-size}
 .zpage{position:relative; width:min(100%, 470px); aspect-ratio:5/7; container-type:inline-size; overflow:hidden; background:var(--z-paper); color:var(--z-ink);
   padding:6cqw; font-size:3.45cqw; line-height:1.38}
 .acc .zpage{position:absolute; inset:0; width:100%; height:100%; aspect-ratio:auto}
@@ -1137,8 +1137,8 @@ footer .hand{font-size:26px; color:var(--accent)}
   let clock = 0, ptx = 0, pty = 0, tiltX = 0, tiltY = 0, stageOn = false, wasMoving = false;
   function measure() {
     S = stage.clientWidth; mobile = S < 720;
-    W = mobile ? Math.min(S * .84, 430) : clamp(S * .3, 300, 410);
-    H = W * 1.4; SH = Math.round(H * (mobile ? 1.28 : 1.4) + 40);
+    W = mobile ? Math.min(S * .84, 430) : clamp(Math.min(S * .3, (innerHeight - 140) / 1.4 / 1.3), 300, 410);
+    H = W * 1.4; SH = Math.round(H * (mobile ? 1.28 : 1.3) + 40);
     stage.style.height = SH + 'px';
     stage.style.perspective = Math.round(W * 3.1) + 'px';
     cam.style.setProperty('--w', W + 'px'); cam.style.setProperty('--h', H + 'px');
@@ -1187,8 +1187,8 @@ footer .hand{font-size:26px; color:var(--accent)}
     // luz: una lámpara arriba a la izquierda; el brillo recorre el papel cuando gira
     for (let j = 0; j < N; j++) {
       const wd = A[j] + ry, w = wd * R, dot = -.42 * Math.sin(w) + .908 * Math.cos(w);
-      shF[j].style.opacity = clamp((1 - dot) * .62, 0, .72).toFixed(3);
-      shB[j].style.opacity = clamp((1 + dot) * .62, 0, .72).toFixed(3);
+      shF[j].style.opacity = clamp((1 - dot) * .48, 0, .55).toFixed(3);
+      shB[j].style.opacity = clamp((1 + dot) * .48, 0, .55).toFixed(3);
       const gl = clamp(Math.abs(Math.sin(w)) * 1.4, 0, .9).toFixed(3);
       glF[j].style.opacity = gl; glB[j].style.opacity = gl;
       glF[j].style.backgroundPosition = (50 + wd * 1.4) + '% 0'; glB[j].style.backgroundPosition = (50 - wd * 1.4) + '% 0';
@@ -1306,6 +1306,7 @@ footer .hand{font-size:26px; color:var(--accent)}
     if (e.key === 'Enter' && G.t < .5) { open(); kick(); }
   });
   new ResizeObserver(measure).observe(stage);
+  addEventListener('resize', measure);
   measure();
   // se abre solo la primera vez que aparece en pantalla
   const oio = new IntersectionObserver(es => { if (es[0].isIntersecting && !opened) { setTimeout(() => { open(); kick(); }, 350); oio.disconnect(); } }, { threshold: .5 });
