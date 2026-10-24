@@ -22,6 +22,13 @@ node render.cjs                         # crea batalla-de-kpis-como-se-juega.mp4
 node render.cjs --stills 10,50,120 out  # capturas sueltas para revisar escenas
 ```
 
+## Voz
+
+`voz/guion.json` tiene lo que dice la voz, por bloques, con el segundo del video en que empieza cada frase. Cada bloque
+es un audio `voz/<id>.mp3` (ElevenLabs, voz «Paula Pinzon», modelo `eleven_v4`) con una pausa larga entre frase y frase;
+`render.cjs` corta las frases en esas pausas, las pone en su lugar y baja la música mientras habla la voz.
+Si falta algún bloque, el video sale sin voz. `node render.cjs --voz` le pone la voz al MP4 ya renderizado sin volver a dibujarlo.
+
 Cada clip se pone en la escena con `<img data-clip="nombre" data-cm="s@c*r">`: en el segundo `s` de la escena va en el
 segundo `c` del clip, a la velocidad `r` (1 si no se pone). El renderizador saca solo los cuadros que se usan.
 

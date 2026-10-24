@@ -1,0 +1,86 @@
+{
+  "voz": "Paula Pinzon (ElevenLabs, eleven_v4)",
+  "nota": "Cada bloque se generó de una vez, con [long pause] entre frases. t = segundo del video en que empieza cada frase.",
+  "bloques": [
+    { "id": "s00", "tono": "[excited]", "frases": [
+      { "t": 0.4, "texto": "¡Bienvenidos a Batalla de KPIs!" },
+      { "t": 3.3, "texto": "[warmly] Hoy cada uno maneja una marca colombiana, y tiene que elegir el KPI correcto a tiempo." } ] },
+    { "id": "s01", "tono": "", "frases": [
+      { "t": 9.5, "texto": "Hay tres juegos." },
+      { "t": 10.8, "texto": "Batalla de KPIs: preguntas contra el reloj." },
+      { "t": 13.4, "texto": "Conquista: ganen ciudades en el mapa de Colombia." },
+      { "t": 16.1, "texto": "Y Bolsa de Valores: inviertan en cada respuesta." },
+      { "t": 18.8, "texto": "¿Cuál jugamos hoy? [excited] ¡Ustedes eligen!" } ] },
+    { "id": "s02", "tono": "[excited]", "frases": [
+      { "t": 22.6, "texto": "Antes de empezar… ¡votación!" },
+      { "t": 24.8, "texto": "[warmly] Cada uno vota por el juego que quiere jugar. Se cuentan los votos, y el que gane por voto popular es el que se juega." },
+      { "t": 33.8, "texto": "[excited] ¡En este ejemplo, gana Conquista!" },
+      { "t": 35.6, "texto": "[warmly] Y el anfitrión pone ese juego en la pantalla del salón." } ] },
+    { "id": "s03", "tono": "", "frases": [
+      { "t": 39.7, "texto": "Para entrar, escaneen con el celular el código QR de la pantalla." },
+      { "t": 44.0, "texto": "Cada jugador que entra aparece en la sala." },
+      { "t": 46.6, "texto": "Escriban su nombre, o el de su equipo." },
+      { "t": 52.6, "texto": "Luego sorteen su marca: a cada uno le toca una de diez marcas colombianas." },
+      { "t": 60.1, "texto": "Toquen «Estoy listo» y esperen en la sala." },
+      { "t": 66.1, "texto": "Cuando todos estén adentro, el anfitrión pone en la TV el juego que ganó la votación." } ] },
+    { "id": "s04", "tono": "", "frases": [
+      { "t": 74.9, "texto": "Son 15 retos, todo el salón a la vez." },
+      { "t": 77.6, "texto": "Cada reto es una situación de su marca con 4 KPIs, y solo uno es el correcto." },
+      { "t": 82.1, "texto": "Tienen 35 segundos, y responder rápido da ventaja." },
+      { "t": 85.2, "texto": "Después de cada reto, la pantalla del salón muestra qué pasó." },
+      { "t": 88.6, "texto": "Desde el reto 12 todo se oculta: nadie sabe quién va ganando." },
+      { "t": 92.3, "texto": "[excited] Y al final… se revela al campeón." } ] },
+    { "id": "titulos", "tono": "[excited]", "frases": [
+      { "t": 96.9, "texto": "Juego 1: Batalla de KPIs." },
+      { "t": 131.9, "texto": "Juego 2: Conquista. ¡La guerra por el mercado!" },
+      { "t": 198.9, "texto": "Juego 3: Bolsa de Valores. ¡Inviertan en lo que saben!" } ] },
+    { "id": "s06", "tono": "", "frases": [
+      { "t": 101.9, "texto": "Cada acierto vale 100 puntos, más un bono de hasta 50 si responden rápido." },
+      { "t": 107.0, "texto": "Si fallan, o se acaba el tiempo: cero." },
+      { "t": 112.0, "texto": "Al cerrar cada reto, sale el podio de los tres primeros." },
+      { "t": 119.5, "texto": "Luego, la tabla: quién subió y quién bajó." },
+      { "t": 122.6, "texto": "En los últimos cuatro retos, la tabla se oculta." },
+      { "t": 126.4, "texto": "Gana quien sume más puntos; en empate, más aciertos y menos tiempo." } ] },
+    { "id": "s08a", "tono": "", "frases": [
+      { "t": 137.0, "texto": "El mapa de Colombia tiene 26 ciudades para conquistar." },
+      { "t": 140.6, "texto": "Cada ciudad le paga ventas a su dueño en cada reto: Bogotá paga 10, y Leticia, 1." },
+      { "t": 147.6, "texto": "Si aciertan el KPI, eligen una ciudad en el celular." },
+      { "t": 150.8, "texto": "Si es libre o de otro jugador, la atacan." },
+      { "t": 153.4, "texto": "Si es suya, la blindan." },
+      { "t": 155.9, "texto": "Y si fallan, no atacan ni blindan." } ] },
+    { "id": "s08b", "tono": "", "frases": [
+      { "t": 160.9, "texto": "Una ciudad libre que nadie defiende… se conquista." },
+      { "t": 164.0, "texto": "Si varios atacan la misma, gana el que respondió más rápido." },
+      { "t": 167.6, "texto": "Y una ciudad blindada resiste todos los ataques." },
+      { "t": 173.6, "texto": "Al cerrar el reto, la TV muestra las batallas una por una… y suma las ventas." },
+      { "t": 180.9, "texto": "Black Friday: ventas al doble." },
+      { "t": 183.5, "texto": "Crisis de reputación: el líder no puede blindar." },
+      { "t": 186.3, "texto": "Niebla de guerra: el mapa se oculta." },
+      { "t": 188.8, "texto": "Y Gran Lanzamiento: ventas al triple." },
+      { "t": 192.3, "texto": "Gana quien más venda." } ] },
+    { "id": "s10a", "tono": "", "frases": [
+      { "t": 204.0, "texto": "Cada uno empieza con $1.000." },
+      { "t": 206.4, "texto": "Antes de responder, eligen cuánto invertir: 10, 25, 50 por ciento… o todo." },
+      { "t": 214.6, "texto": "Un ejemplo: invierten $500." },
+      { "t": 216.8, "texto": "Si aciertan rápido, recuperan lo invertido, ganan un bono, y se llevan parte de lo que perdieron los que fallaron." },
+      { "t": 222.9, "texto": "Si fallan, pierden lo que invirtieron." },
+      { "t": 225.6, "texto": "Mientras menos acierten, más gana cada uno." },
+      { "t": 228.2, "texto": "Y si alguien quiebra, el banco lo rescata." } ] },
+    { "id": "s10b", "tono": "", "frases": [
+      { "t": 231.0, "texto": "En la pantalla del salón está la gráfica del capital de todos, y la pizarra: quién sube y quién baja." },
+      { "t": 237.9, "texto": "[excited] Al cerrar el reto, ¡el mercado se mueve!" },
+      { "t": 242.9, "texto": "[warmly] Mercado alcista: ganancias al doble." },
+      { "t": 245.5, "texto": "Pánico en la bolsa: nadie invierte menos de la mitad." },
+      { "t": 248.1, "texto": "Bolsa a ciegas: la pizarra se apaga." },
+      { "t": 250.7, "texto": "Y el campanazo final: ganancias al triple." },
+      { "t": 256.8, "texto": "Gana quien termine con más capital." } ] },
+    { "id": "s11", "tono": "", "frases": [
+      { "t": 260.4, "texto": "El gran final es igual en los tres juegos." },
+      { "t": 263.1, "texto": "Primero se destapan el tercero… y el segundo." },
+      { "t": 267.1, "texto": "[dramatically] Redoble… ¡y el campeón!" },
+      { "t": 273.4, "texto": "[excited] Sube el podio, y cada celular muestra su puesto final." } ] },
+    { "id": "s12", "tono": "[excited]", "frases": [
+      { "t": 278.3, "texto": "¿Listos? ¡A votar!" },
+      { "t": 282.1, "texto": "Entren a batalladekpis.vercel.app." } ] }
+  ]
+}
