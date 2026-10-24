@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Batalla de KPIs · Cómo se juega</title>
+<style>
+/* Video explicativo de Batalla de KPIs: un escenario fijo de 1920×1080 que se dibuja con seek(t).
+   Cada elemento con data-t="entra,sale" aparece y desaparece según el tiempo de su escena (data-t de la .scene, en segundos). */
+@font-face { font-family: 'Big Shoulders Display'; font-weight: 700; src: url(fonts/big-shoulders-display-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Big Shoulders Display'; font-weight: 800; src: url(fonts/big-shoulders-display-latin-800-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Big Shoulders Display'; font-weight: 900; src: url(fonts/big-shoulders-display-latin-900-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Atkinson Hyperlegible'; font-weight: 400; src: url(fonts/atkinson-hyperlegible-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Atkinson Hyperlegible'; font-weight: 700; src: url(fonts/atkinson-hyperlegible-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Mono'; font-weight: 500; src: url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Mono'; font-weight: 600; src: url(fonts/ibm-plex-mono-latin-600-normal.woff2) format('woff2'); }
+:root {
+  --bg: #130F26; --panel: #1D1838; --panel-2: #29224C; --line: #3B3366; --fg: #F5F2FF; --muted: #ABA3CF; --ink: #140F26;
+  --accent: #FF5B3A; --cyan: #45D0FF; --gold: #FFC93D; --violet: #A98BFF; --good: #38D99A; --bad: #FF4F6E;
+  --f-display: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
+  --f-body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+#stage {
+  position: relative; width: 1920px; height: 1080px; overflow: hidden; color: var(--fg); font-family: var(--f-body);
+  background-color: var(--bg); background-image: radial-gradient(rgba(245, 242, 255, 0.06) 1.2px, transparent 1.6px); background-size: 30px 30px;
+}
+.glow { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.5; pointer-events: none; }
+.scene { position: absolute; inset: 0; display: none; }
+[data-t] { will-change: transform, opacity; }
+.abs { position: absolute; }
+
+/* tipografía */
+.eyebrow { font: 600 26px/1 var(--f-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.h1 { font: 900 150px/0.86 var(--f-display); text-transform: uppercase; letter-spacing: 0.005em; }
+.h2 { font: 900 96px/0.9 var(--f-display); text-transform: uppercase; }
+.h3 { font: 800 56px/1 var(--f-display); text-transform: uppercase; }
+.lede { font-size: 40px; line-height: 1.3; }
+.muted { color: var(--muted); }
+b, .b { font-weight: 700; }
+.acc { color: var(--accent); } .cy { color: var(--cyan); } .gd { color: var(--gold); } .vi { color: var(--violet); } .ok { color: var(--good); } .no { color: var(--bad); }
+.nt { text-transform: none; }
+
+/* lista con números como las reglas del juego */
+.steps { position: absolute; display: grid; gap: 26px; }
+.step { display: grid; grid-template-columns: 78px 1fr; gap: 28px; align-items: center; font-size: 46px; line-height: 1.22; }
+.step .n { width: 78px; height: 78px; border-radius: 16px; display: grid; place-items: center; background: var(--panel-2); color: var(--gold); font: 900 46px var(--f-display); }
+.step.on .n { background: var(--gold); color: var(--ink); }
+.step .ic { width: 78px; height: 78px; border-radius: 16px; display: grid; place-items: center; background: var(--panel-2); }
+.step .ic svg { width: 44px; height: 44px; }
+
+/* tarjetas de los 3 juegos */
+.gcard { position: absolute; top: 380px; width: 520px; height: 470px; border-radius: 28px; background: var(--panel); border: 3px solid var(--line); border-top: 12px solid var(--c); padding: 40px 40px; display: flex; flex-direction: column; gap: 22px; }
+.gcard .num { font: 600 24px var(--f-mono); letter-spacing: 0.16em; color: var(--c); text-transform: uppercase; }
+.gcard .ico { width: 110px; height: 110px; border-radius: 26px; background: var(--c); color: var(--ink); display: grid; place-items: center; }
+.gcard .ico svg { width: 66px; height: 66px; }
+.gcard h3 { font: 900 66px/0.92 var(--f-display); text-transform: uppercase; }
+.gcard p { font-size: 32px; line-height: 1.3; color: var(--muted); }
+
+/* dispositivos */
+.phone { position: absolute; width: 400px; padding: 14px; border-radius: 58px; background: #0A0716; box-shadow: 0 0 0 3px #4A4180, 0 40px 90px rgba(0, 0, 0, 0.65); }
+.phone .scr { position: relative; width: 372px; height: 805px; border-radius: 46px; overflow: hidden; background: var(--bg); }
+.phone .scr img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.phone::before { content: ''; position: absolute; z-index: 2; top: 26px; left: 50%; width: 92px; height: 26px; margin-left: -46px; border-radius: 13px; background: #0A0716; }
+.tv { position: absolute; padding: 14px; border-radius: 22px; background: #0A0716; box-shadow: 0 0 0 3px #4A4180, 0 40px 90px rgba(0, 0, 0, 0.65); }
+.tv .scr { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: var(--bg); }
+.tv .scr img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform-origin: 0 0; }
+.tv::after { content: ''; position: absolute; left: 50%; bottom: -46px; width: 220px; height: 34px; margin-left: -110px; border-radius: 0 0 14px 14px; background: linear-gradient(#2A2350, #15112B); }
+.cap { position: absolute; font: 700 34px/1.25 var(--f-body); color: var(--fg); background: rgba(19, 15, 38, 0.92); border: 2px solid var(--line); border-left: 8px solid var(--c, var(--gold)); padding: 18px 26px; border-radius: 16px; }
+.ring { position: absolute; border: 6px solid var(--gold); border-radius: 18px; box-shadow: 0 0 0 9999px rgba(10, 7, 22, 0.0), 0 0 40px rgba(255, 201, 61, 0.7); }
+
+/* chips */
+.chip { display: inline-flex; align-items: center; gap: 14px; padding: 14px 26px; border-radius: 99px; background: var(--panel); border: 3px solid var(--line); font: 800 40px/1 var(--f-display); text-transform: uppercase; }
+.chip i { width: 22px; height: 22px; border-radius: 50%; background: var(--c); }
+.pct { display: inline-grid; place-items: center; width: 180px; height: 130px; border-radius: 22px; border: 4px solid var(--line); background: var(--panel); font: 900 64px/1 var(--f-display); }
+.pct small { display: block; font: 600 24px var(--f-mono); color: var(--muted); margin-top: -18px; }
+.pct.all { border-color: var(--accent); }
+
+/* título de cada juego */
+.tcard { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.tcard .k { font: 600 34px var(--f-mono); letter-spacing: 0.3em; text-transform: uppercase; color: var(--c); }
+.tcard .t { font: 900 230px/0.85 var(--f-display); text-transform: uppercase; margin: 22px 0 26px; text-shadow: 0 0 60px color-mix(in srgb, var(--c) 50%, transparent); }
+.tcard .s { font-size: 48px; color: var(--muted); }
+.tcard .big-ico { width: 170px; height: 170px; border-radius: 40px; background: var(--c); color: var(--ink); display: grid; place-items: center; margin: 0 auto 30px; }
+.tcard .big-ico svg { width: 104px; height: 104px; }
+
+/* caja de cómo ganar */
+.win { position: absolute; border-radius: 28px; border: 4px solid var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--panel)); padding: 40px 48px; }
+.win .k { font: 600 28px var(--f-mono); letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; }
+.win .t { font: 900 80px/0.95 var(--f-display); text-transform: uppercase; margin: 16px 0 18px; }
+.win p { font-size: 36px; color: var(--muted); line-height: 1.3; }
+
+/* votación */
+.bars { position: absolute; left: 1060px; top: 250px; width: 760px; height: 620px; }
+.bar { position: absolute; bottom: 90px; width: 200px; }
+.bar .col { position: absolute; bottom: 0; left: 0; width: 200px; border-radius: 20px 20px 6px 6px; background: var(--c); }
+.bar .v { position: absolute; left: 0; width: 200px; text-align: center; font: 900 84px/1 var(--f-display); }
+.bar .lb { position: absolute; bottom: -80px; left: -30px; width: 260px; text-align: center; font: 800 34px/1.05 var(--f-display); text-transform: uppercase; }
+.crown { position: absolute; width: 120px; color: var(--gold); }
+
+/* eventos */
+.ev { position: absolute; width: 800px; display: grid; grid-template-columns: 480px 1fr; gap: 30px; align-items: center; }
+.ev .shot { grid-row: span 3; width: 480px; height: 270px; border-radius: 16px; overflow: hidden; border: 3px solid var(--c); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); }
+.ev .shot img { width: 100%; height: 100%; display: block; }
+.ev .k { align-self: end; font: 600 24px var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--c); }
+.ev .t { font: 900 52px/0.95 var(--f-display); text-transform: uppercase; }
+.ev p { align-self: start; font-size: 32px; line-height: 1.25; color: var(--muted); }
+
+/* ejemplo de la bolsa */
+.panel { position: absolute; width: 620px; border-radius: 26px; background: var(--panel); border: 3px solid var(--line); border-top: 10px solid var(--c); padding: 34px 38px; }
+.panel .k { font: 900 50px/1 var(--f-display); text-transform: uppercase; color: var(--c); }
+.panel .ln { font-size: 32px; line-height: 1.25; margin-top: 18px; display: flex; justify-content: space-between; gap: 16px; }
+.panel .ln b { font: 900 42px/1 var(--f-display); white-space: nowrap; }
+.panel .tot { margin-top: 26px; padding-top: 22px; border-top: 3px dashed var(--line); display: flex; justify-content: space-between; align-items: baseline; font: 800 36px var(--f-display); text-transform: uppercase; }
+.panel .tot b { font: 900 84px/1 var(--f-display); color: var(--c); }
+
+/* batallas de conquista */
+.bt { position: absolute; width: 520px; height: 520px; border-radius: 26px; background: var(--panel); border: 3px solid var(--line); }
+.bt h4 { position: absolute; left: 30px; right: 30px; top: 26px; font: 900 46px/1 var(--f-display); text-transform: uppercase; }
+.bt p { position: absolute; left: 30px; right: 30px; bottom: 26px; font-size: 30px; line-height: 1.25; color: var(--muted); }
+.bt svg { position: absolute; left: 0; top: 90px; width: 520px; height: 300px; }
+.hexlb { font: 900 30px var(--f-display); text-anchor: middle; text-transform: uppercase; }
+
+/* ticker */
+.ticker { position: absolute; left: 0; right: 0; height: 84px; border-block: 2px solid var(--line); overflow: hidden; background: rgba(19, 15, 38, 0.8); }
+.ticker-track { position: absolute; top: 0; left: 0; display: flex; white-space: nowrap; height: 84px; align-items: center; }
+.ticker-track span { font: 600 32px var(--f-mono); letter-spacing: 0.08em; color: var(--muted); padding-right: 56px; }
+.ticker-track b { color: var(--fg); }
+.ticker-track .up { color: var(--good); } .ticker-track .dn { color: var(--bad); }
+
+.fade-black { position: absolute; inset: 0; background: #000; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ============ 0 · INTRO ============ -->
+  <section class="scene" data-t="0,9.4" data-sfx="none">
+    <div class="glow" style="left: -200px; top: -260px; width: 900px; height: 900px; background: #FF5B3A; opacity: 0.22"></div>
+    <div class="glow" style="right: -260px; bottom: -300px; width: 1000px; height: 1000px; background: #45D0FF; opacity: 0.16"></div>
+    <p class="eyebrow abs" style="left: 140px; top: 120px" data-t="0.3" data-fx="fade">Juego de marketing digital · para todo el salón</p>
+    <div class="abs h1" style="left: 130px; top: 190px; font-size: 300px" data-t="0.6" data-fx="pop" data-sfx="hit">Batalla</div>
+    <div class="abs h1 muted" style="left: 140px; top: 455px; font-size: 120px" data-t="1.0" data-fx="left">de</div>
+    <div class="abs h1 acc nt" style="left: 300px; top: 425px; font-size: 300px" data-t="1.3" data-fx="pop" data-sfx="hit2">KPIs</div>
+    <p class="abs lede" style="left: 1060px; top: 300px; width: 720px; font-size: 46px" data-t="2.6" data-fx="up" data-sfx="pop">Hoy eres el dueño de una <b class="gd">marca colombiana</b>. En cada reto eliges el <b class="cy">KPI correcto</b> antes de que se acabe el tiempo.</p>
+    <div class="abs" style="left: 1060px; top: 560px; display: flex; gap: 18px; flex-wrap: wrap; width: 760px">
+      <span class="chip" style="--c: var(--accent)" data-t="4.2" data-fx="pop" data-sfx="pop"><i></i>3 juegos</span>
+      <span class="chip" style="--c: var(--cyan)" data-t="4.6" data-fx="pop" data-sfx="pop"><i></i>15 retos</span>
+      <span class="chip" style="--c: var(--gold)" data-t="5.0" data-fx="pop" data-sfx="pop"><i></i>1 campeón</span>
+    </div>
+    <div class="ticker" style="top: 860px" data-t="1.8" data-fx="up"><div class="ticker-track" id="ticker"></div></div>
+  </section>
+
+  <!-- ============ 1 · LOS 3 JUEGOS ============ -->
+  <section class="scene" data-t="9,22.4" data-sfx="whoosh">
+    <p class="eyebrow abs" style="left: 140px; top: 110px" data-t="0.2" data-fx="fade">Hoy hay</p>
+    <div class="abs h1" style="left: 130px; top: 150px" data-t="0.4" data-fx="pop" data-sfx="hit"><span class="gd">3</span> juegos</div>
+    <div class="gcard" style="--c: var(--accent); left: 140px" data-t="1.8" data-fx="up" data-sfx="card">
+      <span class="num">Juego 1</span>
+      <div class="ico" data-icon="clock"></div>
+      <h3>Batalla de <span class="nt">KPIs</span></h3>
+      <p>Preguntas contra el reloj, como un concurso.</p>
+    </div>
+    <div class="gcard" style="--c: var(--cyan); left: 700px" data-t="3.4" data-fx="up" data-sfx="card">
+      <span class="num">Juego 2</span>
+      <div class="ico" data-icon="map"></div>
+      <h3>Conquista</h3>
+      <p>Gana ciudades en el mapa de Colombia.</p>
+    </div>
+    <div class="gcard" style="--c: var(--gold); left: 1260px" data-t="5.0" data-fx="up" data-sfx="card">
+      <span class="num">Juego 3</span>
+      <div class="ico" data-icon="chart"></div>
+      <h3>Bolsa de Valores</h3>
+      <p>Invierte tu dinero en cada respuesta.</p>
+    </div>
+    <p class="abs lede" style="left: 140px; top: 905px; font-size: 50px" data-t="8.0" data-fx="up" data-sfx="pop">¿Cuál jugamos hoy? <b class="gd">Lo decide el salón.</b></p>
+  </section>
+
+  <!-- ============ 2 · VOTACIÓN ============ -->
+  <section class="scene" data-t="22,39.4" data-sfx="whoosh">
+    <p class="eyebrow abs" style="left: 140px; top: 110px" data-t="0.2" data-fx="fade">Antes de empezar</p>
+    <div class="abs h1" style="left: 130px; top: 150px" data-t="0.4" data-fx="pop" data-sfx="hit">¡Votación!</div>
+    <div class="steps" style="left: 140px; top: 400px; width: 860px">
+      <div class="step" data-t="1.6" data-fx="left" data-sfx="pop"><span class="n">1</span><span>Cada uno vota por el juego que <b>quiere jugar</b>.</span></div>
+      <div class="step" data-t="3.0" data-fx="left" data-sfx="pop"><span class="n">2</span><span>Se cuentan los votos.</span></div>
+      <div class="step" data-t="4.4" data-fx="left" data-sfx="pop"><span class="n">3</span><span>El que gane por <b class="gd">voto popular</b> es el juego que se juega.</span></div>
+      <div class="step" data-t="13.4" data-fx="left" data-sfx="pop"><span class="n">4</span><span>El anfitrión pone ese juego en la <b>pantalla del salón</b>.</span></div>
+    </div>
+    <div class="bars" data-t="5.6" data-fx="fade" data-sfx="votes">
+      <p class="eyebrow" style="position: absolute; left: 0; top: -10px">Ejemplo de votación</p>
+      <div class="bar" style="--c: var(--accent); left: 20px"><div class="col" id="vb1"></div><div class="v" id="vv1">0</div><div class="lb">Batalla de <span class="nt">KPIs</span></div></div>
+      <div class="bar" style="--c: var(--cyan); left: 280px"><div class="col" id="vb2"></div><div class="v" id="vv2">0</div><div class="lb">Conquista</div></div>
+      <div class="bar" style="--c: var(--gold); left: 540px"><div class="col" id="vb3"></div><div class="v" id="vv3">0</div><div class="lb">Bolsa de Valores</div></div>
+      <svg class="crown" id="vcrown" viewBox="0 0 64 40" style="left: 320px"><path d="M4 36 8 8l14 14L32 2l10 20L56 8l4 28z" fill="currentColor"/></svg>
+    </div>
+    <div class="cap" style="left: 1150px; top: 900px; --c: var(--gold); font-size: 38px" data-t="11.8" data-fx="pop" data-sfx="win">¡Gana por voto popular!</div>
+  </section>
+
+  <!-- ============ 3 · CÓMO ENTRAR ============ -->
+  <section class="scene" data-t="39,74.4" data-sfx="whoosh">
+    <p class="eyebrow abs" style="left: 140px; top: 110px" data-t="0.2" data-fx="fade">Para los 3 juegos</p>
+    <div class="abs h2" style="left: 135px; top: 150px" data-t="0.3" data-fx="pop" data-sfx="hit">Cómo entrar</div>
+    <div class="steps" style="left: 140px; top: 330px; width: 860px; gap: 34px">
+      <div class="step" data-t="0.8" data-fx="left" data-sfx="pop"><span class="n">1</span><span>Escanea el <b>código QR</b> de la pantalla del salón.</span></div>
+      <div class="step" data-t="7.5" data-fx="left" data-sfx="pop"><span class="n">2</span><span>Escribe <b>tu nombre</b> o el de tu equipo.</span></div>
+      <div class="step" data-t="13.5" data-fx="left" data-sfx="pop"><span class="n">3</span><span>Sortea tu marca: te toca <b class="gd">1 de 10 marcas</b> colombianas.</span></div>
+      <div class="step" data-t="21" data-fx="left" data-sfx="pop"><span class="n">4</span><span>Toca <b>«Estoy listo»</b> y espera en la sala.</span></div>
+      <div class="step" data-t="27" data-fx="left" data-sfx="pop"><span class="n">5</span><span>El anfitrión pone en la TV <b class="gd">el juego que ganó</b>.</span></div>
+    </div>
+    <!-- marcador del paso actual -->
+    <div class="abs" id="stepmark" style="left: 110px; width: 10px; height: 78px; border-radius: 5px; background: var(--gold)" data-t="0.8" data-fx="fade"></div>
+    <div class="tv" style="left: 1010px; top: 250px; width: 860px" data-t="0.8,7.2" data-fx="right">
+      <div class="scr"><img src="img/tv-sala.jpg" data-kb="0.8,7.2,0.5,0.5,1,0.17,0.25,2.1"></div>
+    </div>
+    <div class="cap" style="left: 1080px; top: 830px; --c: var(--cyan)" data-t="3.0,7.2" data-fx="up">Apunta la cámara del celular al QR</div>
+    <div class="phone" style="left: 1240px; top: 140px" data-t="7.5,26.6" data-fx="right">
+      <div class="scr">
+        <img src="img/ph-nombre.jpg" data-t="7.5">
+        <img src="img/ph-sorteo.jpg" data-t="13.5" data-fx="fade">
+        <img src="img/ph-marca.jpg" data-t="17.2" data-fx="fade" data-sfx="ding">
+        <img src="img/ph-sala.jpg" data-t="21" data-fx="fade">
+      </div>
+    </div>
+    <div class="tv" style="left: 1010px; top: 250px; width: 860px" data-t="27" data-fx="right">
+      <div class="scr"><img src="img/tv-sala-juegos.jpg" data-kb="27,33,0.5,0.5,1,0.5,0.55,1.3"></div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · REGLAS COMUNES ============ -->
+  <section class="scene" data-t="74,96.4" data-sfx="whoosh">
+    <p class="eyebrow abs" style="left: 140px; top: 110px" data-t="0.2" data-fx="fade">En los 3 juegos</p>
+    <div class="abs h2" style="left: 135px; top: 150px" data-t="0.3" data-fx="pop" data-sfx="hit">Las reglas básicas</div>
+    <div class="steps" style="left: 140px; top: 300px; width: 1000px; gap: 22px">
+      <div class="step" data-t="0.8" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="list"></span><span><b>15 retos</b>, todo el salón al mismo tiempo.</span></div>
+      <div class="step" data-t="3.2" data-fx="left" data-sfx="pop"><span class="ic cy" data-icon="target"></span><span>Cada reto es una situación de tu marca y <b>4 KPIs</b>: solo uno es el correcto.</span></div>
+      <div class="step" data-t="6.2" data-fx="left" data-sfx="tick"><span class="ic acc" data-icon="clock"></span><span>Tienes <b>35 segundos</b>. Responder rápido da ventaja.</span></div>
+      <div class="step" data-t="9.4" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="tv"></span><span>Después de cada reto, la pantalla del salón muestra qué pasó.</span></div>
+      <div class="step" data-t="12.4" data-fx="left" data-sfx="lock"><span class="ic vi" data-icon="lock"></span><span>Desde el <b>reto 12</b> todo se oculta: nadie sabe quién va ganando.</span></div>
+      <div class="step" data-t="15.4" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="trophy"></span><span>Al final se revela al <b class="gd">campeón</b> con suspenso.</span></div>
+    </div>
+    <div class="phone" style="left: 1340px; top: 140px" data-t="0.8,12.2" data-fx="right">
+      <div class="scr"><img src="img/ph-reto.jpg"><img src="img/ph-correcto.jpg" data-t="7.0" data-fx="fade" data-sfx="ding"></div>
+    </div>
+    <div class="tv" style="left: 1150px; top: 300px; width: 700px" data-t="12.4" data-fx="right">
+      <div class="scr"><img src="img/tv-aviso-ultimos.jpg"><img src="img/tv-rv-campeon.jpg" data-t="15.4" data-fx="fade"></div>
+    </div>
+  </section>
+
+  <!-- ============ 5 · JUEGO 1: BATALLA DE KPIs ============ -->
+  <section class="scene" data-t="96,101.6" data-sfx="title">
+    <div class="glow" style="left: 560px; top: 160px; width: 800px; height: 800px; background: #FF5B3A; opacity: 0.25"></div>
+    <div class="tcard" style="--c: var(--accent)"><div>
+      <div class="big-ico" data-icon="clock" data-t="0.2" data-fx="pop"></div>
+      <div class="k" data-t="0.5" data-fx="fade">Juego 1</div>
+      <div class="t" data-t="0.9" data-fx="zoom">Batalla de <span class="nt">KPIs</span></div>
+      <div class="s" data-t="1.6" data-fx="up">Preguntas contra el reloj, como un concurso</div>
+    </div></div>
+  </section>
+  <section class="scene" data-t="101.4,131.4" data-sfx="whoosh">
+    <p class="eyebrow abs" style="left: 140px; top: 100px; color: var(--accent)" data-t="0.2" data-fx="fade">Juego 1 · Batalla de KPIs</p>
+    <!-- A: puntos -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="0.3,8.6" data-fx="pop">Puntos en cada reto</div>
+    <div class="abs" style="left: 140px; top: 300px" data-t="0.9,8.6" data-fx="up">
+      <div style="display: flex; align-items: baseline; gap: 26px"><b style="font: 900 220px/0.9 var(--f-display); color: var(--good)" data-count="1,1.8,0,100" data-sfx="ding">0</b><span class="lede">puntos por <b>acierto</b></span></div>
+    </div>
+    <div class="abs" style="left: 140px; top: 560px" data-t="2.6,8.6" data-fx="up">
+      <div style="display: flex; align-items: baseline; gap: 26px"><b style="font: 900 160px/0.9 var(--f-display); color: var(--gold)">+<span data-count="2.7,3.3,0,50" data-sfx="ding">0</span></b><span class="lede">de bono si respondes <b>rápido</b></span></div>
+    </div>
+    <p class="abs lede" style="left: 140px; top: 760px; width: 1000px" data-t="4.6,8.6" data-fx="up" data-sfx="buzz"><b class="no">Error o tiempo agotado: 0 puntos.</b></p>
+    <div class="phone" style="left: 1340px; top: 140px" data-t="0.6,8.6" data-fx="right"><div class="scr"><img src="img/ph-correcto.jpg"></div></div>
+    <!-- B: después de cada reto -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="9,24.4" data-fx="pop" data-sfx="whoosh">Después de cada reto</div>
+    <div class="steps" style="left: 140px; top: 330px; width: 620px; gap: 30px">
+      <div class="step" data-t="9.4,24.4" data-fx="left"><span class="n">1</span><span><b>¡Se acabó!</b> y el podio de los 3 primeros.</span></div>
+      <div class="step" data-t="14.6,24.4" data-fx="left" data-sfx="pop"><span class="n">2</span><span>La tabla: quién subió <b class="ok">▲</b> y quién bajó <b class="no">▼</b>.</span></div>
+      <div class="step" data-t="19.6,24.4" data-fx="left" data-sfx="lock"><span class="n">3</span><span>Retos 12 a 15: la tabla <b class="vi">se oculta</b>.</span></div>
+    </div>
+    <div class="tv" style="left: 820px; top: 250px; width: 1000px" data-t="9.4,24.4" data-fx="right">
+      <div class="scr">
+        <img src="img/tv-podio.jpg" data-kb="9.4,14.6,0.5,0.5,1,0.5,0.42,1.12" data-sfx="podium3">
+        <img src="img/tv-tabla.jpg" data-t="14.6" data-fx="fade" data-kb="14.6,19.6,0.5,0.3,1.05,0.5,0.28,1.3">
+        <img src="img/tv-tabla-oculta.jpg" data-t="19.6" data-fx="fade">
+      </div>
+    </div>
+    <!-- C: cómo ganar -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="24.8" data-fx="pop">Cómo ganar</div>
+    <div class="win" style="left: 140px; top: 330px; width: 820px" data-t="25.2" data-fx="pop" data-sfx="win">
+      <div class="k">El campeón</div>
+      <div class="t">Gana quien sume <span class="gd">más puntos</span></div>
+      <p>Si hay empate: gana quien tenga más aciertos y, después, quien haya respondido en menos tiempo.</p>
+    </div>
+    <div class="tv" style="left: 1040px; top: 300px; width: 780px" data-t="25.6" data-fx="right">
+      <div class="scr"><img src="img/tv-final.jpg"></div>
+    </div>
+  </section>
+
+  <!-- ============ 6 · JUEGO 2: CONQUISTA ============ -->
+  <section class="scene" data-t="131,136.6" data-sfx="title">
+    <div class="glow" style="left: 560px; top: 160px; width: 800px; height: 800px; background: #45D0FF; opacity: 0.22"></div>
+    <div class="tcard" style="--c: var(--cyan)"><div>
+      <div class="big-ico" data-icon="map" data-t="0.2" data-fx="pop"></div>
+      <div class="k" data-t="0.5" data-fx="fade">Juego 2</div>
+      <div class="t" data-t="0.9" data-fx="zoom">Conquista</div>
+      <div class="s" data-t="1.6" data-fx="up">La guerra por el mercado</div>
+    </div></div>
+  </section>
+  <section class="scene" data-t="136.4,190.4" data-sfx="whoosh">
+    <p class="eyebrow abs" style="left: 140px; top: 100px; color: var(--cyan)" data-t="0.2" data-fx="fade">Juego 2 · Conquista</p>
+    <!-- A: el mapa -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="0.3,10.6" data-fx="pop">El mapa de Colombia</div>
+    <div class="steps" style="left: 140px; top: 330px; width: 640px" >
+      <div class="step" data-t="0.9,10.6" data-fx="left" data-sfx="pop"><span class="n">1</span><span><b>26 ciudades</b> para conquistar.</span></div>
+      <div class="step" data-t="2.8,10.6" data-fx="left" data-sfx="coin"><span class="n">2</span><span>Cada ciudad le paga <b class="gd">ventas</b> a su dueño en cada reto.</span></div>
+    </div>
+    <div class="abs" style="left: 140px; top: 640px; width: 660px; display: flex; flex-wrap: wrap; gap: 14px" data-t="4.8,10.6" data-fx="up" data-sfx="pop">
+      <span class="chip" style="--c: var(--gold)">Bogotá <b class="gd">10</b></span><span class="chip" style="--c: var(--gold)">Medellín <b class="gd">8</b></span>
+      <span class="chip" style="--c: var(--gold)">Cali <b class="gd">7</b></span><span class="chip" style="--c: var(--gold)">Barranquilla <b class="gd">6</b></span>
+      <span class="chip" style="--c: var(--muted)">… Leticia <b class="gd">1</b></span>
+    </div>
+    <div class="tv" style="left: 860px; top: 250px; width: 960px" data-t="0.6,10.6" data-fx="right">
+      <div class="scr"><img src="img/cq-tv-mapa.jpg" data-kb="0.6,10.6,0.36,0.55,1.45,0.32,0.6,1.7"></div>
+    </div>
+    <!-- B: cada acierto es una jugada -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="11,23.4" data-fx="pop" data-sfx="whoosh">Cada acierto es una jugada</div>
+    <div class="steps" style="left: 140px; top: 330px; width: 1060px; gap: 30px">
+      <div class="step" data-t="11.6,23.4" data-fx="left" data-sfx="pop"><span class="n">1</span><span>Si aciertas el KPI, <b>eliges una ciudad</b> en tu celular.</span></div>
+      <div class="step" data-t="14.2,23.4" data-fx="left" data-sfx="steal"><span class="ic acc" data-icon="sword"></span><span>Libre o de otro jugador: <b class="acc">la atacas</b>.</span></div>
+      <div class="step" data-t="16.8,23.4" data-fx="left" data-sfx="shield"><span class="ic cy" data-icon="shield"></span><span>Tuya: <b class="cy">la blindas</b>.</span></div>
+      <div class="step" data-t="19.4,23.4" data-fx="left" data-sfx="buzz"><span class="ic no" data-icon="x"></span><span>Si fallas, no atacas ni blindas.</span></div>
+    </div>
+    <div class="phone" style="left: 1340px; top: 140px" data-t="11.4,23.4" data-fx="right">
+      <div class="scr"><img src="img/cq-ph-ciudad.jpg"><img src="img/cq-ph-elegida.jpg" data-t="15.6" data-fx="fade" data-sfx="pop"></div>
+    </div>
+    <!-- C: las batallas -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="23.8,35.4" data-fx="pop" data-sfx="whoosh">Las batallas</div>
+    <div class="bt" style="left: 140px; top: 290px" data-t="24.4,35.4" data-fx="up">
+      <h4 class="gd">Ciudad libre</h4>
+      <svg viewBox="0 0 520 300"><g id="bt1"></g></svg>
+      <p>Si nadie la defiende, <b class="fg">la conquistas</b>.</p>
+    </div>
+    <div class="bt" style="left: 700px; top: 290px" data-t="27.4,35.4" data-fx="up">
+      <h4 class="gd">Varios atacan</h4>
+      <svg viewBox="0 0 520 300"><g id="bt2"></g></svg>
+      <p>Gana el que <b>respondió más rápido</b>.</p>
+    </div>
+    <div class="bt" style="left: 1260px; top: 290px" data-t="30.4,35.4" data-fx="up">
+      <h4 class="gd">Ciudad blindada</h4>
+      <svg viewBox="0 0 520 300"><g id="bt3"></g></svg>
+      <p>Resiste <b>todos los ataques</b>.</p>
+    </div>
+    <p class="abs lede" style="left: 140px; top: 870px; width: 1640px; font-size: 36px" data-t="33,35.4" data-fx="up" data-sfx="pop">Todas las jugadas se resuelven a la vez cuando se cierra el reto. La TV muestra las batallas una por una.</p>
+    <!-- D: eventos -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="35.8,47.4" data-fx="pop" data-sfx="whoosh">Eventos especiales</div>
+    <div class="ev" style="--c: var(--gold); left: 140px; top: 300px" data-t="36.4,47.4" data-fx="up" data-sfx="warm">
+      <div class="shot"><img src="img/cq-aviso5.jpg"></div><p class="k">Reto 5</p><p class="t">Black Friday</p><p>Las ventas valen el doble.</p></div>
+    <div class="ev" style="--c: var(--bad); left: 980px; top: 300px" data-t="39,47.4" data-fx="up" data-sfx="alarm">
+      <div class="shot"><img src="img/cq-aviso8.jpg"></div><p class="k">Reto 8</p><p class="t">Crisis de reputación</p><p>El que va ganando no puede blindar.</p></div>
+    <div class="ev" style="--c: var(--violet); left: 140px; top: 640px" data-t="41.6,47.4" data-fx="up" data-sfx="lock">
+      <div class="shot"><img src="img/cq-aviso12.jpg"></div><p class="k">Retos 12 a 15</p><p class="t">Niebla de guerra</p><p>El mapa se oculta.</p></div>
+    <div class="ev" style="--c: var(--gold); left: 980px; top: 640px" data-t="44.2,47.4" data-fx="up" data-sfx="warm">
+      <div class="shot"><img src="img/cq-aviso15.jpg"></div><p class="k">Reto 15</p><p class="t">Gran Lanzamiento</p><p>Las ventas valen el triple.</p></div>
+    <!-- E: cómo ganar -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="47.8" data-fx="pop">Cómo ganar</div>
+    <div class="win" style="left: 140px; top: 330px; width: 820px" data-t="48.2" data-fx="pop" data-sfx="win">
+      <div class="k">El campeón</div>
+      <div class="t">Gana quien <span class="gd">más venda</span></div>
+      <p>Si hay empate: más cuota de mercado, más aciertos y menos tiempo.</p>
+    </div>
+    <div class="tv" style="left: 1040px; top: 300px; width: 780px" data-t="48.6" data-fx="right">
+      <div class="scr"><img src="img/cq-tv-final.jpg"></div>
+    </div>
+  </section>
+
+  <!-- ============ 7 · JUEGO 3: BOLSA DE VALORES ============ -->
+  <section class="scene" data-t="190,195.6" data-sfx="title">
+    <div class="glow" style="left: 560px; top: 160px; width: 800px; height: 800px; background: #FFC93D; opacity: 0.2"></div>
+    <div class="tcard" style="--c: var(--gold)"><div>
+      <div class="big-ico" data-icon="chart" data-t="0.2" data-fx="pop"></div>
+      <div class="k" data-t="0.5" data-fx="fade">Juego 3</div>
+      <div class="t" data-t="0.9" data-fx="zoom">Bolsa de Valores</div>
+      <div class="s" data-t="1.6" data-fx="up">Invierte en lo que sabes</div>
+    </div></div>
+  </section>
+  <section class="scene" data-t="195.4,248.4" data-sfx="whoosh">
+    <p class="eyebrow abs" style="left: 140px; top: 100px; color: var(--gold)" data-t="0.2" data-fx="fade">Juego 3 · Bolsa de Valores</p>
+    <!-- A: tu capital -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="0.3,10.6" data-fx="pop">Tu capital</div>
+    <p class="abs lede" style="left: 140px; top: 320px; width: 1100px" data-t="0.9,10.6" data-fx="up" data-sfx="coin">Empiezas con <b class="gd" style="font: 900 96px/1 var(--f-display)">$1.000</b></p>
+    <p class="abs lede" style="left: 140px; top: 470px; width: 1100px" data-t="2.8,10.6" data-fx="up" data-sfx="pop">Antes de responder eliges <b>cuánto invertir</b>:</p>
+    <div class="abs" style="left: 140px; top: 570px; display: flex; gap: 22px">
+      <span class="pct" data-t="4.2,10.6" data-fx="pop" data-sfx="pop">10 %<small>$100</small></span>
+      <span class="pct" data-t="4.6,10.6" data-fx="pop" data-sfx="pop">25 %<small>$250</small></span>
+      <span class="pct" data-t="5.0,10.6" data-fx="pop" data-sfx="pop">50 %<small>$500</small></span>
+      <span class="pct all" data-t="5.4,10.6" data-fx="pop" data-sfx="pop">Todo<small>$1.000</small></span>
+    </div>
+    <div class="phone" style="left: 1340px; top: 140px" data-t="0.6,10.6" data-fx="right"><div class="scr"><img src="img/st-ph-invertir.jpg"></div></div>
+    <!-- B: si aciertas / si fallas -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="11,26.4" data-fx="pop" data-sfx="whoosh">Un ejemplo: inviertes $500</div>
+    <div class="panel" style="--c: var(--good); left: 140px; top: 290px; width: 760px" data-t="11.6,26.4" data-fx="up">
+      <div class="k">Si aciertas rápido</div>
+      <div class="ln" data-t="12.6,26.4" data-fx="fade" data-sfx="coin"><span>Recuperas lo invertido</span><b>$500</b></div>
+      <div class="ln" data-t="14.0,26.4" data-fx="fade" data-sfx="coin"><span>Bono por rapidez (10 % a 30 %)</span><b class="ok">+$150</b></div>
+      <div class="ln" data-t="15.4,26.4" data-fx="fade" data-sfx="coin"><span>Tu parte de lo que perdieron los que fallaron</span><b class="ok">+$300</b></div>
+      <div class="tot" data-t="16.8,26.4" data-fx="fade"><span>Capital</span><b><span data-count="16.8,18.0,1000,1450,money" data-sfx="ding">$1.000</span></b></div>
+    </div>
+    <div class="panel" style="--c: var(--bad); left: 940px; top: 290px; width: 840px" data-t="18.6,26.4" data-fx="up">
+      <div class="k">Si fallas</div>
+      <div class="ln" data-t="19.4,26.4" data-fx="fade" data-sfx="buzz"><span>Pierdes lo invertido</span><b class="no">−$500</b></div>
+      <div class="ln" data-t="20.4,26.4" data-fx="fade"><span>(o si se acaba el tiempo)</span><b></b></div>
+      <div class="tot" data-t="20.8,26.4" data-fx="fade"><span>Capital</span><b><span data-count="20.8,21.8,1000,500,money">$1.000</span></b></div>
+    </div>
+    <div class="cap" style="left: 140px; top: 860px; width: 760px; --c: var(--gold); font-size: 36px" data-t="22.6,26.4" data-fx="up" data-sfx="pop">Mientras <b>menos acierten</b>, más gana cada acierto.</div>
+    <div class="cap" style="left: 940px; top: 860px; width: 840px; --c: var(--cyan); font-size: 36px" data-t="24.0,26.4" data-fx="up" data-sfx="pop">Si quedas con menos de $100, el <b>banco te rescata</b> con $100.</div>
+    <!-- C: la pantalla -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="26.8,34.4" data-fx="pop" data-sfx="whoosh">La pantalla del salón</div>
+    <div class="steps" style="left: 140px; top: 330px; width: 600px; gap: 30px">
+      <div class="step" data-t="27.4,34.4" data-fx="left" data-sfx="pop"><span class="ic gd" data-icon="chart"></span><span>La <b>gráfica</b> del capital de todos.</span></div>
+      <div class="step" data-t="29.4,34.4" data-fx="left" data-sfx="coin"><span class="ic cy" data-icon="list"></span><span>La <b>pizarra</b>: quién sube <b class="ok">▲</b> y quién baja <b class="no">▼</b>.</span></div>
+    </div>
+    <div class="tv" style="left: 800px; top: 250px; width: 1020px" data-t="27.2,34.4" data-fx="right">
+      <div class="scr"><img src="img/st-tv-grafica.jpg" data-kb="27.2,34.4,0.5,0.5,1,0.62,0.5,1.25"></div>
+    </div>
+    <!-- D: eventos -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="34.8,46.4" data-fx="pop" data-sfx="whoosh">Eventos especiales</div>
+    <div class="ev" style="--c: var(--gold); left: 140px; top: 300px" data-t="35.4,46.4" data-fx="up" data-sfx="warm">
+      <div class="shot"><img src="img/st-aviso5.jpg"></div><p class="k">Reto 5</p><p class="t">Mercado alcista</p><p>Las ganancias valen el doble.</p></div>
+    <div class="ev" style="--c: var(--bad); left: 980px; top: 300px" data-t="38,46.4" data-fx="up" data-sfx="alarm">
+      <div class="shot"><img src="img/st-aviso8.jpg"></div><p class="k">Reto 8</p><p class="t">Pánico en la bolsa</p><p>Nadie invierte menos del 50 %.</p></div>
+    <div class="ev" style="--c: var(--violet); left: 140px; top: 640px" data-t="40.6,46.4" data-fx="up" data-sfx="lock">
+      <div class="shot"><img src="img/st-aviso12.jpg"></div><p class="k">Retos 12 a 15</p><p class="t">Bolsa a ciegas</p><p>La pizarra se apaga.</p></div>
+    <div class="ev" style="--c: var(--gold); left: 980px; top: 640px" data-t="43.2,46.4" data-fx="up" data-sfx="warm">
+      <div class="shot"><img src="img/st-aviso15.jpg"></div><p class="k">Reto 15</p><p class="t">Campanazo final</p><p>Las ganancias valen el triple.</p></div>
+    <!-- E: cómo ganar -->
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="46.8" data-fx="pop">Cómo ganar</div>
+    <div class="win" style="left: 140px; top: 330px; width: 820px" data-t="47.2" data-fx="pop" data-sfx="win">
+      <div class="k">El campeón</div>
+      <div class="t">Gana quien termine con <span class="gd">más capital</span></div>
+      <p>Invierte con cabeza: ir con todo puede hacerte ganar… o quebrar.</p>
+    </div>
+    <div class="tv" style="left: 1040px; top: 300px; width: 780px" data-t="47.6" data-fx="right">
+      <div class="scr"><img src="img/st-tv-final.jpg"></div>
+    </div>
+  </section>
+
+  <!-- ============ 8 · EL GRAN FINAL ============ -->
+  <section class="scene" data-t="248,266.4" data-sfx="whoosh">
+    <p class="eyebrow abs" style="left: 140px; top: 100px" data-t="0.2" data-fx="fade">En los 3 juegos</p>
+    <div class="abs h2" style="left: 135px; top: 140px" data-t="0.3" data-fx="pop">El gran final</div>
+    <div class="steps" style="left: 140px; top: 330px; width: 520px; gap: 30px">
+      <div class="step" data-t="0.8" data-fx="left"><span class="n">1</span><span>¿Quién ganó? Se destapan el <b>3.º</b> y el <b>2.º</b>.</span></div>
+      <div class="step" data-t="4.6" data-fx="left"><span class="n">2</span><span>Redoble… y <b class="gd">¡el campeón!</b></span></div>
+      <div class="step" data-t="11.4" data-fx="left"><span class="n">3</span><span>El <b>podio</b> de los 3 primeros.</span></div>
+      <div class="step" data-t="14" data-fx="left"><span class="n">4</span><span>Cada celular muestra su <b>puesto final</b>.</span></div>
+    </div>
+    <div class="tv" style="left: 700px; top: 270px; width: 880px" data-t="0.6" data-fx="right">
+      <div class="scr">
+        <img src="img/tv-rv-tarjetas.jpg" data-sfx="tension">
+        <img src="img/tv-rv-redoble.jpg" data-t="4.6" data-fx="fade" data-sfx="roll">
+        <img src="img/tv-rv-campeon.jpg" data-t="7.4" data-fx="fade" data-sfx="boom">
+        <img src="img/tv-rv-podio.jpg" data-t="11.4" data-fx="fade" data-sfx="podium">
+      </div>
+    </div>
+    <div class="phone" style="left: 1610px; top: 300px; width: 280px; padding: 10px; border-radius: 42px" data-t="14" data-fx="up" data-sfx="pop">
+      <div class="scr" style="width: 260px; height: 563px; border-radius: 32px"><img src="img/ph-campeon.jpg"></div>
+    </div>
+  </section>
+
+  <!-- ============ 9 · CIERRE ============ -->
+  <section class="scene" data-t="266,277" data-sfx="whoosh">
+    <div class="glow" style="left: 360px; top: 80px; width: 1200px; height: 900px; background: #FF5B3A; opacity: 0.22"></div>
+    <div class="abs" style="left: 0; right: 0; top: 140px; text-align: center">
+      <div class="h1" style="font-size: 170px" data-t="0.2" data-fx="pop" data-sfx="hit">¿Listos?</div>
+      <div class="h1 gd" style="font-size: 290px; margin-top: 10px" data-t="1.0" data-fx="zoom" data-sfx="hit2">¡A votar!</div>
+    </div>
+    <div class="abs" style="left: 0; right: 0; top: 700px; display: flex; justify-content: center; gap: 22px">
+      <span class="chip" style="--c: var(--accent)" data-t="2.2" data-fx="pop" data-sfx="pop"><i></i>Batalla de <span class="nt">KPIs</span></span>
+      <span class="chip" style="--c: var(--cyan)" data-t="2.6" data-fx="pop" data-sfx="pop"><i></i>Conquista</span>
+      <span class="chip" style="--c: var(--gold)" data-t="3.0" data-fx="pop" data-sfx="pop"><i></i>Bolsa de Valores</span>
+    </div>
+    <p class="abs" style="left: 0; right: 0; top: 860px; text-align: center; font: 900 72px var(--f-display); color: var(--cyan)" data-t="4.0" data-fx="up" data-sfx="ding">batalladekpis.vercel.app</p>
+    <p class="abs eyebrow" style="left: 0; right: 0; top: 965px; text-align: center; font-size: 22px" data-t="4.6" data-fx="fade">Casos ficticios con fines educativos. Las marcas no participan ni patrocinan el juego.</p>
+  </section>
+
+  <div class="fade-black" id="fadeblack"></div>
+</div>
+
+<script>
+'use strict';
+// ---------- íconos (trazos simples, todos en un cuadro de 64) ----------
+const ICONS = {
+  clock: '<circle cx="32" cy="35" r="22" fill="none" stroke="currentColor" stroke-width="6"/><path d="M32 22v14l9 6" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M24 6h16" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>',
+  map: '<path d="M32 4c-11 0-19 8-19 18 0 14 19 36 19 36s19-22 19-36C51 12 43 4 32 4z" fill="currentColor"/><circle cx="32" cy="22" r="7" fill="#130F26"/>',
+  chart: '<path d="M6 54h52" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M10 44l14-14 10 9 20-22" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M42 16h13v13" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>',
+  list: '<path d="M22 16h34M22 32h34M22 48h34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><circle cx="10" cy="16" r="4" fill="currentColor"/><circle cx="10" cy="32" r="4" fill="currentColor"/><circle cx="10" cy="48" r="4" fill="currentColor"/>',
+  target: '<circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" stroke-width="6"/><circle cx="32" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="6"/><circle cx="32" cy="32" r="4" fill="currentColor"/>',
+  tv: '<rect x="6" y="10" width="52" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="6"/><path d="M22 54h20" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>',
+  lock: '<path d="M20 28V20a12 12 0 0 1 24 0v8" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><rect x="12" y="27" width="40" height="31" rx="7" fill="currentColor"/>',
+  trophy: '<path d="M18 8h28v14a14 14 0 0 1-28 0z" fill="currentColor"/><path d="M18 12h-8a9 9 0 0 0 10 12M46 12h8a9 9 0 0 1-10 12" fill="none" stroke="currentColor" stroke-width="4"/><rect x="29" y="35" width="6" height="11" fill="currentColor"/><rect x="20" y="46" width="24" height="8" rx="2" fill="currentColor"/>',
+  sword: '<path d="M50 6 26 30l8 8L58 14V6z" fill="currentColor"/><path d="M14 34l16 16M20 44l-10 10" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>',
+  shield: '<path d="M32 4 8 12v18c0 15 10 25 24 30 14-5 24-15 24-30V12z" fill="currentColor"/>',
+  x: '<path d="M16 16l32 32M48 16 16 48" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>'
+};
+document.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = `<svg viewBox="0 0 64 64">${ICONS[el.dataset.icon]}</svg>` + el.innerHTML; });
+
+// ---------- ticker ----------
+(function () {
+  const items = [['CTR', '2,4%', 'up'], ['ROAS', '3,1x', 'up'], ['CPA', '$18.500', 'dn'], ['Alcance', '48,2K', 'up'], ['Engagement', '5,7%', 'up'], ['CPM', '$9.200', 'dn'], ['Churn', '4,1%', 'dn'], ['NPS', '62', 'up'], ['Guardados', '1.204', 'up'], ['Frecuencia', '3,8', 'dn'], ['Share of voice', '27%', 'up'], ['LTV', '$420K', 'up']];
+  const html = items.map(([k, v, d]) => `<span>${k} <b>${v}</b> <em class="${d}">${d === 'up' ? '▲' : '▼'}</em></span>`).join('');
+  document.getElementById('ticker').innerHTML = html + html + html;
+})();
+
+// ---------- motor de tiempo ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const easeBack = x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const easeInOut = x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const scenes = [...document.querySelectorAll('.scene')].map(el => {
+  const [a, b] = el.dataset.t.split(',').map(Number);
+  return { el, a, b, items: [...el.querySelectorAll('[data-t]')].map(x => {
+    const [i, o] = x.dataset.t.split(',').map(Number);
+    return { el: x, a: a + i, b: isNaN(o) ? null : a + o, fx: x.dataset.fx || (x.tagName === 'IMG' ? 'fade' : 'up') };
+  }) };
+});
+const D = Math.max(...scenes.map(s => s.b));
+function fxStyle(el, fx, v, out) {
+  if (v >= 1) { el.style.opacity = ''; el.style.transform = ''; return; }
+  const e = out ? easeOut(v) : (fx === 'pop' ? easeBack(v) : easeOut(v));
+  el.style.opacity = String(clamp(out ? v : easeOut(v) * 1.15));
+  const k = 1 - e;
+  el.style.transform = {
+    up: `translateY(${50 * k}px)`, down: `translateY(${-50 * k}px)`, left: `translateX(${-70 * k}px)`, right: `translateX(${90 * k}px)`,
+    pop: `scale(${0.55 + 0.45 * e})`, zoom: `scale(${1.25 - 0.25 * e})`, fade: ''
+  }[fx] || '';
+}
+function seek(t) {
+  for (const s of scenes) {
+    const on = t >= s.a - 0.001 && t < s.b;
+    s.el.style.display = on ? 'block' : 'none';
+    if (!on) continue;
+    s.el.style.opacity = String(clamp(Math.min((t - s.a) / 0.45 + 0.0001, (s.b - t) / 0.45)));
+    for (const it of s.items) {
+      const din = it.fx === 'fade' && it.el.tagName === 'IMG' ? 0.6 : 0.55;
+      const vin = clamp((t - it.a) / din), vout = it.b === null ? 1 : clamp((it.b - t) / 0.35);
+      it.el.style.visibility = vin <= 0 || vout <= 0 ? 'hidden' : 'visible';
+      if (vout < 1) fxStyle(it.el, it.fx, vout, true); else fxStyle(it.el, it.fx, vin, false);
+    }
+  }
+  hooks.forEach(h => h(t));
+  const fb = document.getElementById('fadeblack');
+  fb.style.opacity = String(clamp(Math.max(1 - t / 0.5, (t - (D - 1.2)) / 1.0)));
+}
+const hooks = [];
+const sceneOf = el => scenes.find(s => s.el.contains(el));
+
+// contadores: data-count="desde,hasta,valor0,valor1[,money]" (tiempos relativos a la escena)
+const money = n => '$' + Math.round(n).toLocaleString('es-CO');
+document.querySelectorAll('[data-count]').forEach(el => {
+  const [a, b, v0, v1, f] = el.dataset.count.split(','), s = sceneOf(el).a;
+  hooks.push(t => { const v = Number(v0) + (Number(v1) - Number(v0)) * easeOut(clamp((t - s - Number(a)) / (Number(b) - Number(a)))); el.textContent = f === 'money' ? money(v) : Math.round(v); });
+});
+// paneo y zoom sobre las capturas de la TV: data-kb="desde,hasta,cx0,cy0,z0,cx1,cy1,z1" (cx, cy = punto que queda en el centro)
+document.querySelectorAll('[data-kb]').forEach(img => {
+  const [a, b, x0, y0, z0, x1, y1, z1] = img.dataset.kb.split(',').map(Number), s = sceneOf(img).a;
+  hooks.push(t => {
+    const W = img.parentElement.offsetWidth, H = img.parentElement.offsetHeight;
+    const k = easeInOut(clamp((t - s - a) / (b - a)));
+    const z = z0 + (z1 - z0) * k, cx = x0 + (x1 - x0) * k, cy = y0 + (y1 - y0) * k;
+    const tx = clamp(W / 2 - cx * W * z, W - W * z, 0), ty = clamp(H / 2 - cy * H * z, H - H * z, 0);
+    img.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
+  });
+});
+// ticker que corre
+hooks.push(t => { const tr = document.getElementById('ticker'); tr.style.transform = `translateX(${-((t * 90) % (tr.scrollWidth / 3))}px)`; });
+
+// marcador del paso actual en «Cómo entrar»
+(function () {
+  const sc = scenes[3], mark = document.getElementById('stepmark'), steps = [...sc.el.querySelectorAll('.steps .step')];
+  const times = steps.map(st => sc.a + Number(st.dataset.t));
+  hooks.push(t => {
+    let i = 0; times.forEach((x, k) => { if (t >= x) i = k; });
+    const y0 = steps[Math.max(0, i - 1)].offsetTop, y1 = steps[i].offsetTop;
+    const k = easeOut(clamp((t - times[i]) / 0.5));
+    mark.style.top = (330 + (i ? y0 + (y1 - y0) * k : y1)) + 'px';
+    steps.forEach((st, k2) => st.classList.toggle('on', k2 === i));
+  });
+})();
+
+// votación: barras que crecen y la corona sobre la ganadora
+(function () {
+  const sc = scenes[2], votes = [8, 13, 9], maxH = 430;
+  hooks.push(t => {
+    const r = t - sc.a;
+    votes.forEach((v, i) => {
+      const k = easeOut(clamp((r - 6.0 - i * 0.25) / (4.6 - i * 0.2)));
+      const n = Math.round(v * k), h = 20 + (maxH - 20) * (n / 13);
+      document.getElementById('vb' + (i + 1)).style.height = h + 'px';
+      const vv = document.getElementById('vv' + (i + 1)); vv.textContent = n; vv.style.bottom = (h + 14) + 'px';
+      document.getElementById('vb' + (i + 1)).style.opacity = i === 1 || r < 11.6 ? '1' : '0.45';
+    });
+    const c = document.getElementById('vcrown'), kc = easeBack(clamp((r - 11.6) / 0.6));
+    c.style.opacity = String(clamp(kc)); c.style.bottom = (90 + maxH + 110 + 40 * (1 - kc)) + 'px'; c.style.left = '330px';
+  });
+})();
+
+// batallas de Conquista: hexágonos con flechas (todo calculado desde t)
+(function () {
+  const sc = scenes[8];   // escena de reglas de Conquista
+  const hex = (cx, cy, r) => Array.from({ length: 6 }, (_, i) => { const a = Math.PI / 6 + i * Math.PI / 3; return `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`; }).join(' ');
+  const P = { a: '#FF5B3A', b: '#45D0FF', c: '#C6F25E' };
+  function arrow(x0, y0, x1, y1, col, k) {
+    const x = x0 + (x1 - x0) * k, y = y0 + (y1 - y0) * k;
+    const ang = Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI;
+    return `<line x1="${x0}" y1="${y0}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${col}" stroke-width="10" stroke-linecap="round" opacity="${k > 0 ? 1 : 0}"/>`
+      + `<polygon points="0,-16 26,0 0,16" fill="${col}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${ang.toFixed(1)})" opacity="${k > 0 ? 1 : 0}"/>`;
+  }
+  const player = (x, y, col, label) => `<circle cx="${x}" cy="${y}" r="30" fill="${col}"/><text x="${x}" y="${y + 70}" class="hexlb" fill="${col}" style="font-size:26px">${label}</text>`;
+  const city = (fill, stroke, name, extra = '') => `<polygon points="${hex(380, 140, 86)}" fill="${fill}" stroke="${stroke}" stroke-width="6"/>`
+    + `<text x="380" y="150" class="hexlb" fill="${fill === '#29224C' ? '#F5F2FF' : '#140F26'}">${name}</text>${extra}`;
+  hooks.push(t => {
+    const r = t - sc.a;
+    // 1. ciudad libre: llega la flecha y se pinta del color del atacante
+    let k = easeInOut(clamp((r - 25.2) / 0.9));
+    document.getElementById('bt1').innerHTML = player(90, 140, P.a, 'Tú') + arrow(130, 140, 280, 140, P.a, k) + city(k >= 1 ? P.a : '#29224C', k >= 1 ? '#fff' : '#3B3366', 'Cali');
+    // 2. dos atacan: el más rápido (4 s) gana
+    const k1 = easeInOut(clamp((r - 28.2) / 0.8)), k2 = easeInOut(clamp((r - 28.6) / 1.4));
+    const won = r >= 29.0;
+    document.getElementById('bt2').innerHTML = player(90, 70, P.a, '4 s') + player(90, 230, P.b, '9 s')
+      + arrow(130, 76, 290, 118, P.a, k1) + arrow(130, 224, 290, 165, P.b, won ? Math.min(k2, 0.55) : k2)
+      + city(won ? P.a : '#29224C', won ? '#fff' : '#3B3366', 'Bogotá');
+    // 3. blindada: la flecha rebota en el escudo
+    const k3 = clamp((r - 31.2) / 0.8), bounce = k3 < 0.7 ? easeInOut(k3 / 0.7) * 0.85 : 0.85 - (k3 - 0.7) / 0.3 * 0.35;
+    const sh = r >= 30.8 ? `<path d="M380 54 330 72v38c0 32 21 52 50 63 29-11 50-31 50-63V72z" fill="none" stroke="#FFC93D" stroke-width="8" opacity="${clamp((r - 30.8) / 0.3)}"/>` : '';
+    document.getElementById('bt3').innerHTML = player(90, 140, P.b, 'Ataca') + arrow(130, 140, 290, 140, P.b, bounce) + city(P.c, '#fff', 'Medellín', sh);
+  });
+})();
+
+// carga: espera fuentes e imágenes antes de dibujar (el renderizador lo llama antes del primer cuadro)
+window.ready = Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))]).then(() => { seek(0); return D; });
+window.seek = seek;
+window.DURATION = D;
+// Marcas de sonido: cada elemento con data-sfx suena cuando aparece (tiempo absoluto, segundos).
+window.cues = (() => {
+  const out = [];
+  scenes.forEach(s => {
+    if (s.el.dataset.sfx && s.el.dataset.sfx !== 'none') out.push({ t: s.a, k: s.el.dataset.sfx });
+    s.el.querySelectorAll('[data-sfx]').forEach(el => {
+      const rel = el.dataset.t ? Number(el.dataset.t.split(',')[0]) : el.dataset.count ? Number(el.dataset.count.split(',')[0]) : el.dataset.kb ? Number(el.dataset.kb.split(',')[0]) : 0;
+      out.push({ t: s.a + rel, k: el.dataset.sfx });
+    });
+  });
+  return out.sort((a, b) => a.t - b.t);
+})();
+</script>
+<script src="audio.js"></script>
+</body>
+</html>
