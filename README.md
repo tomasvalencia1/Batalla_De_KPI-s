@@ -1,15 +1,37 @@
 # Batalla de KPIs
 
-Juego para el salón: cada jugador maneja las redes sociales de una marca colombiana sorteada al azar y debe elegir el KPI correcto en 15 retos de 35 segundos. Después de cada reto, la batalla se pausa, la pantalla del salón (TV) muestra las posiciones en vivo y el anfitrión pasa al siguiente reto con un botón. En los últimos 4 retos la tabla se oculta: nadie sabe quién gana hasta la revelación final. Gana un solo jugador.
+Juego para el salón: cada jugador maneja las redes sociales de una marca colombiana sorteada al azar y debe elegir el KPI correcto en 15 retos de 35 segundos. Los jugadores entran desde el celular, escriben su nombre y esperan en la sala; el anfitrión elige en la TV uno de los **tres juegos** y empieza. Después de cada reto, la pantalla del salón (TV) muestra qué pasó y el anfitrión pasa al siguiente reto con un botón. En los últimos 4 retos todo se oculta: nadie sabe quién gana hasta la revelación final. Gana un solo jugador.
 
 - 10 marcas posibles: Juan Valdez, Rappi, Frisby, Arturo Calle, Postobón, Alpina, Nequi, Totto, Crepes & Waffles y Platzi.
 - 15 retos por marca, con 4 opciones. La respuesta correcta cambia de letra en cada reto.
+
+## Los tres juegos
+
+**Batalla de KPIs** (preguntas contra el reloj)
 - Puntos: 100 por acierto más un bono de hasta 50 por rapidez.
-- Desempate: más aciertos y, después, menos tiempo total.
+- Después de cada reto: “¡SE ACABÓ!”, podio de los 3 primeros y tabla de posiciones.
+- Gana quien más puntos sume. Desempate: más aciertos y, después, menos tiempo total.
+
+**Conquista** (la guerra por el mercado)
+- La TV muestra un mapa de Colombia con 26 ciudades. Cada ciudad le paga **ventas** a su dueño después de cada reto: Bogotá 10, Medellín 8, Cali 7… San Andrés y Leticia 1.
+- Si aciertas el KPI, en el celular eliges una ciudad antes de que se acabe el tiempo. Si es libre o de otro jugador, **la atacas**. Si es tuya, **la blindas**.
+- Todas las jugadas se resuelven a la vez al cerrar el reto. Una ciudad blindada resiste todos los ataques. Si no está blindada, se la queda el atacante que respondió más rápido. Si fallas, no atacas ni blindas.
+- Eventos: reto 5 **Black Friday** (ventas ×2), reto 8 **Crisis de reputación** (el que va ganando no puede blindar), retos 12 a 15 **Niebla de guerra** (el mapa se oculta) y reto 15 **Gran Lanzamiento** (ventas ×3).
+- Gana quien más venda. Desempate: más cuota de mercado, más aciertos y menos tiempo.
+
+**Bolsa de Valores** (invierte en lo que sabes)
+- Cada jugador empieza con **$1.000**. En cada reto, antes de responder, elige cuánto invertir: 10 %, 25 %, 50 % o todo.
+- Si acierta, recupera lo invertido y gana entre 10 % y 30 % según su rapidez, más su parte de lo que perdieron los que fallaron, en proporción a lo que invirtió. Esa parte tiene un tope de 3 veces lo invertido. Si falla o se le acaba el tiempo, pierde lo invertido.
+- Mientras menos jugadores acierten, más gana cada acierto. Si alguien queda por debajo de $100, el banco lo rescata con $100.
+- La TV muestra la gráfica del capital de todos, la pizarra de cotizaciones con ▲▼ y el cierre del mercado: mayor alza, mayor caída y quién fue con todo.
+- Eventos: reto 5 **Mercado alcista** (ganancias ×2), reto 8 **Pánico en la bolsa** (nadie invierte menos del 50 %), retos 12 a 15 **Bolsa a ciegas** (la pizarra se apaga) y reto 15 **Campanazo final** (ganancias ×3).
+- Gana quien termine con más capital.
 
 > Las situaciones son casos ficticios con fines educativos. Las marcas no participan, no patrocinan ni avalan este juego.
 
 La página es estática: Vercel solo la publica. Los puntajes en vivo y la contraseña de la TV funcionan con **Firebase** (plan gratuito Spark).
+
+> **¿Ya lo tenías publicado?** Para tener los tres juegos solo vuelve a subir `index.html` y `README.md` a GitHub. Las reglas de Firebase (`database.rules.json`) y `config.js` no cambian.
 
 ## Qué hay en esta carpeta
 
@@ -90,19 +112,26 @@ Usa dos aparatos distintos, por ejemplo el computador para la TV y tu celular co
 
 1. En el computador abre la página, toca **Pantalla del salón** y escribe la contraseña del anfitrión. Debe aparecer la sala de espera con un código QR.
 2. Con el celular escanea el QR, escribe un nombre, sortea una marca y toca **Estoy listo**. Tu nombre debe aparecer en la TV.
-3. Toca **Empezar la batalla**, responde un reto en el celular y revisa que la TV muestre las posiciones y el botón **Siguiente reto**.
-4. Al terminar la prueba toca **Nueva partida** para dejar la sala vacía.
+3. En la TV toca **Conquista** o **Bolsa de Valores**: las reglas del celular deben cambiar al instante.
+4. Toca **Empezar la batalla**, responde un reto en el celular y revisa que la TV muestre el resultado del reto y el botón **Siguiente reto**.
+5. Al terminar la prueba toca **Nueva partida** para dejar la sala vacía.
 
 ## Cómo se juega en clase
 
 1. **TV:** abre la página → **Pantalla del salón** → contraseña → **Pantalla completa**.
-2. **Jugadores:** escanean el QR, escriben su nombre, sortean su marca y tocan **Estoy listo**.
-3. **Anfitrión:** cuando estén todos, toca **Empezar la batalla**.
-4. Cada reto dura 35 segundos. Cuando todos responden o se acaba el tiempo, la TV muestra la animación **¡SE ACABÓ!** con el podio de los 3 primeros y luego la tabla de posiciones, con flechas de quién subió o bajó. Tocar la pantalla salta la animación. Si alguien se demora, puedes tocar **Cerrar reto**.
-5. Toca **Siguiente reto** para continuar.
-6. Al pasar al reto 12 la TV muestra el aviso **¡Últimos 4 retos!** y la tabla se oculta. Desde ahí ni la TV ni los celulares muestran posiciones ni podio: los puntos se siguen sumando en secreto.
-7. Después del reto 15 toca **Revelar ganador**. La TV arma el suspenso (aparecen el 3.º y el 2.º puesto y suena un redoble), revela al campeón con la celebración y muestra el botón **Ver tabla completa**. Mientras tanto los celulares dicen “Revelando al ganador…” y cada jugador ve su puesto final cuando el campeón sale en la TV. Para repetir la revelación toca **Mostrar ganador**.
-8. Para jugar otra vez con otro grupo, toca **Nueva partida**. Eso borra los puntajes de la partida anterior.
+2. **Jugadores:** escanean el QR, escriben su nombre, sortean su marca y tocan **Estoy listo**. Quedan en la sala de espera.
+3. **Anfitrión:** en la TV elige el juego tocando su tarjeta: **Batalla de KPIs**, **Conquista** o **Bolsa de Valores**. Los celulares muestran al instante las reglas del juego elegido. Puedes cambiarlo mientras sigan en la sala.
+4. Cuando estén todos, toca **Empezar la batalla**.
+5. Cada reto dura 35 segundos. Cuando todos terminan o se acaba el tiempo, la TV muestra **¡SE ACABÓ!** y luego el resultado del reto:
+   - **Batalla de KPIs:** podio de los 3 primeros y tabla de posiciones.
+   - **Conquista:** las batallas una por una sobre el mapa (conquistas, robos y ciudades defendidas) y las ventas acumuladas.
+   - **Bolsa de Valores:** la gráfica avanza, la pizarra de cotizaciones y el cierre del mercado.
+
+   Si alguien se demora, puedes tocar **Cerrar reto**. En Conquista, un jugador está listo cuando respondió y, si acertó, eligió ciudad.
+6. Toca **Siguiente reto** para continuar. Antes de los retos con evento (5, 8, 12 y 15) la TV muestra un aviso a pantalla completa. Toca la pantalla para empezar el reto.
+7. Desde el reto 12 todo se oculta: la tabla en Batalla de KPIs, el mapa en Conquista y la pizarra en la Bolsa. Cada celular solo ve lo suyo.
+8. Después del reto 15 toca **Revelar ganador**. La TV arma el suspenso (aparecen el 3.º y el 2.º puesto y suena un redoble), revela al campeón con la celebración y luego presenta el podio de los 3 primeros, uno por uno. Al final muestra el botón **Ver tabla completa**. Mientras tanto los celulares dicen “Revelando al ganador…” y, cuando el campeón sale en la TV, cada jugador ve su puesto final y el podio. Para repetir la revelación toca **Mostrar ganador**.
+9. Para jugar otra vez con otro grupo, toca **Nueva partida**. Eso borra los puntajes de la partida anterior y conserva el juego elegido.
 
 **Sonido:** la TV pone música de fondo (distinta en la sala de espera, los retos, la pausa y el final) y efectos para cada cosa que aparece. Todo se genera en el navegador, sin archivos de audio. Se activa al entrar con la contraseña. Si recargas la TV y no se oye, toca **Activar sonido**. Revisa también que el audio salga por el TV (cable HDMI) y que el volumen esté arriba. Los celulares no suenan.
 
