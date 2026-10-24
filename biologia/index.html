@@ -244,14 +244,14 @@ button{font:inherit; color:inherit}
 .risk .cols{display:grid; grid-template-columns:1fr 1fr; gap:3cqw; font-size:2.7cqw; line-height:1.3}
 .risk h4{font:500 2.4cqw/1 var(--f-mono); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.8cqw}
 .risk ul{margin:0; padding-left:3.2cqw}
-.risk .act{font-size:2.7cqw; margin-top:1.4cqw}
+.risk .act{font-size:2.6cqw; margin-top:1.2cqw; line-height:1.3}
 .risk .big{position:absolute; right:5cqw; top:3.5cqw; font:500 6cqw/1 var(--f-mono); opacity:.85}
 .risk.hot .big{color:#c2410c} .risk.cold .big{color:#1d4fd8}
 
 /* página 5 */
 .p-camp{background:var(--z-ink); color:#fff; display:flex; flex-direction:column; gap:2.2cqw}
 .p-camp .tag{font:500 2.8cqw/1 var(--f-mono); color:var(--z-yellow)}
-.p-camp h3{font-size:10.5cqw; color:#fff}
+.p-camp h3{font-size:9cqw; color:#fff}
 .p-camp h3 em{font-style:normal; color:var(--z-pink)}
 .p-camp .lede{font:700 4.6cqw/1.05 var(--f-hand); color:var(--z-yellow)}
 .tips{display:grid; grid-template-columns:1fr 1fr; gap:2.4cqw}
@@ -259,7 +259,8 @@ button{font:inherit; color:inherit}
 .tip.h{background:var(--z-orange)} .tip.c{background:#8fb6ff}
 .tip strong{display:block; font:800 3.8cqw/1 var(--f-display); margin-bottom:1.2cqw}
 .tip ol{margin:0; padding-left:3.4cqw; display:grid; gap:.8cqw}
-.sos{margin-top:auto; display:flex; align-items:center; gap:3cqw; border:.5cqw dashed var(--z-yellow); border-radius:2cqw; padding:2.4cqw 3cqw}
+.sos{margin-top:auto; display:flex; align-items:center; gap:3cqw; border:.5cqw dashed var(--z-yellow); border-radius:2cqw; padding:2.2cqw 3cqw}
+.sos .num{font-size:7cqw!important; white-space:nowrap}
 .sos .num{font:800 11cqw/1 var(--f-display); color:var(--z-pink); animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{50%{transform:scale(1.08)}}
 .sos p{font-size:2.9cqw}
@@ -268,6 +269,8 @@ button{font:inherit; color:inherit}
 .p-back{background:var(--z-pink); display:flex; flex-direction:column; gap:3cqw}
 .p-back h3{font-size:11cqw; color:var(--z-ink)}
 .p-back .lede{font:700 5cqw/1.05 var(--f-hand)}
+.p-back .gloss{background:var(--z-paper); border:.5cqw solid var(--z-ink); border-radius:2cqw; padding:3.2cqw; display:grid; gap:1.8cqw; font-size:3cqw; line-height:1.32}
+.p-back .gloss b{font-family:var(--f-display); font-size:3.3cqw}
 .p-back .how{background:var(--z-paper); border:.5cqw solid var(--z-ink); border-radius:2cqw; padding:3cqw; font-size:2.8cqw}
 .p-back .how b{font-family:var(--f-display); font-size:3.6cqw}
 .p-back .how svg{width:100%; height:auto; margin-top:1.5cqw}
@@ -428,6 +431,17 @@ textarea:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 4px co
 .checks span.ok{border-style:solid; border-color:var(--ok); color:var(--ok); transform:scale(1.05)}
 .wc{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; font:500 13px/1.4 var(--f-mono); color:var(--muted)}
 
+.defs{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px 22px; margin:0}
+.defs > div{min-width:0; padding:12px 14px; border-radius:12px; background:var(--surface-2); border:1px solid var(--line); transition:transform .45s var(--spring), border-color .3s}
+.defs > div:hover{transform:translateY(-3px); border-color:var(--accent)}
+.defs dt{font:800 16px/1.2 var(--f-display); margin-bottom:4px}
+.defs dd{margin:0; font-size:14.5px; color:var(--ink)}
+.facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:16px}
+.fact{padding:12px; border-radius:12px; border:1px solid var(--line); background:var(--surface)}
+.fact b{display:block; font:500 22px/1.1 var(--f-mono); font-variant-numeric:tabular-nums}
+.fact span{font-size:13px; color:var(--muted)}
+.fact.ok b{color:var(--ok)} .fact.mid b{color:#c98a00} .fact.hi b{color:var(--heat)}
+.refs{font-size:14px; color:var(--muted); display:grid; gap:6px; padding-left:18px; margin:0}
 footer{padding-block:40px 60px; border-top:1px solid var(--line); text-align:center; color:var(--muted); font-size:14px}
 footer .hand{font-size:26px; color:var(--accent)}
 
@@ -471,10 +485,10 @@ footer .hand{font-size:26px; color:var(--accent)}
     <div><span>Unidad: </span><strong>Homeostasis y regulación</strong></div>
   </div>
   <div class="index">
-    <a href="#fanzine"><span class="num">1</span><h3>Fanzine: arcos reflejos y termorregulación</h3><p>Fanzine acordeón de 5 páginas y contraportada, con esquema animado del arco reflejo.</p><span class="chip done">Completo</span></a>
-    <a href="#homeostasis"><span class="num">2</span><h3>Ficha: ¿Qué es la homeostasis?</h3><p>Actividades 1 a 8: conceptos, ciclo, clasificación, casos y diagramas.</p><span class="chip done">Completo</span></a>
-    <a href="#presion"><span class="num">3</span><h3>Mapa conceptual: presión arterial</h3><p>Barorreceptores y sistema renina-angiotensina-aldosterona.</p><span class="chip class">Base para la clase 27/10</span></a>
-    <a href="#glucosa"><span class="num">4</span><h3>Regulación de la glucosa</h3><p>Simulador de insulina y glucagón, y espacio para la síntesis del video.</p><span class="chip you">Síntesis: escríbela tú</span></a>
+    <a href="#fanzine"><span class="num">1</span><h3>Fanzine: arcos reflejos y termorregulación</h3><p>Exploración, conceptualización y producto final: fanzine en formato acordeón de 5 páginas y contraportada.</p><span class="chip done">Producto final</span></a>
+    <a href="#homeostasis"><span class="num">2</span><h3>Ficha: ¿Qué es la homeostasis?</h3><p>Conceptos clave, sistema homeostático, clasificación, análisis de casos, diagramas y errores conceptuales.</p><span class="chip done">Ficha resuelta</span></a>
+    <a href="#presion"><span class="num">3</span><h3>Mapa conceptual: presión arterial</h3><p>Mecanismo nervioso (barorreceptores) y hormonal (sistema renina-angiotensina-aldosterona).</p><span class="chip class">Mapa conceptual</span></a>
+    <a href="#glucosa"><span class="num">4</span><h3>Regulación de la glucosa</h3><p>Insulina, glucagón y homeostasis energética: el páncreas como glándula endocrina.</p><span class="chip you">Sistema endocrino</span></a>
   </div>
 </section>
 
@@ -484,7 +498,21 @@ footer .hand{font-size:26px; color:var(--accent)}
     <div class="sec-head rv">
       <span class="sec-tag" aria-hidden="true">1</span>
       <h2>El sistema nervioso como centro de control</h2>
-      <p>Arcos reflejos y termorregulación. El fanzine es una tira de papel doblada en acordeón: arrástralo de lado a lado y las páginas se despliegan y se vuelven a doblar en tiempo real.</p>
+      <p>Arcos reflejos y termorregulación. Logro: explicar el papel del sistema nervioso en la regulación homeostática mediante arcos reflejos y la termorregulación corporal.</p>
+    </div>
+
+    <div class="card rv" style="margin-bottom:18px">
+      <div class="act-title"><span class="n">◆</span><h3>Marco conceptual</h3></div>
+      <dl class="defs">
+        <div><dt>Sistema nervioso</dt><dd>El sistema nervioso central (encéfalo y médula espinal) integra la información; el periférico (nervios y ganglios) la conduce desde los receptores y hacia los efectores.</dd></div>
+        <div><dt>Neurona e impulso nervioso</dt><dd>La neurona recibe estímulos por las dendritas, conduce el impulso eléctrico por el axón y lo transmite a otra célula en la sinapsis mediante neurotransmisores.</dd></div>
+        <div><dt>Acto reflejo</dt><dd>Respuesta rápida, involuntaria y siempre igual ante un estímulo. Se integra en la médula espinal o el tronco encefálico, sin necesidad de la corteza cerebral, lo que ahorra tiempo y protege al organismo.</dd></div>
+        <div><dt>Reflejo monosináptico y polisináptico</dt><dd>En el reflejo patelar la neurona sensitiva hace sinapsis directamente con la motora (una sola sinapsis). En el reflejo de retirada participa al menos una interneurona, por eso es polisináptico.</dd></div>
+        <div><dt>Termorregulación</dt><dd>El hipotálamo actúa como termostato con un punto de referencia cercano a 37 °C. Recibe información de termorreceptores periféricos (piel) y centrales (sangre que llega al hipotálamo) y activa efectores que producen o liberan calor.</dd></div>
+        <div><dt>Intercambio de calor</dt><dd>El cuerpo gana o pierde calor por radiación, conducción, convección y evaporación. Cuando el ambiente está más caliente que la piel, la evaporación del sudor es prácticamente la única vía para perder calor.</dd></div>
+        <div><dt>Producción de calor</dt><dd>Proviene del metabolismo celular, de la contracción muscular (escalofríos) y de hormonas como las tiroideas y la adrenalina, que aumentan el metabolismo.</dd></div>
+        <div><dt>Control nervioso y hormonal</dt><dd>La respuesta nerviosa es rápida y de corta duración; la hormonal es más lenta y sostenida. En la termorregulación ambas trabajan juntas por retroalimentación negativa.</dd></div>
+      </dl>
     </div>
 
     <div class="grid2" style="margin-bottom:28px">
@@ -496,10 +524,10 @@ footer .hand{font-size:26px; color:var(--accent)}
         </ol>
       </div>
       <div class="card rv">
-        <div class="act-title"><span class="n">2</span><h3>¿Qué son?</h3></div>
+        <div class="act-title"><span class="n">2</span><h3>Conceptualización: ¿qué son?</h3></div>
         <ol class="qa">
-          <li><span class="q">Golpe de calor</span><span class="a">Elevación peligrosa de la temperatura corporal (≥ 40 °C) porque la sudoración y la vasodilatación ya no alcanzan a enfriar el cuerpo. Puede causar deshidratación, desmayo y daño en órganos vitales.</span></li>
-          <li><span class="q">Hipotermia</span><span class="a">Descenso de la temperatura corporal por debajo de 35 °C, cuando el cuerpo pierde calor más rápido de lo que lo produce. Causa confusión, somnolencia, fallo de órganos y, en casos graves, la muerte.</span></li>
+          <li><span class="q">Golpe de calor</span><span class="a">Elevación de la temperatura corporal a 40 °C o más, acompañada de alteraciones del sistema nervioso central (confusión, desmayo), porque la sudoración y la vasodilatación ya no alcanzan a disipar el calor. Puede causar deshidratación y daño en órganos vitales como cerebro, riñones e hígado.</span></li>
+          <li><span class="q">Hipotermia</span><span class="a">Descenso de la temperatura corporal por debajo de 35 °C, cuando el cuerpo pierde calor más rápido de lo que lo produce. Se clasifica en leve (32 a 35 °C), moderada (28 a 32 °C) y grave (menos de 28 °C). Causa confusión, somnolencia, arritmias, fallo de órganos y, en casos graves, la muerte.</span></li>
         </ol>
       </div>
     </div>
@@ -530,7 +558,7 @@ footer .hand{font-size:26px; color:var(--accent)}
             <g fill="#2e6bff" stroke="#1d1b33" stroke-width="2"><path d="M40 104l4-8 4 8-8 0zM44 88v8"/></g>
           </svg>
           <div class="bubble">¡Me quema!</div>
-          <div class="sticker">¡Sé creativo!</div>
+          <div class="sticker">Reflejos · 37 °C</div>
         </div>
         <div class="foot">
           <h3>Arcos reflejos y termorregulación</h3>
@@ -630,7 +658,7 @@ footer .hand{font-size:26px; color:var(--accent)}
             <div><h4>Causas</h4><ul><li>Ejercicio intenso al sol</li><li>Poca agua</li><li>Ropa gruesa, encierro en un carro</li></ul></div>
             <div><h4>Señales</h4><ul><li>Piel caliente y roja</li><li>Dolor de cabeza, mareo, confusión</li><li>Pulso rápido, desmayo</li></ul></div>
           </div>
-          <p class="act"><b>Qué hacer:</b> llevar a la sombra, enfriar con paños húmedos, abanicar, dar agua si está consciente y llamar al 123.</p>
+          <p class="act"><b>Qué falla en el organismo:</b> la deshidratación reduce el volumen de sangre y la sudoración se detiene; desde unos 41 °C las proteínas y enzimas se desnaturalizan y se dañan cerebro, riñones e hígado.</p>
         </div>
         <div class="risk cold">
           <span class="big">&lt; 35 °C</span>
@@ -640,7 +668,7 @@ footer .hand{font-size:26px; color:var(--accent)}
             <div><h4>Causas</h4><ul><li>Frío intenso o viento</li><li>Ropa mojada, agua fría</li><li>Páramo o alta montaña</li></ul></div>
             <div><h4>Señales</h4><ul><li>Escalofríos fuertes que luego paran</li><li>Piel pálida o azulada</li><li>Habla lenta, somnolencia</li></ul></div>
           </div>
-          <p class="act"><b>Qué hacer:</b> lugar seco, quitar ropa mojada, cubrir con mantas, bebida tibia si está consciente, no frotar fuerte y llamar al 123.</p>
+          <p class="act"><b>Qué falla en el organismo:</b> las enzimas trabajan más lento, baja el metabolismo, el corazón presenta arritmias y el sistema nervioso se deprime. Leve: 32–35 °C · moderada: 28–32 °C · grave: &lt; 28 °C.</p>
         </div>
         <span class="zfolio">4</span>
       </article>
@@ -648,29 +676,31 @@ footer .hand{font-size:26px; color:var(--accent)}
       <!-- Página 5: campaña -->
       <article class="zpage p-camp" aria-label="Página 5: campaña de prevención">
         <span class="tag">CAMPAÑA DE PREVENCIÓN · #TermostatoInterno</span>
-        <h3>Tu hipotálamo hace su parte. <em>¡Haz la tuya!</em></h3>
-        <p class="lede">Ni muy caliente, ni muy frío: 37 °C es tu número.</p>
+        <h3>La homeostasis tiene límites. <em>La prevención los protege.</em></h3>
+        <p class="lede">Cada medida tiene una explicación fisiológica.</p>
         <div class="tips">
-          <div class="tip h"><strong>Contra el calor</strong><ol><li>Bebe agua aunque no tengas sed.</li><li>Evita el sol fuerte de 10 a. m. a 3 p. m.</li><li>Ropa clara, ligera y gorra.</li><li>Nunca dejes personas ni mascotas en un carro cerrado.</li></ol></div>
-          <div class="tip c"><strong>Contra el frío</strong><ol><li>Abrígate por capas.</li><li>Cámbiate la ropa mojada.</li><li>Cubre cabeza, manos y pies.</li><li>Si vas al páramo, lleva impermeable y bebida caliente.</li></ol></div>
+          <div class="tip h"><strong>Frente al calor</strong><ol><li><b>Hidratación:</b> mantiene el volumen de sangre necesario para sudar.</li><li><b>Evitar el sol de 10 a. m. a 3 p. m.:</b> menor ganancia de calor por radiación.</li><li><b>Ropa clara y ligera:</b> refleja la radiación y facilita la evaporación.</li><li><b>Pausas en el ejercicio:</b> los músculos producen menos calor.</li></ol></div>
+          <div class="tip c"><strong>Frente al frío</strong><ol><li><b>Ropa por capas:</b> el aire atrapado entre ellas es aislante.</li><li><b>Ropa seca:</b> el agua conduce el calor unas 25 veces más que el aire.</li><li><b>Cubrir cabeza y extremidades:</b> menos pérdida por radiación y convección.</li><li><b>Alimentación adecuada:</b> aporta la energía del metabolismo que produce calor.</li></ol></div>
         </div>
-        <div class="sos"><span class="num">123</span><p>¿Alguien está confundido, muy caliente o muy frío? Llama a la línea de emergencias y no lo dejes solo.</p></div>
+        <div class="sos"><span class="num">37 °C</span><p>Población más vulnerable: niños pequeños y adultos mayores, cuya termorregulación es menos eficiente, y deportistas o trabajadores expuestos al clima.</p></div>
         <span class="zfolio" style="color:var(--z-yellow)">5</span>
       </article>
 
       <!-- Contraportada -->
-      <article class="zpage p-back" aria-label="Contraportada">
-        <h3>¡Tu creatividad también es ciencia!</h3>
-        <p class="lede">La ciencia nos ayuda a entender nuestro cuerpo y cuidarlo.</p>
-        <div class="how">
-          <b>Así se dobla este fanzine</b>
-          <p>Una tira de papel con 6 paneles doblada en acordeón: los pliegues alternan montaña y valle, por eso se abre y se cierra en zigzag.</p>
-          <svg viewBox="0 0 240 70" aria-hidden="true">
-            <path d="M10 55 L50 15 L90 55 L130 15 L170 55 L210 15 L230 35" fill="none" stroke="#1d1b33" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-            <g font-family="DM Mono, monospace" font-size="8" fill="#5d5a72" text-anchor="middle"><text x="50" y="10">montaña</text><text x="90" y="67">valle</text><text x="130" y="10">montaña</text><text x="170" y="67">valle</text><text x="210" y="10">montaña</text></g>
-          </svg>
+      <article class="zpage p-back" aria-label="Contraportada: glosario">
+        <h3>Glosario</h3>
+        <p class="lede">Términos clave del fanzine</p>
+        <div class="gloss">
+          <p><b>Homeostasis:</b> mantenimiento de un medio interno estable dentro de un rango compatible con la vida.</p>
+          <p><b>Estímulo:</b> cambio del ambiente externo o interno que detecta un receptor.</p>
+          <p><b>Termorreceptor:</b> receptor sensible a los cambios de temperatura.</p>
+          <p><b>Nociceptor:</b> receptor que detecta estímulos dañinos y produce la sensación de dolor.</p>
+          <p><b>Interneurona:</b> neurona del sistema nervioso central que conecta la neurona sensitiva con la motora.</p>
+          <p><b>Efector:</b> músculo o glándula que ejecuta la respuesta.</p>
+          <p><b>Hipotálamo:</b> región del encéfalo que actúa como centro termorregulador.</p>
+          <p><b>Vasodilatación / vasoconstricción:</b> aumento o disminución del diámetro de los vasos sanguíneos.</p>
         </div>
-        <p class="cred">Basado en la guía "El sistema nervioso como centro de control" · Docente: Diana Cristina Bedoya · Biología 10° · 2026</p>
+        <p class="cred">Fanzine N.º 1 · Biología 10° · Tomás Valencia · Docente: Diana Cristina Bedoya · 2026</p>
       </article>
     </div>
 
@@ -693,7 +723,7 @@ footer .hand{font-size:26px; color:var(--accent)}
     <div class="zine-extra">
       <div class="card thermo rv" id="thermo">
         <div class="act-title"><span class="n">+</span><h3>Termostato interactivo</h3></div>
-        <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Mueve la temperatura corporal y mira qué mecanismos activa el hipotálamo.</p>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Modelo de la respuesta del hipotálamo según la temperatura corporal. Desliza para cambiarla.</p>
         <div class="thermo-top">
           <div class="tube" aria-hidden="true"><div class="fill"></div><div class="ref"></div></div>
           <div>
@@ -706,7 +736,7 @@ footer .hand{font-size:26px; color:var(--accent)}
         <div class="scale"><span>32</span><span>35</span><span>37</span><span>40</span><span>42</span></div>
       </div>
       <div class="card rv">
-        <div class="act-title"><span class="n">+</span><h3>¿Qué se activa?</h3></div>
+        <div class="act-title"><span class="n">+</span><h3>Efectores activados</h3></div>
         <div class="mechs">
           <div class="mech h" data-m="sudor"><b>Sudoración</b>glándulas sudoríparas</div>
           <div class="mech h" data-m="vdil"><b>Vasodilatación</b>vasos de la piel</div>
@@ -820,7 +850,7 @@ footer .hand{font-size:26px; color:var(--accent)}
 
     <div class="card rv" style="margin-top:18px">
       <div class="act-title"><span class="n">5</span><h3>Juego de roles: "Yo soy parte del sistema"</h3></div>
-      <p style="margin-bottom:6px;color:var(--muted);max-width:75ch">Guion para representar el sistema en grupo. La pelota pasa de un rol al siguiente igual que la información.</p>
+      <p style="margin-bottom:6px;color:var(--muted);max-width:75ch">Guion para la representación en grupo. La pelota pasa de un rol al siguiente igual que la información en el ciclo.</p>
       <div class="roles" id="roles">
         <span class="ball" id="ball" aria-hidden="true"></span>
         <div class="role"><span class="who">Estímulo</span><h4>Calor</h4><p>"¡Subió la temperatura! Hace sol y estuve corriendo."</p></div>
@@ -829,7 +859,7 @@ footer .hand{font-size:26px; color:var(--accent)}
         <div class="role"><span class="who">Efector</span><h4>Glándulas sudoríparas</h4><p>"Orden recibida. Produzco sudor."</p></div>
         <div class="role"><span class="who">Respuesta</span><h4>Sudoración</h4><p>"El sudor se evapora y enfría. Volvimos a 37 °C: ciclo apagado."</p></div>
       </div>
-      <p class="note">Objetivo: comprender el recorrido de la información en el ciclo. Esta actividad se hace en grupo durante la clase.</p>
+      <p class="note">Objetivo: comprender el recorrido de la información en un ciclo de retroalimentación negativa, desde el estímulo hasta el retorno al equilibrio.</p>
     </div>
 
     <div class="card rv" style="margin-top:18px">
@@ -871,7 +901,7 @@ footer .hand{font-size:26px; color:var(--accent)}
       <div class="cmap">
         <div class="node root"><h4>Regulación de la presión arterial</h4></div>
         <div class="link"><span>mantiene estable la</span></div>
-        <div class="node def" data-k="def"><h4>Presión arterial</h4><p>Fuerza que ejerce la sangre contra las paredes de las arterias. Se mide en mmHg; normal en adultos ≈ <span class="mono">120/80 mmHg</span>. Depende del volumen de sangre y de la resistencia de los vasos.</p></div>
+        <div class="node def" data-k="def"><h4>Presión arterial</h4><p>Fuerza que ejerce la sangre contra las paredes de las arterias. Se mide en mmHg; valor normal en adultos ≈ <span class="mono">120/80 mmHg</span>: sistólica cuando el corazón se contrae y diastólica cuando se relaja. Depende del gasto cardíaco, del volumen de sangre y de la resistencia de los vasos.</p></div>
         <div class="link"><span>se regula por dos mecanismos</span></div>
 
         <div class="branches">
@@ -913,7 +943,27 @@ footer .hand{font-size:26px; color:var(--accent)}
         </div>
       </div>
     </div>
-    <p class="note">En clase este mapa se hace en parejas sobre un pliego de papel bond. Esta versión sirve como base para copiarlo.</p>
+    <div class="card rv" style="margin-top:18px">
+      <div class="act-title"><span class="n">◆</span><h3>Comparación de los dos mecanismos</h3></div>
+      <div class="tbl-wrap">
+        <table class="cls">
+          <thead><tr><th>Característica</th><th>Mecanismo nervioso</th><th>Mecanismo hormonal (SRAA)</th></tr></thead>
+          <tbody>
+            <tr><td>Receptor</td><td>Barorreceptores (seno carotídeo y arco aórtico)</td><td>Células yuxtaglomerulares del riñón</td></tr>
+            <tr><td>Centro de control</td><td>Bulbo raquídeo (centro cardiovascular)</td><td>Riñón, con participación de hígado, pulmones y glándulas suprarrenales</td></tr>
+            <tr><td>Mensajeros</td><td>Impulsos nerviosos del sistema nervioso autónomo</td><td>Renina, angiotensina II y aldosterona</td></tr>
+            <tr><td>Efectores</td><td>Corazón y músculo liso de los vasos</td><td>Vasos sanguíneos y túbulos renales</td></tr>
+            <tr><td>Velocidad</td><td>Segundos</td><td>Minutos a horas</td></tr>
+            <tr><td>Función principal</td><td>Corrige cambios bruscos (al levantarse o con un susto)</td><td>Mantiene la presión a largo plazo regulando el volumen de sangre</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="facts">
+        <div class="fact ok"><b>&lt; 120/80</b><span>mmHg · presión normal en adultos</span></div>
+        <div class="fact mid"><b>120–139</b><span>mmHg sistólica · presión elevada</span></div>
+        <div class="fact hi"><b>≥ 140/90</b><span>mmHg · hipertensión según la OMS</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -923,7 +973,7 @@ footer .hand{font-size:26px; color:var(--accent)}
     <div class="sec-head rv">
       <span class="sec-tag" aria-hidden="true">4</span>
       <h2>Regulación de la glucosa</h2>
-      <p>Insulina, glucagón y homeostasis energética. Repaso interactivo y espacio para escribir la síntesis del video con tus propias palabras.</p>
+      <p>Insulina, glucagón y homeostasis energética. Relación con el sistema endocrino.</p>
     </div>
 
     <div class="gluco">
@@ -943,10 +993,10 @@ footer .hand{font-size:26px; color:var(--accent)}
           <button class="btn" type="button" id="eatBtn">▶ Acabo de comer</button>
           <button class="btn" type="button" id="fastBtn">▶ Llevo horas sin comer</button>
         </div>
-        <ol class="gsteps" id="gSteps"><li class="only">Elige una situación para ver cómo responde el páncreas.</li></ol>
+        <ol class="gsteps" id="gSteps"><li class="only">Selecciona una situación para ver la respuesta del páncreas.</li></ol>
       </div>
       <div class="card rv">
-        <div class="act-title"><span class="n">+</span><h3>Ideas clave para repasar</h3></div>
+        <div class="act-title"><span class="n">+</span><h3>Ideas clave</h3></div>
         <ul class="keys">
           <li>La glucosa es la principal fuente de energía de las células. En ayunas su valor normal está entre 70 y 100 mg/dL.</li>
           <li>El páncreas es una glándula endocrina: en los islotes de Langerhans tiene células beta y células alfa.</li>
@@ -958,13 +1008,26 @@ footer .hand{font-size:26px; color:var(--accent)}
       </div>
     </div>
 
-    <div class="card rv" style="margin-top:18px">
-      <div class="act-title"><span class="n">✎</span><h3>Mi síntesis del video</h3></div>
-      <p style="color:var(--muted);margin-bottom:12px;max-width:80ch">Mira el <a href="https://www.youtube.com/watch?v=h7fyo6vH6Bs" target="_blank" rel="noopener">video de la actividad</a> y escribe aquí tu párrafo. Preguntas guía: ¿de qué trata el video en una frase?, ¿qué hormonas y qué glándula aparecen?, ¿qué pasa después de comer y en ayunas?, ¿por qué esto es parte del sistema endocrino?</p>
-      <label for="synth" class="mono" style="font-size:12px;color:var(--muted)">TU PÁRRAFO (se guarda solo en este navegador)</label>
-      <textarea id="synth" placeholder="Escribe aquí con tus propias palabras…"></textarea>
-      <div class="checks" id="checks" aria-label="Conceptos mencionados"></div>
-      <div class="wc"><span id="wc">0 palabras</span><button class="btn" type="button" id="copyBtn">Copiar texto</button></div>
+    <div class="grid2" style="margin-top:18px">
+      <div class="card rv">
+        <div class="act-title"><span class="n">◆</span><h3>Relación con el sistema endocrino</h3></div>
+        <dl class="defs" style="grid-template-columns:1fr">
+          <div><dt>Glándula endocrina</dt><dd>Los islotes de Langerhans del páncreas liberan hormonas directamente a la sangre. El páncreas también es exocrino porque produce jugo pancreático para la digestión.</dd></div>
+          <div><dt>Hormona y órgano diana</dt><dd>La insulina y el glucagón viajan por la sangre y solo actúan en células que tienen receptores para ellas: hígado, músculo y tejido adiposo.</dd></div>
+          <div><dt>Acción de la insulina</dt><dd>Al unirse a su receptor, la célula lleva transportadores de glucosa (GLUT4) a la membrana y la glucosa entra. El hígado y el músculo la almacenan como glucógeno.</dd></div>
+          <div><dt>Otras hormonas que suben la glucosa</dt><dd>Adrenalina (estrés y ejercicio), cortisol (ayuno prolongado) y hormona del crecimiento. Por eso se llaman hormonas hiperglucemiantes.</dd></div>
+        </dl>
+      </div>
+      <div class="card rv">
+        <div class="act-title"><span class="n">◆</span><h3>Valores de referencia en ayunas</h3></div>
+        <div class="facts" style="margin-top:0">
+          <div class="fact ok"><b>70–99</b><span>mg/dL · normal</span></div>
+          <div class="fact mid"><b>100–125</b><span>mg/dL · prediabetes</span></div>
+          <div class="fact hi"><b>≥ 126</b><span>mg/dL · diabetes</span></div>
+        </div>
+        <p style="margin-top:16px;font-size:15px">Cuando esta regulación falla aparece la <b>diabetes mellitus</b>. En la <b>tipo 1</b> el sistema inmune destruye las células beta y no se produce insulina. En la <b>tipo 2</b> se produce insulina, pero las células responden poco a ella (resistencia a la insulina). En ambos casos la glucosa permanece alta en la sangre y daña vasos sanguíneos, riñones, ojos y nervios.</p>
+        <p class="note">Valores según la Asociación Americana de Diabetes (ADA).</p>
+      </div>
     </div>
   </div>
 </section>
@@ -972,8 +1035,9 @@ footer .hand{font-size:26px; color:var(--accent)}
 
 <footer>
   <div class="wrap">
-    <p class="hand">¡Tu creatividad también es ciencia!</p>
-    <p>La ciencia nos ayuda a entender nuestro cuerpo y cuidarlo. · Biología 10° · 2026</p>
+    <p class="hand">Cuerpo en equilibrio</p>
+    <p>Tomás Valencia · Biología 10° · Docente: Diana Cristina Bedoya · 2026</p>
+    <p style="margin-top:8px;font-size:13px">Fuentes: guías de clase de la docente (arco reflejo, homeostasis, presión arterial y glucosa); Asociación Americana de Diabetes (ADA); Organización Mundial de la Salud (OMS).</p>
   </div>
 </footer>
 
@@ -1046,14 +1110,14 @@ footer .hand{font-size:26px; color:var(--accent)}
   /* ================== FANZINE ACORDEÓN ================== */
   const stage = $('#accStage'), cam = $('#accCam'), src = $('#zineSrc'), ui = $('#zineUi');
   const arts = $$('.zpage', src), N = arts.length;
-  const NAMES = ['Portada', 'Arco reflejo', 'Calor vs. frío', 'Riesgos', 'Campaña', 'Contraportada'];
+  const NAMES = ['Portada', 'Arco reflejo', 'Calor vs. frío', 'Hipotermia y golpe de calor', 'Campaña', 'Glosario'];
   const panels = [], shF = [], shB = [], glF = [], glB = [];
   let parent = cam;
   arts.forEach((a, i) => {
     const p = el('div', 'panel'), f = el('div', 'face front'), b = el('div', 'face back');
     const sf = el('div', 'shade'), sb = el('div', 'shade'), gf = el('div', 'glint'), gb = el('div', 'glint'), art = el('div', 'backart');
     f.dataset.i = i; b.dataset.i = i;
-    art.innerHTML = '<i class="crease l"></i><i class="crease r"></i><span>' + (i % 2 ? 'pliegue valle' : 'pliegue montaña') + '</span>';
+    art.innerHTML = '<i class="crease l"></i><i class="crease r"></i><span>' + (i % 2 ? 'pliegue en valle' : 'pliegue en montaña') + '</span>';
     f.append(a, gf, sf); b.append(art, gb, sb); p.append(el('div', 'fshadow'), f, b);
     parent.appendChild(p); parent = p;
     panels.push(p); shF.push(sf); shB.push(sb); glF.push(gf); glB.push(gb);
@@ -1305,12 +1369,12 @@ footer .hand{font-size:26px; color:var(--accent)}
   const tr = $('#tRange'), mechs = $$('.mech'), thermoEl = $('#thermo');
   let shownT = 37, tRaf = 0;
   function thermoState(t) {
-    if (t < 32) return ['Hipotermia grave', 'var(--cold)', ['vcon', 'pilo'], 'Los escalofríos se detienen porque el cuerpo ya no tiene energía para producirlos. Hay confusión y riesgo de muerte: emergencia.'];
+    if (t < 32) return ['Hipotermia grave', 'var(--cold)', ['vcon', 'pilo'], 'Hipotermia grave: los escalofríos se detienen porque el músculo ya no puede producirlos, aparecen arritmias y depresión del sistema nervioso.'];
     if (t < 35) return ['Hipotermia', 'var(--cold)', ['vcon', 'esc', 'pilo'], 'El cuerpo pierde calor más rápido de lo que lo produce. Los escalofríos son fuertes y aparecen torpeza y somnolencia.'];
     if (t < 36.1) return ['Frío', 'var(--cold)', ['vcon', 'esc', 'pilo'], 'El hipotálamo conserva calor: estrecha los vasos de la piel, activa los escalofríos y eriza el vello.'];
-    if (t <= 37.2) return ['Normal', 'var(--ok)', ['eq'], 'Dentro del rango normal (36,1 a 37,2 °C). Los receptores siguen vigilando, pero no hace falta corregir.'];
+    if (t <= 37.2) return ['Normal', 'var(--ok)', ['eq'], 'Dentro del rango normal (36,1 a 37,2 °C). Los termorreceptores siguen informando al hipotálamo, pero no se activan respuestas de corrección.'];
     if (t < 40) return ['Calor', 'var(--heat)', ['sudor', 'vdil'], 'El hipotálamo libera calor: dilata los vasos de la piel (se enrojece) y activa el sudor, que enfría al evaporarse.'];
-    return ['Golpe de calor', 'var(--heat)', ['vdil'], 'Los mecanismos ya no alcanzan: el sudor puede detenerse, hay confusión y daño a órganos. Emergencia: enfriar y llamar al 123.'];
+    return ['Golpe de calor', 'var(--heat)', ['vdil'], 'Los mecanismos ya no alcanzan: la sudoración puede detenerse por deshidratación, hay alteración del sistema nervioso y daño a órganos.'];
   }
   let lastState = '';
   function thermo() {
@@ -1470,24 +1534,6 @@ footer .hand{font-size:26px; color:var(--accent)}
   $('#fastBtn').onclick = () => gSim('fast');
   pts = []; gSet(90, 0); for (let i = 1; i <= 20; i++) gSet(90 + Math.sin(i) * 3, i / 20);
 
-  /* ---------- Síntesis ---------- */
-  const ta = $('#synth'), KEY = 'sintesis-glucosa';
-  const TERMS = [['páncreas', /p[aá]ncreas/i], ['insulina', /insulina/i], ['glucagón', /glucag[oó]n/i], ['hígado', /h[ií]gado/i], ['hormonas', /hormona/i], ['sistema endocrino', /endocrin/i], ['sangre', /sangre|sangu[ií]ne/i], ['homeostasis', /homeostasis|equilibrio/i]];
-  const checks = $('#checks');
-  checks.innerHTML = TERMS.map(t => '<span>' + t[0] + '</span>').join('');
-  function upd() {
-    const v = ta.value, n = (v.trim().match(/\S+/g) || []).length;
-    $('#wc').textContent = n + (n === 1 ? ' palabra' : ' palabras') + (n && n < 80 ? ' · un buen párrafo tiene entre 80 y 150' : '');
-    $$('span', checks).forEach((s, i) => s.classList.toggle('ok', TERMS[i][1].test(v)));
-    try { localStorage.setItem(KEY, v); } catch (e) {}
-  }
-  try { ta.value = localStorage.getItem(KEY) || ''; } catch (e) {}
-  ta.addEventListener('input', upd); upd();
-  $('#copyBtn').onclick = function () {
-    const done = () => { this.textContent = 'Copiado'; setTimeout(() => this.textContent = 'Copiar texto', 1600); };
-    if (!navigator.clipboard) { ta.select(); return; }
-    navigator.clipboard.writeText(ta.value).then(done).catch(() => { ta.select(); this.textContent = 'Seleccionado: usa Copiar'; });
-  };
 })();
 </script>
 </body></html>
