@@ -3,6 +3,7 @@
 //   node render.cjs --stills 3,12.5,40 out   → capturas sueltas en la carpeta out (para revisar escenas)
 //   node render.cjs --audio out.wav          → solo la banda sonora
 //   node render.cjs --voz                    → le pone la voz (voz/) al MP4 ya renderizado, sin volver a dibujar el video
+//   node render.cjs --plan                   → muestra cómo quedó cortada cada frase de la voz
 // Necesita Playwright (con Chromium) y ffmpeg. Los clips del juego (clips/*.mp4) se pasan a cuadros JPG en .render/frames.
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
@@ -105,6 +106,33 @@ function silences(file) {
   const en = [...out.matchAll(/silence_end: ([\d.]+)/g)].map(m => Number(m[1]));
   return st.map((a, i) => ({ a, e: en[i] === undefined ? Infinity : en[i] })).map(x => ({ ...x, d: x.e - x.a }));
 }
+// Reparte los tramos de voz (separados por silencios) entre las frases del guion: cada frase debe durar lo que le toca
+// por su número de letras, y los cortes prefieren las pausas más largas. Así no se confunde una pausa de coma o de punto
+// con la pausa entre frases.
+function splitLines(sil, len, frases) {
+  const head = sil.find(x => x.a < 0.05), tail = sil.find(x => x.e >= len - 0.05);
+  const gaps = sil.filter(x => x !== head && x !== tail);
+  const st = [head ? head.e : 0, ...gaps.map(x => x.e)], en = [...gaps.map(x => x.a), tail ? tail.a : len];
+  const m = st.length, k = frases.length;
+  if (m < k) throw new Error(`la toma trae ${m} tramos de voz y el guion tiene ${k} frases`);
+  const chars = frases.map(f => f.texto.replace(/\[[^\]]*\]/g, '').trim().length);
+  const longest = gaps.map(x => x.d).sort((x, y) => y - x).slice(0, k - 1).reduce((s, x) => s + x, 0);
+  const rate = (en[m - 1] - st[0] - longest) / chars.reduce((s, x) => s + x, 0);
+  const lineCost = (i, j, f) => { const d = en[j] - st[i], e = chars[f] * rate; return 6 * ((d - e) / e) ** 2; };
+  const best = Array.from({ length: k + 1 }, () => new Array(m + 1).fill(Infinity)), from = best.map(r => r.map(() => -1));
+  best[0][0] = 0;
+  for (let f = 0; f < k; f++) for (let i = 0; i < m; i++) {
+    if (best[f][i] === Infinity) continue;
+    const bonus = i > 0 ? 4 * Math.min(gaps[i - 1].d, 1.2) : 0;
+    for (let j = i; j < m; j++) {
+      const c = best[f][i] + lineCost(i, j, f) - bonus;
+      if (c < best[f + 1][j + 1]) { best[f + 1][j + 1] = c; from[f + 1][j + 1] = i; }
+    }
+  }
+  const out = [];
+  for (let f = k, j = m; f > 0; f--) { const i = from[f][j]; out.unshift({ a: st[i], e: en[j - 1] }); j = i; }
+  return out;
+}
 function vozPlan() {
   const g = JSON.parse(fs.readFileSync(path.join(VOZ, 'guion.json'), 'utf8'));
   // Si falta algún bloque, el video sale sin voz (mejor eso que una voz a medias).
@@ -114,17 +142,14 @@ function vozPlan() {
   for (const b of g.bloques) {
     const file = path.join(VOZ, b.id + '.mp3');
     if (!fs.existsSync(file)) continue;
-    const len = durationOf(file), n = b.frases.length, sil = silences(file);
-    const head = sil.find(x => x.a < 0.05), tail = sil.find(x => x.e >= len - 0.05);
-    const cuts = sil.filter(x => x !== head && x !== tail).sort((x, y) => y.d - x.d).slice(0, n - 1).sort((x, y) => x.a - y.a);
-    if (cuts.length !== n - 1) throw new Error(`el bloque ${b.id} trae ${cuts.length + 1} frases y el guion tiene ${n}`);
-    let a = head ? head.e : 0;
-    b.frases.forEach((f, k) => {
-      let e = k < n - 1 ? cuts[k].a : tail ? tail.a : len;
+    const len = durationOf(file), sil = silences(file);
+    splitLines(sil, len, b.frases).forEach(({ a, e }, k) => {
+      const f = b.frases[k];
       // corte: solo lo que va antes de la primera pausa de la frase
       if (f.corte) { const inner = sil.find(x => x.a > a + 0.2 && x.e < e); if (inner) e = inner.a; }
-      lines.push({ file, a: Math.max(0, a - 0.04), e: Math.min(len, e + 0.1), t: f.t, texto: f.texto });
-      if (k < n - 1) a = cuts[k].e;
+      if (process.env.VOZ_DEBUG) console.log(`  ${b.id} ${String(k + 1).padStart(2)} ${(e - a).toFixed(2)} s${f.omitir ? ' (no se usa)' : ''}  ${f.texto}`);
+      // omitir: la frase no se pone; vel: se acelera un poco (1.05 = 5 % más rápida) para que quepa en su escena
+      if (!f.omitir) lines.push({ file, a: Math.max(0, a - 0.04), e: Math.min(len, e + 0.1), t: f.t, vel: f.vel || 1, texto: f.texto });
     });
   }
   lines.sort((x, y) => x.t - y.t);
@@ -132,24 +157,25 @@ function vozPlan() {
   let end = 0;
   for (const l of lines) {
     if (l.t < end + 0.15) { console.log(`  se corre ${(end + 0.15 - l.t).toFixed(2)} s: ${l.texto}`); l.t = end + 0.15; }
-    end = l.t + (l.e - l.a);
+    end = l.t + (l.e - l.a) / l.vel;
   }
   return lines;
 }
 // Pista de voz del largo del video, con las frases en su lugar y a −17 LUFS.
 async function vozTrack(lines, D, wav) {
   const raw = wav.replace(/\.wav$/, '-crudo.wav');
-  const parts = lines.map((l, i) => `[${i}:a]atrim=${l.a.toFixed(3)}:${l.e.toFixed(3)},asetpts=PTS-STARTPTS,aformat=sample_rates=48000:channel_layouts=stereo,`
-    + `afade=t=in:d=0.03,afade=t=out:st=${Math.max(0, l.e - l.a - 0.08).toFixed(3)}:d=0.08,adelay=${Math.round(l.t * 1000)}:all=1[v${i}]`);
+  const parts = lines.map((l, i) => `[${i}:a]atrim=${l.a.toFixed(3)}:${l.e.toFixed(3)},asetpts=PTS-STARTPTS,${l.vel !== 1 ? `atempo=${l.vel},` : ''}`
+    + `aformat=sample_rates=48000:channel_layouts=stereo,afade=t=in:d=0.03,afade=t=out:st=${Math.max(0, (l.e - l.a) / l.vel - 0.08).toFixed(3)}:d=0.08,`
+    + `adelay=${Math.round(l.t * 1000)}:all=1[v${i}]`);
   const graph = parts.join(';') + ';' + lines.map((_, i) => `[v${i}]`).join('') + `amix=inputs=${lines.length}:normalize=0,apad=whole_len=${Math.round(D * 48000)},atrim=0:${D}[out]`;
   await run('ffmpeg', ['-y', '-loglevel', 'error', ...lines.flatMap(l => ['-i', l.file]), '-filter_complex', graph, '-map', '[out]', raw]);
   const meter = spawnSync('ffmpeg', ['-hide_banner', '-i', raw, '-af', 'ebur128', '-f', 'null', '-'], { encoding: 'utf8' }).stderr;
   const I = Number((meter.match(/I:\s+(-?[\d.]+) LUFS/g) || ['I: -17 LUFS']).pop().match(/-?[\d.]+/)[0]);
   await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', raw, '-af', `volume=${(-17 - I).toFixed(2)}dB`, wav]);
 }
-// Mezcla: la música y los efectos bajan solos cuando habla la voz. Después se mide y se lleva todo a −16 LUFS.
-const MIX = '[0:a]acompressor=threshold=0.18:ratio=3:attack=5:release=150:knee=3,volume=0.7[bed];[1:a]asplit=2[key][voz];'
-  + '[bed][key]sidechaincompress=threshold=0.015:ratio=8:attack=15:release=450[duck];[duck][voz]amix=inputs=2:normalize=0[a]';
+// Mezcla: la música y los efectos quedan a −17 LUFS (casi como en el video sin voz) y bajan solos unos 8 dB cuando habla
+// la voz, que va a −16 LUFS. Después se mide la mezcla y se lleva todo a −16 LUFS.
+const MIX = '[0:a][1:a]sidechaincompress=threshold=0.03:ratio=5:attack=20:release=450[duck];[duck][2:a]amix=inputs=2:normalize=0[a]';
 const loudness = f => Number((spawnSync('ffmpeg', ['-hide_banner', '-i', f, '-af', 'ebur128', '-f', 'null', '-'], { encoding: 'utf8' }).stderr
   .match(/I:\s+(-?[\d.]+) LUFS/g) || ['I: -16 LUFS']).pop().match(/-?[\d.]+/)[0]);
 async function addVoz(video, bed, D, out) {
@@ -157,12 +183,18 @@ async function addVoz(video, bed, D, out) {
   if (!lines.length) return false;
   const voz = path.join(TMP, 'voz.wav'), mix = path.join(TMP, 'mezcla.wav');
   await vozTrack(lines, D, voz);
-  await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', bed, '-i', voz, '-filter_complex', MIX, '-map', '[a]', mix]);
-  const gain = (-16 - loudness(mix)).toFixed(2);
+  const bedc = path.join(TMP, 'fondo.wav');
+  await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', bed, '-af', 'acompressor=threshold=0.18:ratio=3:attack=5:release=150:knee=3', bedc]);
+  const bedGain = (-17 - loudness(bedc)).toFixed(2);
+  await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', bedc, '-i', voz, '-i', voz, '-filter_complex',
+    `[0:a]volume=${bedGain}dB[b];[1:a]volume=1dB[k];[2:a]volume=1dB[v];` + MIX.replace('[0:a][1:a]', '[b][k]').replace('[2:a]', '[v]'), '-map', '[a]', mix]);
+  // −16 LUFS con el pico real por debajo de −1,5 dB (loudnorm en dos pasadas: medir y aplicar).
+  const LN = 'loudnorm=I=-16:TP=-1.5:LRA=11';
+  const m = JSON.parse(spawnSync('ffmpeg', ['-hide_banner', '-i', mix, '-af', `${LN}:print_format=json`, '-f', 'null', '-'], { encoding: 'utf8' }).stderr.match(/\{[^{}]*"input_i"[^{}]*\}/)[0]);
+  const af = `${LN}:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true`;
   await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', mix, '-i', video, '-map', '1:v', '-map', '0:a', '-c:v', 'copy',
-    '-af', `volume=${gain}dB,alimiter=limit=0.84:attack=3:release=60:level=disabled`, '-ar', '48000', '-c:a', 'aac', '-b:a', '192k',
-    '-movflags', '+faststart', '-shortest', out]);
-  console.log(`voz: ${lines.length} frases · mezcla ${gain} dB`);
+    '-af', af, '-ar', '48000', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', '-shortest', out]);
+  console.log(`voz: ${lines.length} frases · mezcla medida ${m.input_i} LUFS`);
   return true;
 }
 async function light() {
@@ -216,7 +248,8 @@ async function full() {
 }
 
 const i = process.argv.indexOf('--stills'), ia = process.argv.indexOf('--audio');
-if (process.argv.includes('--voz')) voiceOnly().catch(e => { console.error(e); process.exit(1); });
+if (process.argv.includes('--plan')) { process.env.VOZ_DEBUG = '1'; process.env.VOZ_PARCIAL = '1'; vozPlan(); }
+else if (process.argv.includes('--voz')) voiceOnly().catch(e => { console.error(e); process.exit(1); });
 else if (ia > 0) chromium.launch().then(async b => { await renderAudio(b, process.argv[ia + 1]); await b.close(); console.log('audio ->', process.argv[ia + 1]); });
 else if (i > 0) stills(process.argv[i + 1].split(',').map(Number), process.argv[i + 2] || path.join(__dirname, 'stills'));
 else full().catch(e => { console.error(e); process.exit(1); });

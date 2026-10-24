@@ -24,10 +24,17 @@ node render.cjs --stills 10,50,120 out  # capturas sueltas para revisar escenas
 
 ## Voz
 
-`voz/guion.json` tiene lo que dice la voz, por bloques, con el segundo del video en que empieza cada frase. Cada bloque
-es un audio `voz/<id>.mp3` (ElevenLabs, voz «Dipemo», masculina con acento colombiano neutro, modelo `eleven_v4`) con una pausa larga entre frase y frase;
-`render.cjs` corta las frases en esas pausas, las pone en su lugar y baja la música mientras habla la voz.
-Si falta algún bloque, el video sale sin voz. `node render.cjs --voz` le pone la voz al MP4 ya renderizado sin volver a dibujarlo.
+Narración calmada, tipo tutorial, con la voz «Dipemo» de ElevenLabs (masculina, acento colombiano neutro, modelo `eleven_v4`).
+La presentación (0 a 9 s) va sin voz y la voz nunca dice el nombre del juego.
+
+- `voz/guion.json`: cada frase con el segundo del video en que empieza (`t`). `vel` la acelera un poco para que quepa en
+  su escena y `omitir` la deja por fuera (cuando ya está escrita en pantalla).
+- `voz/parte1.mp3` y `voz/parte2.mp3`: las dos tomas de ElevenLabs, con una pausa larga entre frase y frase. La cuenta
+  gratis deja una grabación cada 5 minutos más o menos, por eso son dos tomas largas y no una por frase.
+- `render.cjs` corta cada toma en sus frases según la duración que le toca a cada una por su texto, las pone en su lugar,
+  baja la música unos 8 dB mientras habla la voz y deja todo a −16 LUFS. Si falta alguna toma, el video sale sin voz.
+- `node render.cjs --plan` muestra cómo quedó cortada cada frase; `node render.cjs --voz` le pone la voz al MP4 ya
+  renderizado sin volver a dibujarlo.
 
 Cada clip se pone en la escena con `<img data-clip="nombre" data-cm="s@c*r">`: en el segundo `s` de la escena va en el
 segundo `c` del clip, a la velocidad `r` (1 si no se pone). El renderizador saca solo los cuadros que se usan.
