@@ -1,25 +1,25 @@
 {
-  "voz": "Paula Pinzon (ElevenLabs, eleven_v4)",
-  "nota": "Cada bloque se generó de una vez, con [long pause] entre frases. t = segundo del video en que empieza cada frase.",
+  "voz": "Dipemo, masculina con acento colombiano neutro (ElevenLabs, eleven_v4, voice_id j7XQZUnVCfhpa94EsaJS)",
+  "nota": "Cada bloque se generó de una vez, con [long pause] entre frases. t = segundo del video en que empieza cada frase. corte = solo se usa lo que va antes de la primera pausa de la frase (en las tarjetas de los juegos, solo el nombre).",
   "bloques": [
     { "id": "s00", "tono": "[excited]", "frases": [
       { "t": 0.4, "texto": "¡Bienvenidos a Batalla de KPIs!" },
-      { "t": 3.3, "texto": "[warmly] Hoy cada uno maneja una marca colombiana, y tiene que elegir el KPI correcto a tiempo." } ] },
+      { "t": 3.35, "texto": "[warmly] Hoy cada uno maneja una marca colombiana, y tiene que elegir el KPI correcto a tiempo." } ] },
     { "id": "s01", "tono": "", "frases": [
-      { "t": 9.5, "texto": "Hay tres juegos." },
-      { "t": 10.8, "texto": "Batalla de KPIs: preguntas contra el reloj." },
-      { "t": 13.4, "texto": "Conquista: ganen ciudades en el mapa de Colombia." },
-      { "t": 16.1, "texto": "Y Bolsa de Valores: inviertan en cada respuesta." },
-      { "t": 18.8, "texto": "¿Cuál jugamos hoy? [excited] ¡Ustedes eligen!" } ] },
+      { "t": 9.7, "texto": "Hay tres juegos." },
+      { "t": 11.0, "texto": "Batalla de KPIs: preguntas contra el reloj.", "corte": true },
+      { "t": 12.6, "texto": "Conquista: ganen ciudades en el mapa de Colombia.", "corte": true },
+      { "t": 14.1, "texto": "Y Bolsa de Valores: inviertan en cada respuesta.", "corte": true },
+      { "t": 17.2, "texto": "¿Cuál jugamos hoy? [excited] ¡Ustedes eligen!" } ] },
     { "id": "s02", "tono": "[excited]", "frases": [
       { "t": 22.6, "texto": "Antes de empezar… ¡votación!" },
       { "t": 24.8, "texto": "[warmly] Cada uno vota por el juego que quiere jugar. Se cuentan los votos, y el que gane por voto popular es el que se juega." },
-      { "t": 33.8, "texto": "[excited] ¡En este ejemplo, gana Conquista!" },
-      { "t": 35.6, "texto": "[warmly] Y el anfitrión pone ese juego en la pantalla del salón." } ] },
+      { "t": 33.0, "texto": "[excited] ¡En este ejemplo, gana Conquista!" },
+      { "t": 35.7, "texto": "[warmly] Y el anfitrión pone ese juego en la pantalla del salón." } ] },
     { "id": "s03", "tono": "", "frases": [
-      { "t": 39.7, "texto": "Para entrar, escaneen con el celular el código QR de la pantalla." },
-      { "t": 44.0, "texto": "Cada jugador que entra aparece en la sala." },
-      { "t": 46.6, "texto": "Escriban su nombre, o el de su equipo." },
+      { "t": 39.5, "texto": "Para entrar, escaneen con el celular el código QR de la pantalla." },
+      { "t": 44.2, "texto": "Cada jugador que entra aparece en la sala." },
+      { "t": 47.0, "texto": "Escriban su nombre, o el de su equipo." },
       { "t": 52.6, "texto": "Luego sorteen su marca: a cada uno le toca una de diez marcas colombianas." },
       { "t": 60.1, "texto": "Toquen «Estoy listo» y esperen en la sala." },
       { "t": 66.1, "texto": "Cuando todos estén adentro, el anfitrión pone en la TV el juego que ganó la votación." } ] },

@@ -109,17 +109,20 @@ function vozPlan() {
   const g = JSON.parse(fs.readFileSync(path.join(VOZ, 'guion.json'), 'utf8'));
   // Si falta algún bloque, el video sale sin voz (mejor eso que una voz a medias).
   const missing = g.bloques.filter(b => !fs.existsSync(path.join(VOZ, b.id + '.mp3'))).map(b => b.id);
-  if (missing.length) { console.log(`voz incompleta (faltan ${missing.join(', ')}): el video sale sin voz`); return []; }
+  if (missing.length && !process.env.VOZ_PARCIAL) { console.log(`voz incompleta (faltan ${missing.join(', ')}): el video sale sin voz`); return []; }
   const lines = [];
   for (const b of g.bloques) {
     const file = path.join(VOZ, b.id + '.mp3');
+    if (!fs.existsSync(file)) continue;
     const len = durationOf(file), n = b.frases.length, sil = silences(file);
     const head = sil.find(x => x.a < 0.05), tail = sil.find(x => x.e >= len - 0.05);
     const cuts = sil.filter(x => x !== head && x !== tail).sort((x, y) => y.d - x.d).slice(0, n - 1).sort((x, y) => x.a - y.a);
     if (cuts.length !== n - 1) throw new Error(`el bloque ${b.id} trae ${cuts.length + 1} frases y el guion tiene ${n}`);
     let a = head ? head.e : 0;
     b.frases.forEach((f, k) => {
-      const e = k < n - 1 ? cuts[k].a : tail ? tail.a : len;
+      let e = k < n - 1 ? cuts[k].a : tail ? tail.a : len;
+      // corte: solo lo que va antes de la primera pausa de la frase
+      if (f.corte) { const inner = sil.find(x => x.a > a + 0.2 && x.e < e); if (inner) e = inner.a; }
       lines.push({ file, a: Math.max(0, a - 0.04), e: Math.min(len, e + 0.1), t: f.t, texto: f.texto });
       if (k < n - 1) a = cuts[k].e;
     });
