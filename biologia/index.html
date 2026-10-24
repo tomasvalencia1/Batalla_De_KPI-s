@@ -9,7 +9,7 @@
 :root{
   --bg:#eef0f5; --surface:#ffffff; --surface-2:#f5f6fa; --ink:#1c1d33; --muted:#585b73; --line:#d5d8e3;
   --accent:#d6247a; --accent-2:#2457d6; --heat:#d9441b; --cold:#1f6fd0; --ok:#147a55; --pos:#8a3ffc;
-  --hi:#ffd84a; --hi-ink:#1d1b33; --table:#dfe3ec; --table-2:#cfd5e2; --shadow:rgba(24,26,60,.28);
+  --hi:#ffd84a; --hi-ink:#1d1b33; --table:#dfe3ec; --table-2:#c6cddd; --shadow:rgba(24,26,60,.28); --zshadow:rgba(20,22,52,.5);
   /* el fanzine es un objeto de papel: mismos colores en ambos temas */
   --z-paper:#fcfbf8; --z-back:#efece4; --z-ink:#1d1b33; --z-pink:#ff4fa3; --z-blue:#2e6bff; --z-yellow:#ffe14d; --z-green:#18a874; --z-orange:#ff7a2e; --z-purple:#7b4dff; --z-muted:#5d5a72;
   --f-display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
@@ -23,14 +23,14 @@
   :root:not([data-theme="light"]){
     --bg:#11131f; --surface:#1a1d2e; --surface-2:#22263a; --ink:#ecebf5; --muted:#a3a6bf; --line:#33374e;
     --accent:#ff5ca8; --accent-2:#7aa2ff; --heat:#ff7b52; --cold:#62a8ff; --ok:#3ccf91; --pos:#b48cff;
-    --table:#0b0d18; --table-2:#191c2e; --shadow:rgba(0,0,0,.6);
+    --table:#0b0d18; --table-2:#1d2136; --shadow:rgba(0,0,0,.6); --zshadow:rgba(0,0,0,.85);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#11131f; --surface:#1a1d2e; --surface-2:#22263a; --ink:#ecebf5; --muted:#a3a6bf; --line:#33374e;
   --accent:#ff5ca8; --accent-2:#7aa2ff; --heat:#ff7b52; --cold:#62a8ff; --ok:#3ccf91; --pos:#b48cff;
-  --table:#0b0d18; --table-2:#191c2e; --shadow:rgba(0,0,0,.6);
+  --table:#0b0d18; --table-2:#1d2136; --shadow:rgba(0,0,0,.6); --zshadow:rgba(0,0,0,.85);
   color-scheme:dark;
 }
 @property --fill{syntax:"<percentage>"; inherits:false; initial-value:0%}
@@ -121,11 +121,11 @@ button{font:inherit; color:inherit}
 
 /* ---------- FANZINE ACORDEÓN ---------- */
 .zine-wrap{max-width:1280px; margin:0 auto}
-.acc-stage{position:relative; height:640px; overflow:hidden; perspective:2400px; perspective-origin:50% 42%; touch-action:pan-y; user-select:none; -webkit-user-select:none; cursor:grab;
-  background:radial-gradient(120% 90% at 50% 40%, var(--table) 0%, var(--table-2) 100%); border-block:1px solid var(--line)}
+.acc-stage{position:relative; height:640px; overflow:hidden; perspective:1300px; perspective-origin:50% 40%; touch-action:pan-y; user-select:none; -webkit-user-select:none; cursor:grab;
+  background:radial-gradient(90% 70% at 50% 35%, var(--table) 0%, var(--table-2) 100%); border-block:1px solid var(--line)}
 .acc-stage.drag{cursor:grabbing}
 .acc-stage:focus-visible{outline-offset:-4px}
-.acc-floor{position:absolute; left:50%; bottom:5%; height:46px; width:60%; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, var(--shadow), transparent); filter:blur(8px); pointer-events:none}
+.acc-floor{display:none; position:absolute; left:50%; bottom:5%; height:46px; width:60%; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, var(--shadow), transparent); filter:blur(8px); pointer-events:none}
 .acc-cam{position:absolute; left:0; top:0; width:0; height:0; transform-style:preserve-3d; transform-origin:0 0}
 .panel{position:absolute; left:0; top:0; width:var(--w); height:var(--h); transform-style:preserve-3d; transform-origin:0 50%}
 .panel .panel{left:var(--w)}
@@ -134,6 +134,8 @@ button{font:inherit; color:inherit}
 .face::after{content:""; position:absolute; inset:0; pointer-events:none; z-index:3;
   background:linear-gradient(90deg, rgba(0,0,0,.07), transparent 4%, transparent 96%, rgba(0,0,0,.07)),
   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.15 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.fshadow{position:absolute; left:-4%; width:108%; top:calc(var(--h) - var(--w) * .4); height:calc(var(--w) * .8); transform:rotateX(90deg); pointer-events:none; background:radial-gradient(50% 50% at 50% 50%, var(--zshadow), transparent)}
+.glint{position:absolute; inset:0; z-index:4; pointer-events:none; opacity:0; background:linear-gradient(100deg, transparent 38%, rgba(255,255,255,.5) 48%, rgba(255,255,255,.12) 54%, transparent 62%); background-size:320% 100%}
 .shade{position:absolute; inset:0; z-index:4; pointer-events:none; background:#0d0c1c; opacity:0}
 .backart{position:absolute; inset:0; display:grid; place-items:center; color:var(--z-muted)}
 .backart .crease{position:absolute; top:6%; bottom:6%; width:0; border-left:1.5px dashed rgba(29,27,51,.25)}
@@ -197,14 +199,25 @@ button{font:inherit; color:inherit}
 .fire button{border:.5cqw solid var(--z-ink); background:var(--z-pink); color:var(--z-ink); font:800 3.2cqw/1 var(--f-display); padding:1.8cqw 3cqw; border-radius:999px; cursor:pointer; box-shadow:.8cqw .8cqw 0 var(--z-ink); transition:transform .12s, box-shadow .12s}
 .fire button:active{transform:translate(.6cqw,.6cqw); box-shadow:.2cqw .2cqw 0 var(--z-ink)}
 .fire small{font:500 2.5cqw/1.3 var(--f-mono); color:var(--z-muted); text-align:right; padding-right:4cqw}
-#forearm{transform-box:view-box; transform-origin:150px 205px; transition:transform .5s var(--spring)}
-.withdraw #forearm{transform:rotate(-22deg); transition:transform .22s cubic-bezier(.2,1.6,.4,1)}
+#forearm{transform-box:view-box; transform-origin:165px 212px; transition:transform .7s var(--spring)}
+.withdraw #forearm{transform:rotate(18deg); transition:transform .45s cubic-bezier(.2,1.5,.4,1)}
 #ay{opacity:0; transform-box:fill-box; transform-origin:30% 100%; transform:scale(.4); transition:opacity .2s, transform .45s var(--spring)}
 .withdraw-ay #ay{opacity:1; transform:scale(1)}
 .steam path{animation:steam 2.4s ease-in-out infinite}
 .steam path:nth-child(2){animation-delay:.6s} .steam path:nth-child(3){animation-delay:1.2s}
 @keyframes steam{0%{opacity:0; transform:translateY(6px)} 40%{opacity:.9} 100%{opacity:0; transform:translateY(-10px)}}
-.nerve{stroke-dasharray:var(--len); stroke-dashoffset:0}
+.nerve,.trail,.flowd{fill:none; stroke-linecap:round}
+.nerve{stroke-width:3.2}
+.trail{stroke-width:9; opacity:.35}
+.flowd{stroke:#fff; stroke-width:1.2; stroke-dasharray:2 7; opacity:.85; animation:flowd 1.6s linear infinite}
+@keyframes flowd{to{stroke-dashoffset:-18}}
+#recRing{fill:none; stroke:#ff4fa3; stroke-width:2; opacity:0; transform-box:fill-box; transform-origin:center}
+.stim #recRing{animation:ring 1.1s ease-out 2}
+@keyframes ring{0%{opacity:.9; transform:scale(.6)} 100%{opacity:0; transform:scale(3)}}
+#biceps{transform-box:fill-box; transform-origin:center; transition:transform .45s var(--spring)}
+.contract #biceps{transform:scale(1.1,1.4)}
+.bdg{transform-box:fill-box; transform-origin:center; transition:transform .4s var(--spring)}
+.bdg.on{transform:scale(1.35)}
 #impulse{opacity:0; transition:opacity .2s} .firing #impulse{opacity:1}
 #impulseGlow{opacity:0} .firing #impulseGlow{opacity:.55}
 
@@ -529,39 +542,50 @@ footer .hand{font-size:26px; color:var(--accent)}
       <article class="zpage p-arc" aria-label="Página 2: esquema del arco reflejo">
         <h3>El arco reflejo</h3>
         <p class="sub">Esquema rotulado del reflejo de retirada</p>
-        <svg class="arc-svg" id="arcSvg" viewBox="0 0 320 250" role="img" aria-label="Esquema: la mano toca una taza caliente, el impulso viaja por la neurona sensitiva a la médula espinal, pasa por una interneurona y vuelve por la neurona motora al bíceps, que retira la mano">
-          <ellipse cx="245" cy="72" rx="44" ry="36" fill="#ffe9f2" stroke="#1d1b33" stroke-width="2"/>
-          <path d="M226 52c10 6 12 12 6 18-6 7-2 16 8 20 3-5 5-8 5-10 0 2 2 5 5 10 10-4 14-13 8-20-6-6-4-12 6-18-10 0-16 6-19 13-3-7-9-13-19-13z" fill="#d9c9ee" stroke="#1d1b33" stroke-width="1.2"/>
-          <circle cx="245" cy="72" r="2.4" fill="#1d1b33"/>
-          <text x="245" y="124" text-anchor="middle" font-family="DM Mono, monospace" font-size="10" fill="#1d1b33">MÉDULA ESPINAL</text>
+        <svg class="arc-svg" id="arcSvg" viewBox="0 0 340 250" role="img" aria-label="Esquema del arco reflejo: el receptor del dedo detecta el calor de la taza, la neurona sensitiva lleva el impulso por el brazo hasta la médula espinal, una interneurona lo pasa a la neurona motora y esta hace contraer el bíceps, que retira la mano">
+          <g font-family="DM Mono, monospace" font-size="8.5" fill="#1d1b33">
+            <text x="250" y="24" text-anchor="middle" font-size="9.5" font-weight="500">MÉDULA ESPINAL</text>
+          </g>
+          <ellipse cx="250" cy="80" rx="50" ry="42" fill="#ffe9f2" stroke="#1d1b33" stroke-width="2"/>
+          <path d="M226 58 C236 60 244 66 250 74 C256 66 264 60 274 58 C272 70 264 76 258 80 C266 86 272 94 272 104 C262 102 254 96 250 88 C246 96 238 102 228 104 C228 94 234 86 242 80 C236 76 228 70 226 58 Z" fill="#d9c9ee" stroke="#1d1b33" stroke-width="1.2"/>
+          <circle cx="250" cy="81" r="2.2" fill="#1d1b33"/>
           <g>
-            <rect x="4" y="204" width="32" height="36" rx="5" fill="#d9381e" stroke="#1d1b33" stroke-width="2"/>
-            <path d="M36 212c10 0 10 18 0 18" fill="none" stroke="#1d1b33" stroke-width="3"/>
+            <rect x="8" y="198" width="34" height="38" rx="5" fill="#d9381e" stroke="#1d1b33" stroke-width="2"/>
+            <path d="M8 207c-11 0-11 19 0 19" fill="none" stroke="#1d1b33" stroke-width="3"/>
             <g class="steam" fill="none" stroke="#ff7a2e" stroke-width="2.4" stroke-linecap="round">
-              <path d="M12 196c-4-6 4-10 0-16"/><path d="M20 196c-4-6 4-10 0-16"/><path d="M28 196c-4-6 4-10 0-16"/>
+              <path d="M16 192c-4-6 4-10 0-16"/><path d="M25 192c-4-6 4-10 0-16"/><path d="M34 192c-4-6 4-10 0-16"/>
             </g>
           </g>
-          <path d="M150 205 L215 158 L250 150" fill="none" stroke="#f2c19c" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
-          <ellipse cx="186" cy="176" rx="24" ry="11" transform="rotate(-36 186 176)" fill="#ff7a2e" stroke="#1d1b33" stroke-width="1.6"/>
+          <path d="M165 212 L252 170" fill="none" stroke="#f2c19c" stroke-width="24" stroke-linecap="round"/>
+          <g transform="rotate(-26 206 190)"><ellipse id="biceps" cx="206" cy="190" rx="27" ry="11" fill="#ff7a2e" stroke="#1d1b33" stroke-width="1.6"/></g>
           <g id="forearm">
-            <path d="M150 205 L72 190" fill="none" stroke="#f2c19c" stroke-width="20" stroke-linecap="round"/>
-            <ellipse cx="62" cy="190" rx="15" ry="12" fill="#f2c19c"/>
-            <g stroke="#f2c19c" stroke-width="7" stroke-linecap="round"><path d="M52 192 L40 200"/><path d="M55 197 L43 207"/><path d="M60 200 L50 211"/><path d="M64 180 L56 171"/></g>
-            <circle cx="40" cy="200" r="5" fill="#ff4fa3" stroke="#1d1b33" stroke-width="1.4"/>
+            <path d="M165 212 L74 200" fill="none" stroke="#f2c19c" stroke-width="20" stroke-linecap="round"/>
+            <ellipse cx="62" cy="198" rx="14" ry="11" fill="#f2c19c"/>
+            <g stroke="#f2c19c" stroke-width="7" stroke-linecap="round"><path d="M54 195 L45 191"/><path d="M54 201 L44 200"/><path d="M57 206 L47 209"/><path d="M66 189 L61 181"/></g>
+            <path id="nS1" class="nerve" d="M45 192 C70 190 120 198 165 204" stroke="#2e6bff"/>
+            <circle id="recRing" cx="45" cy="192" r="5"/>
+            <circle cx="45" cy="192" r="4.5" fill="#ff4fa3" stroke="#1d1b33" stroke-width="1.4"/>
           </g>
-          <path d="M40 200 C70 150 150 40 205 50 L232 60" fill="none" stroke="#2e6bff" stroke-width="3.2" stroke-linecap="round"/>
-          <ellipse cx="205" cy="50" rx="7" ry="4.5" fill="#2e6bff" stroke="#1d1b33" stroke-width="1"/>
-          <path d="M232 60 L246 86" fill="none" stroke="#7b4dff" stroke-width="3.2" stroke-linecap="round"/>
-          <path d="M246 86 C272 132 232 168 196 172" fill="none" stroke="#18a874" stroke-width="3.2" stroke-linecap="round"/>
-          <path id="impulsePath" d="M40 200 C70 150 150 40 205 50 L232 60 L246 86 C272 132 232 168 196 172" fill="none" stroke="none"/>
-          <circle id="impulseGlow" r="13" fill="#ffe14d"/>
-          <circle id="impulse" r="6" fill="#ffe14d" stroke="#1d1b33" stroke-width="1.6"/>
-          <g font-family="DM Mono, monospace" font-size="10" font-weight="500" text-anchor="middle" fill="#fff">
-            <circle cx="22" cy="176" r="9" fill="#ff4fa3"/><text x="22" y="179.5">1</text>
-            <circle cx="112" cy="96" r="9" fill="#2e6bff"/><text x="112" y="99.5">2</text>
-            <circle cx="276" cy="44" r="9" fill="#7b4dff"/><text x="276" y="47.5">3</text>
-            <circle cx="276" cy="128" r="9" fill="#18a874"/><text x="276" y="131.5">4</text>
-            <circle cx="200" cy="208" r="9" fill="#ff7a2e"/><text x="200" y="211.5">5</text>
+          <path id="nS2" class="nerve" d="M165 204 C148 150 150 70 200 50 L234 64" stroke="#2e6bff"/>
+          <ellipse cx="200" cy="50" rx="7" ry="4.5" fill="#2e6bff" stroke="#1d1b33" stroke-width="1"/>
+          <path id="nI" class="nerve" d="M234 64 Q250 80 242 98" stroke="#7b4dff"/>
+          <path id="nM" class="nerve" d="M242 98 C244 132 236 160 216 182" stroke="#18a874"/>
+          <path d="M262 120 L246 86" fill="none" stroke="#7b4dff" stroke-width="1" stroke-dasharray="2 2"/>
+          <circle id="impulseGlow" r="12" fill="#ffe14d" cx="45" cy="192"/>
+          <circle id="impulse" r="5.5" fill="#ffe14d" stroke="#1d1b33" stroke-width="1.6" cx="45" cy="192"/>
+          <g font-family="DM Mono, monospace" font-size="9" font-weight="500" text-anchor="middle" fill="#fff">
+            <g class="bdg" data-s="0"><circle cx="62" cy="168" r="8" fill="#ff4fa3"/><text x="62" y="171.5">1</text></g>
+            <g class="bdg" data-s="1"><circle cx="157" cy="114" r="8" fill="#2e6bff"/><text x="157" y="117.5">2</text></g>
+            <g class="bdg" data-s="2"><circle cx="262" cy="128" r="8" fill="#7b4dff"/><text x="262" y="131.5">3</text></g>
+            <g class="bdg" data-s="3"><circle cx="237" cy="145" r="8" fill="#18a874"/><text x="237" y="148.5">4</text></g>
+            <g class="bdg" data-s="4"><circle cx="230" cy="222" r="8" fill="#ff7a2e"/><text x="230" y="225.5">5</text></g>
+          </g>
+          <g font-family="DM Mono, monospace" font-size="8.5" fill="#1d1b33">
+            <text x="73" y="171.5">Receptor</text>
+            <text x="145" y="117.5" text-anchor="end">Neurona sensitiva</text>
+            <text x="273" y="131.5">Interneurona</text>
+            <text x="226" y="148" text-anchor="end">Neurona</text><text x="226" y="157" text-anchor="end">motora</text>
+            <text x="241" y="225.5">Bíceps (efector)</text>
           </g>
           <g id="ay"><path d="M96 12h70v30h-46l-10 10 2-10h-16z" fill="#fff" stroke="#1d1b33" stroke-width="2"/><text x="131" y="34" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="20" fill="#d9381e">¡AY!</text></g>
         </svg>
@@ -572,7 +596,7 @@ footer .hand{font-size:26px; color:var(--accent)}
           <li><span class="dotn" style="background:var(--z-green)">4</span><span><b>Neurona motora:</b> lleva la orden al músculo.</span></li>
           <li><span class="dotn" style="background:var(--z-orange)">5</span><span><b>Efector:</b> el bíceps se contrae y retira la mano.</span></li>
         </ol>
-        <div class="fire"><button type="button" id="fireBtn">▶ Tocar la taza</button><small>Todo ocurre en ~0,05 s.<br>El cerebro se entera después.</small></div>
+        <div class="fire"><button type="button" id="fireBtn">▶ Tocar la taza</button><small><span id="arcTime">Tiempo real: ~0,05 s</span><br>Animación en cámara lenta</small></div>
         <span class="zfolio">2</span>
       </article>
 
@@ -1023,22 +1047,22 @@ footer .hand{font-size:26px; color:var(--accent)}
   const stage = $('#accStage'), cam = $('#accCam'), src = $('#zineSrc'), ui = $('#zineUi');
   const arts = $$('.zpage', src), N = arts.length;
   const NAMES = ['Portada', 'Arco reflejo', 'Calor vs. frío', 'Riesgos', 'Campaña', 'Contraportada'];
-  const panels = [], shF = [], shB = [];
+  const panels = [], shF = [], shB = [], glF = [], glB = [];
   let parent = cam;
   arts.forEach((a, i) => {
     const p = el('div', 'panel'), f = el('div', 'face front'), b = el('div', 'face back');
-    const sf = el('div', 'shade'), sb = el('div', 'shade'), art = el('div', 'backart');
+    const sf = el('div', 'shade'), sb = el('div', 'shade'), gf = el('div', 'glint'), gb = el('div', 'glint'), art = el('div', 'backart');
     f.dataset.i = i; b.dataset.i = i;
     art.innerHTML = '<i class="crease l"></i><i class="crease r"></i><span>' + (i % 2 ? 'pliegue valle' : 'pliegue montaña') + '</span>';
-    f.append(a, sf); b.append(art, sb); p.append(f, b);
+    f.append(a, gf, sf); b.append(art, gb, sb); p.append(el('div', 'fshadow'), f, b);
     parent.appendChild(p); parent = p;
-    panels.push(p); shF.push(sf); shB.push(sb);
+    panels.push(p); shF.push(sf); shB.push(sb); glF.push(gf); glB.push(gb);
   });
   stage.classList.add('acc'); stage.hidden = false; ui.hidden = false; src.remove();
 
-  // resortes físicos: posición de lectura, apertura y vista desplegada
+  // resortes físicos: posición de lectura, apertura, vista desplegada y "manipulación" (la cámara se aleja y ladea mientras el papel se mueve)
   const spring = (x, k, z) => ({ x, v: 0, t: x, k, z });
-  const P = spring(0, 150, .86), G = spring(0, 70, .78), O = spring(0, 110, .9);
+  const P = spring(0, 150, .86), G = spring(0, 70, .78), O = spring(0, 110, .9), M = spring(0, 60, .85);
   function step(s, dt) {
     const c = 2 * Math.sqrt(s.k) * s.z, n = 4, h = dt / n;
     for (let i = 0; i < n; i++) { const a = s.k * (s.t - s.x) - c * s.v; s.v += a * h; s.x += s.v * h; }
@@ -1046,23 +1070,25 @@ footer .hand{font-size:26px; color:var(--accent)}
     return true;
   }
   let S = 0, W = 0, H = 0, SH = 0, mobile = false, raf = 0, last = 0, dragging = false, scrubbing = false;
+  let clock = 0, ptx = 0, pty = 0, tiltX = 0, tiltY = 0, stageOn = false, wasMoving = false;
   function measure() {
     S = stage.clientWidth; mobile = S < 720;
-    W = mobile ? Math.min(S * .86, 430) : clamp(S * .32, 300, 420);
-    H = W * 1.4; SH = Math.round(H * 1.17 + 30);
+    W = mobile ? Math.min(S * .84, 430) : clamp(S * .3, 300, 410);
+    H = W * 1.4; SH = Math.round(H * (mobile ? 1.28 : 1.4) + 40);
     stage.style.height = SH + 'px';
+    stage.style.perspective = Math.round(W * 3.1) + 'px';
     cam.style.setProperty('--w', W + 'px'); cam.style.setProperty('--h', H + 'px');
     render();
   }
   const R = Math.PI / 180;
   function render() {
     if (!W) return;
-    const p = P.x, g = clamp(G.x, 0, 1.06), o = clamp(O.x, 0, 1);
-    const phi0 = mobile ? 26 : 22, phi1 = 168;
+    const p = P.x, g = clamp(G.x, 0, 1.06), o = clamp(O.x, 0, 1), m = clamp(M.x, 0, 1.1);
+    const phi0 = mobile ? 52 : 48, phi1 = 168;
     const A = [0], phi = [0];
     for (let j = 1; j < N; j++) {
       const d = Math.abs(j - (clamp(p, 0, N - 1) + .5));
-      const read = lerp(phi0 + (phi1 - phi0) * smooth(.5, 2.1, d), 26, o);
+      const read = lerp(phi0 + (phi1 - phi0) * smooth(.5, 2.1, d), 44, o);
       phi[j] = lerp(179.3, read, Math.min(g, 1)) - (g > 1 ? (g - 1) * 60 : 0);
       A[j] = A[j - 1] + (j % 2 ? phi[j] : -phi[j]);
     }
@@ -1081,34 +1107,54 @@ footer .hand{font-size:26px; color:var(--accent)}
       mnx = Math.min(mnx, X[j], x2); mxx = Math.max(mxx, X[j], x2); mnz = Math.min(mnz, Zs[j], z2); mxz = Math.max(mxz, Zs[j], z2);
     }
     const go = -A.reduce((s, a) => s + a, 0) / N;
-    const so = Math.min(1, (S * .94) / (mxx - mnx), (SH * .82) / H);
-    const Fx = lerp(fx, (mnx + mxx) / 2, o), Fz = lerp(fz, (mnz + mxz) / 2, o), Gd = lerp(gf, go, o), sc = lerp(1, so, o);
-    cam.style.transform = `translate3d(${S / 2}px,${SH / 2 - H * .02}px,0) scale3d(${sc},${sc},${sc}) rotateY(${Gd}deg) translate3d(${-Fx}px,${-H / 2}px,${-Fz}px)`;
+    const so = Math.min(1, (S * .9) / (mxx - mnx), (SH * .7) / H);
+    const Fx = lerp(fx, (mnx + mxx) / 2, o), Fz = lerp(fz, (mnz + mxz) / 2, o), Gd = lerp(gf, go, o);
+    const sc = lerp(1, so, o) * lerp(1, mobile ? .66 : .8, Math.min(m, 1) * (1 - o));
+    // cámara: un poco desde arriba, se mece suave, se inclina con la velocidad y sigue al mouse
+    const sway = reduce ? 0 : Math.sin(clock * .8) * 3 * (1 - m * .5);
+    const lean = clamp(-P.v * 6, -16, 16);
+    const rx = -(mobile ? 9 : 11) - 9 * Math.min(m, 1) - 12 * o + tiltY + (reduce ? 0 : Math.sin(clock * .55) * 1.5);
+    const ry = Gd + sway + lean + tiltX;
+    cam.style.transform = `translate3d(${S / 2}px,${SH / 2 - H * .04}px,0) scale3d(${sc},${sc},${sc}) rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${-Fx}px,${-H / 2}px,${-Fz}px)`;
     for (let j = 1; j < N; j++) {
       const sgn = j % 2 ? 1 : -1, eps = Math.pow(phi[j] / 180, 6) * 1.2;
       panels[j].style.transform = `rotateY(${sgn * phi[j]}deg) translateZ(${(sgn * eps).toFixed(3)}px)`;
     }
-    // luz: una lámpara arriba a la izquierda
+    // luz: una lámpara arriba a la izquierda; el brillo recorre el papel cuando gira
     for (let j = 0; j < N; j++) {
-      const w = (A[j] + Gd) * R, dot = -.32 * Math.sin(w) + .947 * Math.cos(w);
-      shF[j].style.opacity = clamp((1 - dot) * .42, 0, .55).toFixed(3);
-      shB[j].style.opacity = clamp((1 + dot) * .42, 0, .55).toFixed(3);
+      const wd = A[j] + ry, w = wd * R, dot = -.42 * Math.sin(w) + .908 * Math.cos(w);
+      shF[j].style.opacity = clamp((1 - dot) * .62, 0, .72).toFixed(3);
+      shB[j].style.opacity = clamp((1 + dot) * .62, 0, .72).toFixed(3);
+      const gl = clamp(Math.abs(Math.sin(w)) * 1.4, 0, .9).toFixed(3);
+      glF[j].style.opacity = gl; glB[j].style.opacity = gl;
+      glF[j].style.backgroundPosition = (50 + wd * 1.4) + '% 0'; glB[j].style.backgroundPosition = (50 - wd * 1.4) + '% 0';
     }
-    const fl = $('#accFloor'); fl.style.width = Math.min(S * .92, lerp(W * .9, Math.min(mxx - mnx, W * 2.6) * sc, clamp(g, 0, 1))) + 'px';
-    fl.style.top = (SH / 2 - H * .02 + H * sc / 2 - 14) + 'px'; fl.style.bottom = 'auto';
     syncUi();
   }
   function tick(now) {
-    const dt = Math.min(.034, (now - last) / 1000 || .016); last = now;
-    let active = dragging || scrubbing;
-    [P, G, O].forEach(s => { if (!(s === P && (dragging || scrubbing))) active = step(s, dt) || active; });
+    const dt = Math.min(.034, (now - last) / 1000 || .016); last = now; clock += dt;
+    let moving = false;
+    [P, G, O].forEach(s => { if (!(s === P && (dragging || scrubbing))) moving = step(s, dt) || moving; });
+    M.t = dragging || scrubbing ? 1 : clamp(Math.abs(P.v) / 2.2 + (moving && O.t < .5 ? .45 : 0), 0, 1);
+    step(M, dt);
+    tiltX += (ptx - tiltX) * .07; tiltY += (pty - tiltY) * .07;
     render();
-    if (active) raf = requestAnimationFrame(tick); else { raf = 0; settled(); }
+    const busy = moving || dragging || scrubbing;
+    if (wasMoving && !busy) settled();
+    wasMoving = busy;
+    if (busy || M.x > .002 || (stageOn && !document.hidden)) raf = requestAnimationFrame(tick); else raf = 0;
   }
   function kick() {
     if (reduce) { [P, G, O].forEach(s => { if (!(s === P && (dragging || scrubbing))) { s.x = s.t; s.v = 0; } }); render(); settled(); return; }
     if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
   }
+  new IntersectionObserver(es => { stageOn = es[0].isIntersecting; if (stageOn) kick(); }).observe(stage);
+  stage.addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse' || dragging) return;
+    const r = stage.getBoundingClientRect();
+    ptx = ((e.clientX - r.left) / r.width - .5) * 14; pty = -((e.clientY - r.top) / r.height - .5) * 10;
+  });
+  stage.addEventListener('pointerleave', () => { ptx = pty = 0; });
   // interfaz
   const tabs = $('#tabs'), tabPill = $('#tabPill'), range = $('#accRange');
   range.max = N - 1;
@@ -1201,26 +1247,51 @@ footer .hand{font-size:26px; color:var(--accent)}
   const oio = new IntersectionObserver(es => { if (es[0].isIntersecting && !opened) { setTimeout(() => { open(); kick(); }, 350); oio.disconnect(); } }, { threshold: .5 });
   oio.observe(stage);
 
-  /* Arco reflejo: el impulso recorre el camino real de las neuronas */
-  const svg = $('#arcSvg'), legend = $$('#arcLegend li'), ipath = $('#impulsePath'), imp = $('#impulse'), glow = $('#impulseGlow');
-  const plen = ipath.getTotalLength();
-  const STOPS = [0, .06, .62, .7, .98];
-  let firing = false, firedAt = -1;
+  /* Arco reflejo en cámara lenta: el impulso recorre cada neurona y se detiene en cada estructura */
+  const svg = $('#arcSvg'), legend = $$('#arcLegend li'), imp = $('#impulse'), glow = $('#impulseGlow'), arcTime = $('#arcTime');
+  const segs = ['nS1', 'nS2', 'nI', 'nM'].map(id => $('#' + id));
+  const lens = segs.map(s => s.getTotalLength()), total = lens.reduce((a, b) => a + b, 0);
+  const trails = segs.map((s, i) => {
+    const tr = s.cloneNode(); tr.removeAttribute('id'); tr.setAttribute('class', 'trail');
+    tr.style.strokeDasharray = lens[i]; tr.style.strokeDashoffset = lens[i];
+    s.parentNode.insertBefore(tr, s);
+    const fl = s.cloneNode(); fl.removeAttribute('id'); fl.setAttribute('class', 'flowd'); fl.removeAttribute('stroke');
+    s.parentNode.insertBefore(fl, s.nextSibling);
+    return tr;
+  });
+  const bdgs = $$('#arcSvg .bdg');
+  const setStep = s => { legend.forEach((l, j) => l.classList.toggle('lit', j === s)); bdgs.forEach((b, j) => b.classList.toggle('on', j === s)); };
+  let firing = false, firedAt = -1, done = 0;
+  const showT = d => { arcTime.textContent = 't = ' + (d / total * .05).toFixed(3).replace('.', ',') + ' s'; };
+  function travel(i, ms) {
+    const s = segs[i], L = lens[i], base = done;
+    return tween(ms, t => {
+      const e = .5 - .5 * Math.cos(Math.PI * t), pt = s.getPointAtLength(e * L);
+      // los puntos del antebrazo se mueven con él: se convierten a coordenadas del esquema
+      const m = s.getCTM(), r = svg.getCTM().inverse().multiply(m);
+      const x = r.a * pt.x + r.c * pt.y + r.e, y = r.b * pt.x + r.d * pt.y + r.f;
+      imp.setAttribute('cx', x); imp.setAttribute('cy', y); glow.setAttribute('cx', x); glow.setAttribute('cy', y);
+      glow.setAttribute('r', 10 + 3 * Math.sin(t * 24));
+      trails[i].style.strokeDashoffset = L * (1 - e);
+      showT(base + e * L);
+    }).then(() => { done += L; });
+  }
   async function fire() {
-    if (firing) return; firing = true;
-    svg.classList.remove('withdraw', 'withdraw-ay'); svg.classList.add('firing');
-    await tween(1500, t => {
-      const e = ease(t), pt = ipath.getPointAtLength(e * plen);
-      imp.setAttribute('cx', pt.x); imp.setAttribute('cy', pt.y); glow.setAttribute('cx', pt.x); glow.setAttribute('cy', pt.y);
-      glow.setAttribute('r', 10 + 4 * Math.sin(t * 30));
-      let s = 0; STOPS.forEach((v, i) => { if (e >= v) s = i; });
-      legend.forEach((l, j) => l.classList.toggle('lit', j === s));
-    });
-    svg.classList.add('withdraw');
-    await wait(380); svg.classList.add('withdraw-ay');
-    await wait(1700);
-    legend.forEach(l => l.classList.remove('lit'));
-    svg.classList.remove('withdraw', 'withdraw-ay', 'firing');
+    if (firing) return; firing = true; done = 0;
+    trails.forEach((t, i) => t.style.strokeDashoffset = lens[i]);
+    svg.classList.remove('withdraw', 'withdraw-ay', 'contract');
+    svg.classList.add('firing', 'stim'); showT(0);
+    setStep(0); await wait(1100);
+    setStep(1); await travel(0, 1000); await travel(1, 1600);
+    setStep(2); await wait(350); await travel(2, 1000); await wait(250);
+    setStep(3); await travel(3, 1500);
+    setStep(4); svg.classList.add('contract'); await wait(350);
+    svg.classList.add('withdraw'); await wait(1000);
+    svg.classList.add('withdraw-ay'); await wait(2600);
+    setStep(-1);
+    svg.classList.remove('withdraw', 'withdraw-ay', 'firing', 'stim', 'contract');
+    trails.forEach((t, i) => t.style.strokeDashoffset = lens[i]);
+    arcTime.textContent = 'Tiempo real: ~0,05 s';
     firing = false;
   }
   $('#fireBtn').addEventListener('click', e => { e.stopPropagation(); fire(); });
