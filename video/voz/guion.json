@@ -1,0 +1,276 @@
+{
+  "voz": "Dipemo, masculina con acento colombiano neutro (ElevenLabs, eleven_v4, voice_id j7XQZUnVCfhpa94EsaJS), tono calmado de tutorial",
+  "nota": "Cada bloque se generó en una sola toma, con [long pause] entre frases. t = segundo del video en que empieza cada frase. La presentación (0 a 9 s) va sin voz y la voz no dice el nombre del juego. vel = la frase se acelera un poco para caber en su escena; omitir = la frase no se usa (ya está escrita en pantalla).",
+  "bloques": [
+    {
+      "id": "parte1",
+      "frases": [
+        {
+          "t": 10.0,
+          "texto": "Hay tres juegos para escoger."
+        },
+        {
+          "t": 17.2,
+          "texto": "¿Cuál jugamos hoy? Ustedes eligen."
+        },
+        {
+          "t": 22.6,
+          "texto": "Antes de empezar, hay una votación."
+        },
+        {
+          "t": 25.0,
+          "texto": "Cada uno vota por el juego que quiere jugar."
+        },
+        {
+          "t": 28.4,
+          "texto": "Se cuentan los votos, y el que gane por voto popular es el que se juega."
+        },
+        {
+          "t": 33.4,
+          "texto": "En este ejemplo, gana Conquista."
+        },
+        {
+          "t": 35.8,
+          "texto": "El anfitrión pone ese juego en la pantalla del salón."
+        },
+        {
+          "t": 39.5,
+          "texto": "Para entrar, escaneen con el celular el código QR de la pantalla."
+        },
+        {
+          "t": 44.2,
+          "texto": "Cada jugador que entra aparece en la sala."
+        },
+        {
+          "t": 47.0,
+          "texto": "Escriban su nombre, o el de su equipo."
+        },
+        {
+          "t": 52.6,
+          "texto": "Luego sorteen su marca: a cada uno le toca una de diez marcas colombianas."
+        },
+        {
+          "t": 60.1,
+          "texto": "Toquen «Estoy listo» y esperen en la sala."
+        },
+        {
+          "t": 66.1,
+          "texto": "Cuando todos estén adentro, el anfitrión pone en la TV el juego que ganó la votación."
+        },
+        {
+          "t": 74.4,
+          "texto": "Son 15 retos, y todo el salón juega al mismo tiempo.",
+          "vel": 1.06
+        },
+        {
+          "t": 78.3,
+          "texto": "Cada reto es una situación de su marca con 4 KPIs. Solo uno es el correcto.",
+          "vel": 1.06
+        },
+        {
+          "t": 83.9,
+          "texto": "Tienen 35 segundos. Responder rápido da ventaja.",
+          "vel": 1.06
+        },
+        {
+          "t": 85.6,
+          "texto": "Después de cada reto, la pantalla del salón muestra qué pasó.",
+          "omitir": true
+        },
+        {
+          "t": 87.9,
+          "texto": "Desde el reto 12, todo se oculta: nadie sabe quién va ganando."
+        },
+        {
+          "t": 92.7,
+          "texto": "Al final, se revela al campeón."
+        },
+        {
+          "t": 97.0,
+          "texto": "Juego uno: preguntas contra el reloj."
+        }
+      ]
+    },
+    {
+      "id": "parte2",
+      "frases": [
+        {
+          "t": 101.9,
+          "texto": "Cada acierto vale 100 puntos, más un bono de hasta 50 si responden rápido."
+        },
+        {
+          "t": 107.3,
+          "texto": "Si fallan, o se acaba el tiempo, no suman puntos."
+        },
+        {
+          "t": 111.1,
+          "texto": "Al cerrar cada reto, aparece el podio de los tres primeros."
+        },
+        {
+          "t": 119.5,
+          "texto": "Luego, la tabla: quién subió y quién bajó."
+        },
+        {
+          "t": 122.9,
+          "texto": "En los últimos cuatro retos, la tabla se oculta."
+        },
+        {
+          "t": 126.1,
+          "texto": "Gana quien sume más puntos. En empate, cuentan los aciertos y el tiempo."
+        },
+        {
+          "t": 132.0,
+          "texto": "Juego dos: Conquista."
+        },
+        {
+          "t": 137.0,
+          "texto": "El mapa de Colombia tiene 26 ciudades para conquistar."
+        },
+        {
+          "t": 140.7,
+          "texto": "Cada ciudad le paga ventas a su dueño en cada reto: Bogotá paga 10, y Leticia, 1."
+        },
+        {
+          "t": 147.6,
+          "texto": "Si aciertan el KPI, eligen una ciudad en el celular."
+        },
+        {
+          "t": 151.5,
+          "texto": "Si es libre o de otro jugador, la atacan."
+        },
+        {
+          "t": 154.6,
+          "texto": "Si es suya, la blindan."
+        },
+        {
+          "t": 156.4,
+          "texto": "Y si fallan, no atacan ni blindan."
+        },
+        {
+          "t": 160.9,
+          "texto": "Una ciudad libre que nadie defiende, se conquista."
+        },
+        {
+          "t": 164.3,
+          "texto": "Si varios atacan la misma, gana el que respondió más rápido."
+        },
+        {
+          "t": 168.2,
+          "texto": "Una ciudad blindada resiste todos los ataques."
+        },
+        {
+          "t": 173.6,
+          "texto": "Al cerrar el reto, la TV muestra las batallas una por una, y suma las ventas."
+        },
+        {
+          "t": 180.9,
+          "texto": "Black Friday: ventas al doble."
+        },
+        {
+          "t": 183.5,
+          "texto": "Crisis de reputación: el líder no puede blindar.",
+          "vel": 1.06
+        },
+        {
+          "t": 187.0,
+          "texto": "Niebla de guerra: el mapa se oculta.",
+          "vel": 1.06
+        },
+        {
+          "t": 189.6,
+          "texto": "Gran Lanzamiento: ventas al triple.",
+          "vel": 1.06
+        },
+        {
+          "t": 192.3,
+          "texto": "Gana quien más venda."
+        },
+        {
+          "t": 199.0,
+          "texto": "Juego tres: Bolsa de Valores."
+        },
+        {
+          "t": 204.0,
+          "texto": "Cada uno empieza con $1.000."
+        },
+        {
+          "t": 206.35,
+          "texto": "Antes de responder, eligen cuánto invertir: 10, 25, 50 por ciento, o todo."
+        },
+        {
+          "t": 214.6,
+          "texto": "Un ejemplo: invierten $500."
+        },
+        {
+          "t": 216.4,
+          "texto": "Si aciertan rápido, recuperan lo invertido, ganan un bono, y se llevan parte de lo que perdieron los que fallaron.",
+          "vel": 1.06
+        },
+        {
+          "t": 224.8,
+          "texto": "Si fallan, pierden lo que invirtieron."
+        },
+        {
+          "t": 227.2,
+          "texto": "Mientras menos acierten, más gana cada uno."
+        },
+        {
+          "t": 228.2,
+          "texto": "Y si alguien quiebra, el banco lo rescata.",
+          "omitir": true
+        },
+        {
+          "t": 230.8,
+          "texto": "En la pantalla del salón está la gráfica del capital de todos, y la pizarra: quién sube y quién baja."
+        },
+        {
+          "t": 237.9,
+          "texto": "Al cerrar el reto, el mercado se mueve."
+        },
+        {
+          "t": 242.9,
+          "texto": "Mercado alcista: ganancias al doble."
+        },
+        {
+          "t": 245.7,
+          "texto": "Pánico en la bolsa: nadie invierte menos de la mitad.",
+          "vel": 1.05
+        },
+        {
+          "t": 249.0,
+          "texto": "Bolsa a ciegas: la pizarra se apaga.",
+          "vel": 1.05
+        },
+        {
+          "t": 251.85,
+          "texto": "Campanazo final: ganancias al triple.",
+          "vel": 1.05
+        },
+        {
+          "t": 256.8,
+          "texto": "Gana quien termine con más capital."
+        },
+        {
+          "t": 260.4,
+          "texto": "El gran final es igual en los tres juegos."
+        },
+        {
+          "t": 263.1,
+          "texto": "Primero se destapan el tercero y el segundo."
+        },
+        {
+          "t": 267.1,
+          "texto": "Luego, el campeón."
+        },
+        {
+          "t": 273.4,
+          "texto": "Después sube el podio, y cada celular muestra su puesto final."
+        },
+        {
+          "t": 278.3,
+          "texto": "¿Listos? A votar."
+        }
+      ]
+    }
+  ]
+}

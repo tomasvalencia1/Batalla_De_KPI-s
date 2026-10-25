@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Batalla de KPIs: manejas las redes de una marca colombiana. Elige el KPI correcto en cada reto y sigue la tabla en vivo.">
 <meta name="theme-color" content="#130F26">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Batalla de KPIs">
+<meta property="og:title" content="Batalla de KPIs">
+<meta property="og:description" content="Juego de marketing digital para todo el salón: maneja las redes de una marca colombiana y elige el KPI correcto antes de que se acabe el tiempo.">
+<meta property="og:url" content="https://batalladekpis.vercel.app/">
+<meta property="og:image" content="https://batalladekpis.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_CO">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23130F26%22%2F%3E%3Cpath%20d%3D%22M20%2014h24v10a12%2012%200%200%201-24%200z%22%20fill%3D%22%23FFC93D%22%2F%3E%3Cpath%20d%3D%22M20%2018h-6a8%208%200%200%200%208%2010M44%2018h6a8%208%200%200%201-8%2010%22%20fill%3D%22none%22%20stroke%3D%22%23FFC93D%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2229%22%20y%3D%2235%22%20width%3D%226%22%20height%3D%229%22%20fill%3D%22%23FFC93D%22%2F%3E%3Crect%20x%3D%2221%22%20y%3D%2244%22%20width%3D%2222%22%20height%3D%227%22%20rx%3D%222%22%20fill%3D%22%23FF5B3A%22%2F%3E%3C%2Fsvg%3E">
 <title>Batalla de KPIs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -546,8 +557,31 @@ input:focus { outline: none; border-color: var(--cyan); }
 .row .pts { font: 900 2.1rem/1 var(--f-display); font-variant-numeric: tabular-nums; min-width: 3.6ch; text-align: right; }
 .row .dots { flex-wrap: nowrap; gap: 3px; }
 .row .dots i { width: 8px; height: 8px; }
+/* Salón lleno (más de 12 jugadores): filas más compactas para que la tabla quepa entera en el TV sin scroll. */
+.tv-leader.dense { padding: 12px 22px; }
+.tv-leader.dense .nm { font-size: clamp(2rem, 3.4vw, 3.4rem); }
+.tv-leader.dense .pts { font-size: clamp(2.4rem, 4vw, 4rem); }
+.board.dense { column-width: 21rem; column-gap: 12px; }
+.board.dense .row { gap: 10px; padding: 5px 12px 5px 8px; margin-bottom: 6px; grid-template-columns: 2.4rem minmax(0, 1fr) auto auto; }
+.board.dense .row .rk b { font-size: 1.5rem; }
+.board.dense .row .delta { font-size: 0.66rem; }
+.board.dense .row .nm { font-size: 1.05rem; }
+.board.dense .row .meta { font-size: 0.68rem; }
+.board.dense .row .pts { font-size: 1.6rem; }
+.board.dense .row .dots { gap: 2px; }
+.board.dense .row .dots i { width: 6px; height: 6px; }
+/* En pantallas pequeñas (proyector 1280×720) el nombre importa más que los puntos de cada reto. */
+@media (max-width: 1500px) {
+  .board.dense .row { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
+  .board.dense .row .dots { display: none; }
+}
+@media (max-height: 800px) {
+  .tv-leader.dense { padding: 8px 20px; }
+  .tv-leader.dense .nm { font-size: 2rem; }
+  .tv-leader.dense .pts { font-size: 2.6rem; }
+}
 @media (max-width: 760px) {
-  .row { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
+  .row, .board.dense .row { grid-template-columns: 2.4rem minmax(0, 1fr) auto; }
   .row .dots { display: none; }
 }
 .tv-empty { text-align: center; padding: 40px 16px; border: 2px dashed var(--line); border-radius: 18px; }
@@ -757,6 +791,13 @@ input:focus { outline: none; border-color: var(--cyan); }
 .bi-sub { max-width: 34ch; font-size: clamp(1.1rem, 2.3vw, 2.1rem); line-height: 1.35; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
 .bi-sub b { color: var(--gold); }
 .blindintro.sub .bi-sub { opacity: 1; transform: none; }
+.blindintro.warm .bi-pulse { background: radial-gradient(circle, color-mix(in srgb, var(--gold) 30%, transparent) 0%, transparent 55%); }
+.blindintro.warm .bi-kick { color: var(--gold); }
+.blindintro.warm .bi-title { color: var(--gold); text-shadow: 0 0.05em 0 var(--accent-deep), 0 0 0.35em color-mix(in srgb, var(--accent) 60%, transparent); }
+.blindintro.alarm .bi-pulse { background: radial-gradient(circle, color-mix(in srgb, var(--bad) 32%, transparent) 0%, transparent 55%); animation-duration: 0.7s; }
+.blindintro.alarm .bi-kick { color: var(--bad); }
+.blindintro.alarm .bi-title { text-shadow: 0 0 0.35em color-mix(in srgb, var(--bad) 70%, transparent); }
+.blindintro.alarm .bi-lock { color: var(--bad); }
 
 /* ---------- revelación del ganador ---------- */
 .reveal { display: block; padding: 0; background: #04020A; overflow: hidden; }
@@ -829,10 +870,174 @@ input:focus { outline: none; border-color: var(--cyan); }
 .rv-pts { font: 900 clamp(2.4rem, 5vw, 4.6rem)/1 var(--f-display); animation: stageIn 0.5s ease both 0.9s; font-variant-numeric: tabular-nums; }
 .rv-pts small { font: 600 0.32em var(--f-mono); letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; }
 .rv-meta { font-size: clamp(1.1rem, 2vw, 1.8rem); color: var(--fg); animation: stageIn 0.5s ease both 1.1s; }
-#rv-table { margin-top: 2vh; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+#rv-table { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.reveal:not(.s-podium) #rv-table { display: none; }
 .reveal.s-done #rv-table { opacity: 1; pointer-events: auto; }
+/* podio final: el campeón sube al centro; el 2.º y el 3.º entran a los lados */
+.rv-pod { display: none; flex-direction: column; align-items: center; gap: 2vh; width: min(1200px, 94vw); }
+.reveal.s-podium .rv-champ { display: none; }
+.reveal.s-podium .rv-pod { display: flex; animation: stageIn 0.5s ease both; }
+.rv-pod-k { font: 600 clamp(1rem, 1.8vw, 1.5rem) var(--f-mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+.rv-pod-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 2.4vw; width: 100%; height: 64vh; }
+.rp { --c: var(--gold); display: flex; flex-direction: column; justify-content: flex-end; height: 100%; min-width: 0; }
+.rp.rp2 { --c: var(--silver); }
+.rp.rp3 { --c: var(--bronze); }
+.rp-who { display: grid; gap: 4px; justify-items: center; margin-bottom: 14px; text-align: center; min-width: 0; opacity: 0; transform: translateY(24px) scale(0.9); transition: opacity 0.35s ease 0.3s, transform 0.5s cubic-bezier(.2, 1.5, .4, 1) 0.3s; }
+.rp-who b { font: 900 clamp(1.6rem, 3.4vw, 3.4rem)/0.95 var(--f-display); text-transform: uppercase; overflow-wrap: anywhere; }
+.rp1 .rp-who b { font-size: clamp(2.2rem, 5vw, 5.2rem); color: var(--gold); text-shadow: 0 0.05em 0 var(--accent-deep), 0 0 0.45em rgba(255, 201, 61, 0.55); }
+.rp-who span { font: 600 clamp(0.75rem, 1.2vw, 1.05rem) var(--f-mono); color: var(--muted); }
+.rp-who em { font: 900 clamp(1.4rem, 2.8vw, 2.8rem)/1 var(--f-display); font-style: normal; color: var(--c); font-variant-numeric: tabular-nums; }
+.rp-crown { width: clamp(40px, 5vw, 76px); height: auto; color: var(--gold); filter: drop-shadow(0 0 18px rgba(255, 201, 61, 0.6)); }
+.rp-bar { display: grid; justify-items: center; align-content: start; padding-top: 2vh; border-radius: 16px 16px 4px 4px; background: var(--c); color: var(--ink); font: 900 clamp(3rem, 8vw, 8rem)/1 var(--f-display); transform: scaleY(0); transform-origin: bottom; transition: transform 0.75s cubic-bezier(.2, 1.25, .3, 1); box-shadow: inset 0 -14px 0 rgba(0, 0, 0, 0.16); }
+.rp1 .rp-bar { height: 60%; }
+.rp2 .rp-bar { height: 42%; }
+.rp3 .rp-bar { height: 30%; }
+.reveal.s-p3 .rp3 .rp-bar, .reveal.s-p2 .rp2 .rp-bar, .reveal.s-p1 .rp1 .rp-bar { transform: scaleY(1); }
+.reveal.s-p3 .rp3 .rp-who, .reveal.s-p2 .rp2 .rp-who, .reveal.s-p1 .rp1 .rp-who { opacity: 1; transform: none; }
+.reveal.s-p1 .rp1 .rp-bar { box-shadow: inset 0 -14px 0 rgba(0, 0, 0, 0.16), 0 0 80px rgba(255, 201, 61, 0.55); }
+/* podio en el celular, cuando ya se reveló al ganador */
+.end-pod { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.end-pod li { --c: var(--gold); display: grid; grid-template-columns: 2.4rem minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); border-left: 5px solid var(--c); }
+.end-pod li:nth-child(2) { --c: var(--silver); }
+.end-pod li:nth-child(3) { --c: var(--bronze); }
+.end-pod li.me { background: color-mix(in srgb, var(--c) 14%, var(--panel)); }
+.end-pod .p { font: 900 1.8rem/1 var(--f-display); color: var(--c); text-align: center; }
+.end-pod .n { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.end-pod .v { font: 900 1.4rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
 .winner-banner.champ { animation: champPop 0.9s cubic-bezier(.2, 1.5, .4, 1) both; box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 35%, transparent), 0 0 40px color-mix(in srgb, var(--gold) 45%, transparent); }
 @keyframes champPop { from { transform: scale(0.6); opacity: 0; } }
+
+/* ---------- modo Conquista ---------- */
+.tv-modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.mode-card { display: grid; gap: 6px; align-content: start; text-align: left; padding: 18px 20px; border-radius: 16px; background: var(--panel); border: 2px solid var(--line); color: var(--fg); cursor: pointer; font: inherit; }
+.mode-card b { font: 900 2.2rem/1 var(--f-display); text-transform: uppercase; }
+.mode-card span { color: var(--muted); }
+.mode-card .tag { justify-self: start; font: 600 0.72rem var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: var(--gold); padding: 3px 8px 2px; border-radius: 6px; visibility: hidden; }
+.mode-card[aria-pressed="true"] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--panel)); }
+.mode-card[aria-pressed="true"] .tag { visibility: visible; }
+.mode-card:disabled { cursor: default; opacity: 1; }
+.mode-card:hover:not(:disabled) { border-color: var(--muted); }
+.cq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(22rem, 31rem); gap: 24px; align-items: start; }
+@media (max-width: 900px) { .cq, .tv-modes { grid-template-columns: 1fr; } }
+.cq-map { min-width: 0; }
+.cq-map svg { display: block; width: 100%; height: min(calc(100vh - 11rem), 64rem); min-height: 22rem; overflow: visible; }
+.cq.lobby .cq-map svg { height: min(34rem, calc(100vh - 11rem)); }
+.cq.final .cq-map svg { height: min(calc(100vh - 20rem), 56rem); }
+.cq-side { display: grid; gap: 14px; min-width: 0; }
+.cq-side .board { column-width: auto; }
+.cq-card { padding: 16px 18px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); display: grid; gap: 10px; }
+.cq-card h3 { font: 900 1.7rem/1 var(--f-display); text-transform: uppercase; }
+.cq-clock { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.cq-clock b { display: block; font: 900 7rem/0.85 var(--f-display); font-variant-numeric: tabular-nums; }
+.cq-clock .cq-sec b { color: var(--cyan); }
+.cq-clock .cq-sec { text-align: right; }
+.cq-clock.low .cq-sec b { color: var(--accent); }
+.cq-ev { border: 2px solid var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--panel)); }
+.cq-ev b { font: 900 2.2rem/1 var(--f-display); text-transform: uppercase; color: var(--gold); }
+.cq-ev.dark { border-color: var(--violet); background: color-mix(in srgb, var(--violet) 14%, var(--panel)); }
+.cq-ev.dark b { color: var(--violet); }
+.cq-rules { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: r; }
+.cq-rules li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 10px; counter-increment: r; font-size: 1.05rem; }
+.cq-rules li::before { content: counter(r); font: 900 1.3rem/1.4 var(--f-display); color: var(--gold); text-align: center; background: var(--panel-2); border-radius: 8px; }
+.cq-rules b { color: var(--fg); }
+.cq-rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cq-rank li { --c: var(--muted); display: grid; grid-template-columns: 2rem 14px minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; padding: 8px 12px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); }
+.cq-rank li:first-child { border-color: var(--gold); }
+.cq-rank .rk { grid-row: span 2; font: 900 1.6rem/1 var(--f-display); color: var(--muted); text-align: center; }
+.cq-rank li:first-child .rk { color: var(--gold); }
+.cq-rank i { grid-row: span 2; width: 14px; height: 30px; border-radius: 4px; background: var(--c); }
+.cq-rank .nm { font-weight: 700; font-size: 1.1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cq-rank .mt { grid-column: 3; font: 600 0.72rem var(--f-mono); color: var(--muted); letter-spacing: 0.04em; }
+.cq-rank .v { grid-row: 1 / span 2; grid-column: 4; font: 900 2rem/1 var(--f-display); font-variant-numeric: tabular-nums; text-align: right; }
+/* Salón lleno (más de 12 jugadores): una línea por jugador, así el top 8 cabe en el TV junto al resumen del reto. */
+.cq-rank.dense { gap: 5px; }
+.cq-rank.dense li { grid-template-columns: 1.6rem 10px minmax(0, 1fr) auto; padding: 5px 12px; }
+.cq-rank.dense .rk, .cq-rank.dense i, .cq-rank.dense .v { grid-row: auto; }
+.cq-rank.dense .rk { font-size: 1.3rem; }
+.cq-rank.dense i { width: 10px; height: 18px; }
+.cq-rank.dense .mt { display: none; }
+.cq-rank.dense .v { font-size: 1.45rem; }
+.cq-feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; max-height: 42vh; overflow: hidden; }
+.cq-feed li { --c: var(--muted); padding: 9px 14px; border-radius: 10px; background: var(--bg); border-left: 5px solid var(--c); font-size: 1.05rem; line-height: 1.3; animation: stageIn 0.4s ease both; }
+.cq-feed li b { color: var(--fg); }
+.cq-feed li em { font-style: normal; font-weight: 700; color: var(--gold); }
+.cq-fog { border: 2px dashed var(--violet); background: color-mix(in srgb, var(--violet) 12%, var(--panel)); justify-items: start; }
+.cq-fog svg { width: 4.5rem; height: auto; color: var(--violet); animation: lockBob 2.4s ease-in-out infinite; }
+.cq-fog b { font: 900 2.6rem/0.9 var(--f-display); text-transform: uppercase; }
+.cq-tile { transform-box: fill-box; transform-origin: center; }
+.cq-tile polygon { fill: var(--c, var(--panel-2)); stroke: var(--bg); stroke-width: 3; transition: fill 0.5s ease; }
+.cq-tile.free polygon { fill: var(--panel); stroke: var(--line); stroke-width: 2; stroke-dasharray: 6 5; }
+.cq-tile.fog polygon { fill: #2B2547; stroke: #463D78; stroke-width: 2; }
+.cq-tile.mine polygon { stroke: var(--paper); stroke-width: 4; }
+.cq-tile text { text-anchor: middle; fill: var(--ink); pointer-events: none; }
+.cq-tile.free text, .cq-tile.fog text { fill: var(--fg); }
+.cq-tile.free .cv, .cq-tile.fog .cv { fill: var(--gold); }
+.cq-tile .cv { font: 900 25px var(--f-display); }
+.cq-tile .cn { font: 800 15px var(--f-display); text-transform: uppercase; }
+.cq-tile .co { font: 700 11px var(--f-body); }
+.cq-tile.free .co, .cq-tile.fog .co { fill: var(--muted); }
+.cq-tile.hit { animation: tileHit 0.85s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes tileHit { 30% { transform: scale(1.28); } }
+.cq-ring { fill: none; stroke: var(--gold); stroke-width: 5; transform-box: fill-box; transform-origin: center; animation: cqRing 1s ease-out forwards; pointer-events: none; }
+.cq-ring.steal { stroke: var(--bad); }
+.cq-ring.shield { stroke: var(--cyan); stroke-width: 7; }
+@keyframes cqRing { from { opacity: 1; transform: scale(0.7); } to { opacity: 0; transform: scale(1.9); } }
+/* celular */
+.q-event { padding: 10px 14px; border-radius: 12px; border: 2px solid var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--panel)); font-weight: 700; }
+.q-event.dark { border-color: var(--violet); background: color-mix(in srgb, var(--violet) 14%, var(--panel)); }
+.cq-pick { display: grid; gap: 10px; padding: 14px; border-radius: 14px; background: var(--bg); border: 2px solid var(--cyan); }
+.cq-pick h3 { font: 900 1.7rem/1 var(--f-display); text-transform: uppercase; }
+.cq-pick .mono { color: var(--cyan); }
+.cq-cities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+/* El nombre de la ciudad va solo en la primera línea para que no se parta en un celular angosto; el valor va debajo, a la derecha. */
+.cq-city { --c: transparent; display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; grid-template-areas: "bar name name" "bar who pts"; gap: 4px 8px; align-items: center; text-align: left; padding: 9px 10px; border-radius: 12px; background: var(--panel); border: 2px solid var(--line); color: var(--fg); font: inherit; cursor: pointer; min-width: 0; }
+.cq-city i { grid-area: bar; width: 8px; height: 100%; min-height: 32px; border-radius: 4px; background: var(--c); box-shadow: inset 0 0 0 1px var(--line); }
+.cq-city b { grid-area: name; font: 800 1.05rem/1 var(--f-display); text-transform: uppercase; overflow-wrap: break-word; hyphens: auto; }
+.cq-city small { grid-area: who; font-size: 0.74rem; line-height: 1.25; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cq-city em { grid-area: pts; font: 900 1.25rem/1 var(--f-display); font-style: normal; color: var(--gold); }
+.cq-city.mine { border-style: dashed; border-color: var(--muted); }
+.cq-city.sel { border-style: solid; border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 18%, var(--panel)); }
+.cq-city:disabled { opacity: 0.45; cursor: not-allowed; }
+.cq-rep { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.cq-rep li { padding: 8px 12px; border-radius: 10px; background: var(--panel); border-left: 4px solid var(--muted); font-weight: 700; }
+.cq-rep li.ok { border-left-color: var(--good); }
+.cq-rep li.no { border-left-color: var(--bad); }
+.cq-rep li.sum { border-left-color: var(--gold); font-weight: 400; color: var(--muted); }
+.cq-rep li.sum b { color: var(--gold); }
+.wait-cq { border: 2px solid var(--gold); }
+.wait-cq h3 { font: 900 1.8rem/1 var(--f-display); text-transform: uppercase; color: var(--gold); }
+@media (max-width: 380px) { .cq-cities { grid-template-columns: 1fr; } }
+.cq-side .row { grid-template-columns: 3rem minmax(0, 1fr) auto; }
+.cq-side .row .dots { display: none; }
+.tv-modes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* ---------- Bolsa de Valores ---------- */
+.st-bet { display: grid; gap: 8px; padding: 12px; border-radius: 14px; background: var(--bg); border: 2px solid var(--good); }
+.st-bet .mono { color: var(--good); }
+.st-bets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.st-b { display: grid; gap: 3px; justify-items: center; padding: 10px 4px 9px; border-radius: 12px; background: var(--panel); border: 2px solid var(--line); color: var(--fg); font: inherit; cursor: pointer; min-width: 0; }
+.st-b b { font: 900 1.5rem/1 var(--f-display); }
+.st-b small { font: 600 0.72rem var(--f-mono); color: var(--muted); }
+.st-b.sel { border-color: var(--good); background: color-mix(in srgb, var(--good) 18%, var(--panel)); }
+.st-b.all.sel { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 20%, var(--panel)); }
+.st-b:disabled { opacity: 0.35; cursor: not-allowed; }
+.st-chart { min-width: 0; position: relative; }
+.st-chart svg { display: block; width: 100%; height: min(calc(100vh - 11rem), 64rem); min-height: 22rem; overflow: visible; }
+.cq.lobby .st-chart svg { height: min(30rem, calc(100vh - 11rem)); }
+.cq.final .st-chart svg { height: min(calc(100vh - 20rem), 56rem); }
+.st-chart .gl { stroke: var(--line); stroke-width: 1; }
+.st-chart .gt { fill: var(--muted); font: 600 14px var(--f-mono); }
+.st-chart .ln { fill: none; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+.st-chart .ln.dim { stroke-width: 2; opacity: 0.28; }
+.st-chart .seg { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: stDraw 1.1s ease-out 0.2s forwards; }
+@keyframes stDraw { to { stroke-dashoffset: 0; } }
+.st-chart .lb { font: 800 17px var(--f-display); text-transform: uppercase; }
+.st-chart .lv { font: 700 13px var(--f-mono); fill: var(--fg); }
+.st-chart .fogbox { fill: color-mix(in srgb, var(--violet) 12%, var(--bg)); stroke: var(--violet); stroke-dasharray: 8 6; stroke-width: 2; }
+.st-chart .fogtx { fill: var(--violet); font: 900 34px var(--f-display); text-transform: uppercase; text-anchor: middle; }
+.st-up { color: var(--good); }
+.st-down { color: var(--bad); }
+.cq-rank .chg { font-weight: 700; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
@@ -880,11 +1085,10 @@ input:focus { outline: none; border-color: var(--cyan); }
     <h2 class="h-display">Ahora las redes son tuyas</h2>
     <p class="lede">Imagina que eres el dueño o la dueña de una marca conocida en Colombia. Cada día pasa algo en sus redes: un anuncio nuevo, un video que se vuelve tendencia, una promo que hay que medir. Para decidir bien necesitas mirar el KPI correcto, el indicador clave que responde a esa situación.</p>
     <ol class="rules">
-      <li><div><b>Te toca una marca al azar.</b><p>Hay 10 posibles: Juan Valdez, Rappi, Frisby, Arturo Calle, Postobón, Alpina, Nequi, Totto, Crepes &amp; Waffles y Platzi.</p></div></li>
-      <li><div><b>Enfrentas 15 retos al mismo ritmo que todo el salón.</b><p>Cada reto describe una situación y te da 4 KPIs. Solo uno es el indicado.</p></div></li>
-      <li><div><b>Tienes 35 segundos por reto.</b><p>Acierto: 100 puntos más un bono de hasta 50 por rapidez. Error o tiempo agotado: 0 puntos.</p></div></li>
-      <li><div><b>Después de cada reto, la batalla se pausa.</b><p>La pantalla del salón muestra las posiciones y el anfitrión decide cuándo pasar al siguiente reto.</p></div></li>
-      <li><div><b>Gana un solo jugador.</b><p>El que sume más puntos. Si hay empate, gana quien tenga más aciertos y, después, quien haya respondido en menos tiempo.</p></div></li>
+      <li><div><b>Escribe tu nombre y te toca una marca al azar.</b><p>Hay 10 posibles: Juan Valdez, Rappi, Frisby, Arturo Calle, Postobón, Alpina, Nequi, Totto, Crepes &amp; Waffles y Platzi.</p></div></li>
+      <li><div><b>Espera en la sala.</b><p>El anfitrión elige el juego: Batalla de KPIs, Conquista o Bolsa de Valores. En tu celular verás las reglas del juego que elija.</p></div></li>
+      <li><div><b>Enfrentas 15 retos al mismo ritmo que todo el salón.</b><p>Cada reto describe una situación de tu marca y te da 4 KPIs. Tienes 35 segundos para elegir el indicado.</p></div></li>
+      <li><div><b>Gana un solo jugador.</b><p>En los últimos 4 retos todo se esconde: nadie sabe quién gana hasta la revelación final en la pantalla del salón.</p></div></li>
     </ol>
     <p class="disclaimer">Las situaciones son casos ficticios con fines educativos. Las marcas no participan, no patrocinan ni avalan este juego.</p>
     <form class="formcard" id="name-form" novalidate>
@@ -927,6 +1131,36 @@ input:focus { outline: none; border-color: var(--cyan); }
       <div class="wait-row"><span class="pulse-dot" aria-hidden="true"></span><p class="lede" id="wait-msg">Mira la pantalla del salón. El anfitrión empezará la batalla cuando estén todos.</p></div>
       <p class="muted" id="wait-count"></p>
     </div>
+    <!-- reglas del juego que eligió el anfitrión (cambian en vivo) -->
+    <div class="wait-card wait-cq" id="wait-classic">
+      <p class="eyebrow">El anfitrión eligió</p>
+      <h3>Batalla de KPIs</h3>
+      <ol class="cq-rules">
+        <li><span>Acierto: <b>100 puntos</b> más un bono de hasta <b>50 por rapidez</b>. Error o tiempo agotado: 0.</span></li>
+        <li><span>Después de cada reto la pantalla del salón muestra el <b>podio</b> y la tabla.</span></li>
+        <li><span>Gana quien <b>más puntos</b> sume. Empate: más aciertos y menos tiempo.</span></li>
+      </ol>
+    </div>
+    <div class="wait-card wait-cq" id="wait-cq" hidden>
+      <p class="eyebrow">El anfitrión eligió</p>
+      <h3>Conquista</h3>
+      <ol class="cq-rules">
+        <li><span>Acierta el KPI y <b>elige una ciudad</b> del mapa de Colombia antes de que se acabe el tiempo.</span></li>
+        <li><span>Libre o de otro: <b>la atacas</b>. Tuya: <b>la blindas</b>. Si varios atacan la misma, gana el más rápido.</span></li>
+        <li><span>Cada ciudad te paga <b>ventas en cada reto</b>. Gana quien más venda.</span></li>
+        <li><span>Eventos: Black Friday (×2), Crisis de reputación, Niebla de guerra y Gran Lanzamiento (×3).</span></li>
+      </ol>
+    </div>
+    <div class="wait-card wait-cq" id="wait-st" hidden>
+      <p class="eyebrow">El anfitrión eligió</p>
+      <h3>Bolsa de Valores</h3>
+      <ol class="cq-rules">
+        <li><span>Empiezas con <b>$1.000</b>. Antes de responder eliges cuánto invertir: <b>10 %, 25 %, 50 % o todo</b>.</span></li>
+        <li><span>Si aciertas, recuperas lo invertido y <b>ganas</b>: entre 10 % y 30 % según tu rapidez, más tu parte de lo que perdieron los que fallaron (hasta 3 veces lo que invertiste).</span></li>
+        <li><span>Si fallas o se acaba el tiempo, <b>pierdes lo invertido</b>. Mientras menos acierten, más gana cada acierto.</span></li>
+        <li><span>Eventos: Mercado alcista (×2), Pánico en la bolsa, Bolsa a ciegas y Campanazo final (×3).</span></li>
+      </ol>
+    </div>
     <p class="sync" data-s="connecting"></p>
   </section>
 
@@ -935,18 +1169,30 @@ input:focus { outline: none; border-color: var(--cyan); }
     <div class="qbar">
       <span class="chip" id="q-brand"><i></i><span></span></span>
       <span class="mono" id="q-num">Reto 01/15</span>
-      <span class="lockb" id="q-lock" hidden><svg viewBox="0 0 64 80" width="11" height="14" aria-hidden="true"><path d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/></svg>Tabla oculta</span>
-      <span class="score-pill"><span class="mono">Pts</span><b id="q-score">0</b></span>
+      <span class="lockb" id="q-lock" hidden><svg viewBox="0 0 64 80" width="11" height="14" aria-hidden="true"><path d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/></svg><span id="q-lock-t">Tabla oculta</span></span>
+      <span class="score-pill"><span class="mono" id="q-score-l">Pts</span><b id="q-score">0</b></span>
     </div>
+    <p class="q-event" id="q-event" hidden></p>
     <div class="timer-row">
       <div class="timer" id="timer" role="progressbar" aria-label="Tiempo restante" aria-valuemin="0" aria-valuemax="35"><i></i></div>
       <span class="secs mono" id="secs">35 s</span>
     </div>
     <div class="sit"><p class="mono">Situación</p><p id="q-sit"></p></div>
     <h2 class="q" id="q-text"></h2>
+    <div class="st-bet" id="st-bet" hidden>
+      <p class="mono" id="st-bet-l">¿Cuánto inviertes en este reto?</p>
+      <div class="st-bets" id="st-bets"></div>
+    </div>
     <div class="opts" id="opts"></div>
     <div class="fb" id="fb" hidden aria-live="polite">
       <div class="fb-head"><span class="fb-title" id="fb-title"></span><span class="fb-pts" id="fb-pts"></span></div>
+      <div class="cq-pick" id="cq-pick" hidden>
+        <p class="mono" id="cq-pick-time"></p>
+        <h3 id="cq-pick-title">¿A dónde llevas tu marca?</h3>
+        <p class="muted" id="cq-pick-sub">Toca una ciudad libre o de otro jugador para atacarla, o una tuya para blindarla.</p>
+        <div class="cq-cities" id="cq-cities"></div>
+      </div>
+      <ul class="cq-rep" id="cq-rep" hidden></ul>
       <p class="fb-ans" id="fb-ans"></p>
       <p id="fb-why"></p>
       <div class="formula" id="fb-f" hidden></div>
@@ -963,15 +1209,16 @@ input:focus { outline: none; border-color: var(--cyan); }
   <section id="s-end" hidden>
     <p class="eyebrow">Batalla terminada</p>
     <h2 class="h-display" id="end-name"></h2>
-    <div class="end-score"><p class="mono">Puntos finales</p><b id="end-score">0</b></div>
+    <div class="end-score"><p class="mono" id="end-score-l">Puntos finales</p><b id="end-score">0</b></div>
     <div class="stats">
-      <div><span class="mono">Aciertos</span><b id="end-correct"></b></div>
-      <div><span class="mono">Tiempo</span><b id="end-time"></b></div>
+      <div><span class="mono" id="end-l1">Aciertos</span><b id="end-correct"></b></div>
+      <div><span class="mono" id="end-l2">Tiempo</span><b id="end-time"></b></div>
       <div><span class="mono">Marca</span><b id="end-brand"></b></div>
     </div>
     <div class="dots big" id="end-dots" aria-label="Resultado de cada reto"></div>
     <div class="pos" id="end-pos" hidden></div>
     <div class="winner-banner" id="end-winner" hidden></div>
+    <ol class="end-pod" id="end-pod" hidden aria-label="Podio final"></ol>
     <p class="sync" data-s="connecting"></p>
     <div class="btn-row">
       <button class="btn btn-ghost btn-sm" id="btn-retry-send" type="button" hidden>Reenviar mi puntaje</button>
@@ -1006,6 +1253,12 @@ input:focus { outline: none; border-color: var(--cyan); }
       </div>
     </div>
 
+    <div class="tv-modes" id="tv-modes" hidden>
+      <button class="mode-card" type="button" data-mode="clasico" aria-pressed="true"><span class="tag">Juego elegido</span><b>Batalla de KPIs</b><span>Preguntas contra el reloj, como un concurso: gana quien más puntos sume.</span></button>
+      <button class="mode-card" type="button" data-mode="conquista" aria-pressed="false"><span class="tag">Juego elegido</span><b>Conquista</b><span>Cada acierto es una jugada en el mapa de Colombia: ataca, blinda y gana el que más venda.</span></button>
+      <button class="mode-card" type="button" data-mode="bolsa" aria-pressed="false"><span class="tag">Juego elegido</span><b>Bolsa de Valores</b><span>Invierte tu capital en cada respuesta: si casi nadie acierta, tu ganancia se dispara.</span></button>
+    </div>
+
     <div id="tv-question" hidden>
       <div class="tv-q">
         <div><p class="eyebrow">Reto en juego</p><b id="tv-q-num">01</b><span class="muted">de 15</span></div>
@@ -1014,6 +1267,7 @@ input:focus { outline: none; border-color: var(--cyan); }
       <div class="answer-bar" aria-hidden="true"><i id="tv-ans-bar"></i></div>
       <p class="tv-ans" id="tv-ans">0 de 0 respondieron</p>
     </div>
+
 
     <div class="pchips" id="tv-chips"></div>
 
@@ -1033,6 +1287,50 @@ input:focus { outline: none; border-color: var(--cyan); }
         <p class="lede">Nadie sabe quién va ganando. Las posiciones se revelan cuando se anuncie al ganador.</p>
         <p class="tvb-left" id="tv-blind-left"></p>
       </div>
+    </div>
+    <div class="cq" id="tv-cq" hidden>
+      <div class="cq-map" id="cq-map"></div>
+      <div class="st-chart" id="st-chart" hidden></div>
+      <aside class="cq-side" id="cq-side">
+        <div class="cq-card" id="st-rules-card" hidden>
+          <p class="eyebrow" style="color: var(--good);">Bolsa de Valores</p>
+          <h3>Invierte en lo que sabes</h3>
+          <ol class="cq-rules">
+            <li><span>Cada jugador empieza con <b>$1.000</b>. Antes de responder elige cuánto invertir: <b>10 %, 25 %, 50 % o todo</b>.</span></li>
+            <li><span>Si acierta, gana entre 10 % y 30 % según su rapidez, <b>más su parte de lo que perdieron los que fallaron</b> (hasta 3 veces lo invertido).</span></li>
+            <li><span>Si falla o se acaba el tiempo, <b>pierde lo invertido</b>. Mientras menos acierten, más gana cada acierto.</span></li>
+            <li><span>Eventos: <b>Mercado alcista</b>, <b>Pánico en la bolsa</b>, <b>Bolsa a ciegas</b> y <b>Campanazo final</b>.</span></li>
+          </ol>
+        </div>
+        <div class="cq-card" id="cq-rules-card">
+          <p class="eyebrow" style="color: var(--gold);">Modo Conquista</p>
+          <h3>La guerra por el mercado</h3>
+          <ol class="cq-rules">
+            <li><span>Acierta el KPI y <b>elige una ciudad</b> en tu celular.</span></li>
+            <li><span>Libre o de otro: <b>la atacas</b>. Tuya: <b>la blindas</b>. Si varios atacan la misma, gana el que respondió más rápido.</span></li>
+            <li><span>Cada ciudad le paga <b>ventas</b> a su dueño en cada reto. Gana quien más venda.</span></li>
+            <li><span>Eventos: <b>Black Friday</b>, <b>Crisis de reputación</b>, <b>Niebla de guerra</b> y <b>Gran Lanzamiento</b>.</span></li>
+          </ol>
+        </div>
+        <div class="cq-card" id="cq-clock-card" hidden>
+          <div class="cq-clock" id="cq-clock">
+            <div><p class="eyebrow">Reto</p><b id="cq-qnum">01</b></div>
+            <div class="cq-sec"><p class="eyebrow">Segundos</p><b id="cq-count">35</b></div>
+          </div>
+          <div class="answer-bar" aria-hidden="true"><i id="cq-ready-bar"></i></div>
+          <p class="tv-ans" id="cq-ready">0 de 0 listos</p>
+          <p class="muted" id="cq-clock-note">Las jugadas son secretas hasta que se cierre el reto.</p>
+        </div>
+        <div class="cq-card cq-ev" id="cq-ev" hidden><p class="eyebrow" id="cq-ev-k">Evento</p><b id="cq-ev-t"></b><p id="cq-ev-s"></p></div>
+        <div class="cq-card" id="cq-feed-card" hidden><p class="eyebrow" id="cq-feed-h">Batallas del reto</p><ul class="cq-feed" id="cq-feed"></ul></div>
+        <div class="cq-card cq-fog" id="cq-fog" hidden>
+          <svg viewBox="0 0 64 80" aria-hidden="true"><path d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/><circle cx="32" cy="50" r="5" fill="#130F26"/><rect x="29.5" y="52" width="5" height="10" rx="2" fill="#130F26"/></svg>
+          <p class="eyebrow" style="color: var(--violet);" id="cq-fog-k">Niebla de guerra</p>
+          <b id="cq-fog-b">Mapa oculto</b>
+          <p class="lede" id="cq-fog-t">Nadie sabe de quién es cada ciudad. El mapa y las ventas se revelan con el ganador.</p>
+        </div>
+        <div class="cq-card" id="cq-rank-card" hidden><p class="eyebrow" id="cq-rank-h">Ventas acumuladas</p><ol class="cq-rank" id="cq-rank"></ol></div>
+      </aside>
     </div>
     <div class="board" id="board" hidden></div>
     <div class="tv-empty" id="tv-empty"><b>Esperando jugadores</b><p class="muted">Cada jugador aparecerá aquí apenas sortee su marca.</p></div>
@@ -1091,12 +1389,13 @@ input:focus { outline: none; border-color: var(--cyan); }
 <div class="overlay blindintro" id="blindintro" hidden>
   <div class="bi-pulse" aria-hidden="true"></div>
   <div class="bi-inner" role="status" aria-live="assertive">
-    <p class="bi-kick">Atención, salón</p>
-    <h2 class="bi-title">¡Últimos 4 retos!</h2>
-    <svg class="bi-lock" viewBox="0 0 64 80" aria-hidden="true"><path class="bi-shackle" d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/><circle cx="32" cy="50" r="5" fill="#130F26"/><rect x="29.5" y="52" width="5" height="10" rx="2" fill="#130F26"/></svg>
-    <p class="bi-sub"><b>La tabla se esconde.</b> Desde ahora nadie sabrá quién va ganando hasta que se revele al ganador.</p>
+    <p class="bi-kick" id="bi-kick">Atención, salón</p>
+    <h2 class="bi-title" id="bi-title">¡Últimos 4 retos!</h2>
+    <svg class="bi-lock" id="bi-lock" viewBox="0 0 64 80" aria-hidden="true"><path class="bi-shackle" d="M18 34V22a14 14 0 0 1 28 0v12" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="8" y="32" width="48" height="40" rx="9" fill="currentColor"/><circle cx="32" cy="50" r="5" fill="#130F26"/><rect x="29.5" y="52" width="5" height="10" rx="2" fill="#130F26"/></svg>
+    <svg class="bi-lock" id="bi-icon" viewBox="0 0 64 64" aria-hidden="true" hidden></svg>
+    <p class="bi-sub" id="bi-sub"><b>La tabla se esconde.</b> Desde ahora nadie sabrá quién va ganando hasta que se revele al ganador.</p>
   </div>
-  <p class="st-skip">Toca la pantalla para empezar el reto 12</p>
+  <p class="st-skip" id="bi-skip">Toca la pantalla para empezar el reto 12</p>
 </div>
 
 <!-- revelación del ganador: suspenso → celebración -->
@@ -1117,10 +1416,19 @@ input:focus { outline: none; border-color: var(--cyan); }
       <svg class="rv-trophy" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28v12a14 14 0 0 1-28 0z" fill="currentColor"/><path d="M18 12h-8a9 9 0 0 0 10 12M46 12h8a9 9 0 0 1-10 12" fill="none" stroke="currentColor" stroke-width="4"/><rect x="29" y="33" width="6" height="11" fill="currentColor"/><rect x="20" y="44" width="24" height="8" rx="2" fill="currentColor"/></svg>
       <p class="rv-kicker">¡Campeón de la Batalla de <span class="nt">KPIs</span>!</p>
       <h2 class="rv-win" id="rv-win"></h2>
-      <p class="rv-pts"><b id="rv-ptsn">0</b> <small>puntos</small></p>
+      <p class="rv-pts"><b id="rv-ptsn">0</b> <small id="rv-pts-l">puntos</small></p>
       <p class="rv-meta" id="rv-meta"></p>
-      <button class="btn" id="rv-table" type="button">Ver tabla completa</button>
     </div>
+    <!-- después de celebrar al campeón: el podio con los 3 primeros -->
+    <div class="rv-pod" aria-label="Podio final">
+      <p class="rv-pod-k">Podio final de la Batalla de <span class="nt">KPIs</span></p>
+      <div class="rv-pod-row">
+        <div class="rp rp2" id="rp-2"><div class="rp-who"><b></b><span></span><em></em></div><div class="rp-bar">2</div></div>
+        <div class="rp rp1" id="rp-1"><div class="rp-who"><svg class="rp-crown" viewBox="0 0 64 40" aria-hidden="true"><path d="M4 36 8 8l14 14L32 2l10 20L56 8l4 28z" fill="currentColor"/></svg><b></b><span></span><em></em></div><div class="rp-bar">1</div></div>
+        <div class="rp rp3" id="rp-3"><div class="rp-who"><b></b><span></span><em></em></div><div class="rp-bar">3</div></div>
+      </div>
+    </div>
+    <button class="btn" id="rv-table" type="button">Ver tabla completa</button>
   </div>
   <div class="rv-flash" aria-hidden="true"></div>
 </div>
@@ -1149,6 +1457,144 @@ input:focus { outline: none; border-color: var(--cyan); }
   // SUSPENSE_MS: lo que dura el suspenso en la TV antes de mostrar el nombre del ganador.
   const BLIND_FROM = Q_COUNT - 4, SUSPENSE_MS = 9000;
   const isBlind = q => q >= BLIND_FROM;
+
+  // Modo Conquista: el mapa de Colombia en casillas hexagonales (col/row). v = ventas que la ciudad le paga a su dueño
+  // después de cada reto. Si aciertas, eliges una ciudad: si es libre o de otro la atacas, si es tuya la blindas.
+  const CQ_CITIES = [
+    { id: 'sai', name: 'San Andrés', v: 1, col: 0, row: 0 }, { id: 'sma', name: 'Santa Marta', v: 3, col: 4, row: 0 },
+    { id: 'rio', name: 'Riohacha', v: 1, col: 5, row: 0 }, { id: 'ctg', name: 'Cartagena', v: 5, col: 2, row: 1 },
+    { id: 'baq', name: 'Barranquilla', v: 6, col: 3, row: 1 }, { id: 'vup', name: 'Valledupar', v: 3, col: 5, row: 1 },
+    { id: 'sin', name: 'Sincelejo', v: 2, col: 2, row: 2 }, { id: 'mon', name: 'Montería', v: 3, col: 1, row: 3 },
+    { id: 'cuc', name: 'Cúcuta', v: 4, col: 6, row: 3 }, { id: 'med', name: 'Medellín', v: 8, col: 2, row: 4 },
+    { id: 'bga', name: 'Bucaramanga', v: 5, col: 5, row: 4 }, { id: 'qib', name: 'Quibdó', v: 1, col: 0, row: 5 },
+    { id: 'man', name: 'Manizales', v: 3, col: 2, row: 5 }, { id: 'tun', name: 'Tunja', v: 2, col: 5, row: 5 },
+    { id: 'yop', name: 'Yopal', v: 1, col: 6, row: 5 }, { id: 'per', name: 'Pereira', v: 4, col: 2, row: 6 },
+    { id: 'iba', name: 'Ibagué', v: 3, col: 3, row: 6 }, { id: 'bog', name: 'Bogotá', v: 10, col: 4, row: 6 },
+    { id: 'cal', name: 'Cali', v: 7, col: 1, row: 7 }, { id: 'arm', name: 'Armenia', v: 2, col: 2, row: 7 },
+    { id: 'vvc', name: 'Villavicencio', v: 3, col: 4, row: 7 }, { id: 'pop', name: 'Popayán', v: 2, col: 1, row: 8 },
+    { id: 'nei', name: 'Neiva', v: 2, col: 3, row: 8 }, { id: 'pso', name: 'Pasto', v: 3, col: 0, row: 9 },
+    { id: 'flo', name: 'Florencia', v: 1, col: 2, row: 9 }, { id: 'let', name: 'Leticia', v: 1, col: 6, row: 9 }
+  ];
+  const CQ_BY_ID = Object.fromEntries(CQ_CITIES.map((c, i) => [c.id, { ...c, i }]));
+  const CQ_TOTAL = CQ_CITIES.reduce((s, c) => s + c.v, 0);
+  // Eventos por reto (índice desde 0). La niebla de guerra son los mismos retos a ciegas del modo clásico.
+  const CQ_CRISIS_Q = 7;
+  const CQ_EVENTS = {
+    4: { kind: 'bf', name: 'Black Friday', mult: 2 },
+    7: { kind: 'crisis', name: 'Crisis de reputación', mult: 1 },
+    11: { kind: 'fog', name: 'Niebla de guerra', mult: 1 },
+    14: { kind: 'launch', name: 'Gran Lanzamiento', mult: 3 }
+  };
+  const cqMult = q => (CQ_EVENTS[q] && CQ_EVENTS[q].mult) || 1;
+  const CQ_PALETTE = ['#FF5B3A', '#45D0FF', '#FFC93D', '#A98BFF', '#38D99A', '#FF8FC8', '#C6F25E', '#7FA8FF', '#FF9F45', '#5FE3C0', '#E8A462', '#F25E8B'];
+  const okId = v => typeof v === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(v);
+  const fmtShare = x => `${(Math.round(x * 10) / 10).toLocaleString('es-CO')} %`;
+  function cqOwned(map, uid) { return CQ_CITIES.filter(c => map[c.id] === uid); }
+  function cqShare(map, uid) { return cqOwned(map, uid).reduce((s, c) => s + c.v, 0) / CQ_TOTAL * 100; }
+  // Color de cada jugador en el mapa: por orden de llegada, igual en la TV y en todos los celulares.
+  function cqColors(teams) {
+    const m = new Map();
+    teams.slice().sort((a, b) => (a.joinedAt - b.joinedAt) || (a.id < b.id ? -1 : 1)).forEach((t, i) =>
+      m.set(t.id, i < CQ_PALETTE.length ? CQ_PALETTE[i] : `hsl(${Math.round((i * 137.508) % 360)} 80% 66%)`));
+    return m;
+  }
+  // Resuelve las batallas de un reto. Todas las jugadas se aplican a la vez:
+  // ciudad blindada (dueño acertó y la eligió) → resiste; si no, se la queda el atacante que respondió más rápido.
+  // Después, cada ciudad le paga sus ventas al dueño (×2 en Black Friday, ×3 en el Gran Lanzamiento).
+  function cqResolve(c, teams, q) {
+    const map = { ...c.map }, sales = { ...c.sales }, res = [];
+    const crisis = q === CQ_CRISIS_Q ? c.crisis : null;
+    const moves = teams.filter(t => t.results[q] === 1 && t.tg[q] !== null)
+      .map(t => ({ id: t.id, city: CQ_CITIES[t.tg[q]].id, el: t.el[q] === null ? Q_MS : t.el[q] }));
+    CQ_CITIES.forEach(city => {
+      const owner = map[city.id] || null;
+      const shielded = !!owner && owner !== crisis && moves.some(m => m.id === owner && m.city === city.id);
+      const att = moves.filter(m => m.city === city.id && m.id !== owner).sort((a, b) => (a.el - b.el) || (a.id < b.id ? -1 : 1));
+      if (!att.length) { if (shielded) res.push({ c: city.id, k: 'blindada', to: owner, from: null, n: 0 }); return; }
+      if (shielded) { res.push({ c: city.id, k: 'defendida', to: owner, from: null, n: att.length }); return; }
+      map[city.id] = att[0].id;
+      res.push({ c: city.id, k: owner ? 'robo' : 'conquista', to: att[0].id, from: owner, n: att.length });
+    });
+    const mult = cqMult(q);
+    Object.keys(map).forEach(cid => { sales[map[cid]] = (sales[map[cid]] || 0) + CQ_BY_ID[cid].v * mult; });
+    return { map, sales, res, mapQ: q };
+  }
+  function cqLeader(sales, teams) {
+    const list = teams.filter(t => (sales[t.id] || 0) > 0)
+      .sort((a, b) => ((sales[b.id] || 0) - (sales[a.id] || 0)) || (b.correct - a.correct) || (a.timeMs - b.timeMs) || (a.joinedAt - b.joinedAt));
+    return list.length ? list[0].id : null;
+  }
+  function cqCleanMap(m) {
+    const o = {};
+    if (m && typeof m === 'object') Object.keys(m).forEach(k => { if (CQ_BY_ID[k] && okId(m[k])) o[k] = m[k]; });
+    return o;
+  }
+  function cqCleanSales(s) {
+    const o = {};
+    if (s && typeof s === 'object') Object.keys(s).forEach(k => { const n = Number(s[k]); if (okId(k) && isFinite(n) && n >= 0) o[k] = Math.round(n); });
+    return o;
+  }
+  function cqCleanRes(r) {
+    const arr = Array.isArray(r) ? r : (r && typeof r === 'object' ? Object.values(r) : []);
+    return arr.filter(x => x && CQ_BY_ID[x.c] && ['conquista', 'robo', 'defendida', 'blindada'].includes(x.k) && okId(x.to))
+      .slice(0, CQ_CITIES.length)
+      .map(x => ({ c: x.c, k: x.k, to: x.to, from: okId(x.from) ? x.from : null, n: Number(x.n) || 0 }));
+  }
+
+  // Bolsa de Valores: cada jugador empieza con $1.000 y, antes de responder, invierte una parte de su capital.
+  // Acierto: recupera lo invertido + 10 a 30 % según su rapidez + su parte de lo que perdieron los que fallaron
+  // (en proporción a lo que invirtió, con tope de 3 veces lo invertido). Error o tiempo agotado: pierde lo invertido.
+  // Si queda por debajo de $100, el banco lo rescata.
+  const ST_START = 1000, ST_FLOOR = 100, ST_BETS = [10, 25, 50, 100], ST_PANIC_Q = 7, ST_POOL_CAP = 3;
+  const ST_EVENTS = {
+    4: { kind: 'bull', name: 'Mercado alcista', mult: 2 },
+    7: { kind: 'panic', name: 'Pánico en la bolsa', mult: 1 },
+    11: { kind: 'stfog', name: 'Bolsa a ciegas', mult: 1 },
+    14: { kind: 'bell', name: 'Campanazo final', mult: 3 }
+  };
+  const stMult = q => (ST_EVENTS[q] && ST_EVENTS[q].mult) || 1;
+  const stMinBet = q => (q === ST_PANIC_Q ? 2 : 0);   // en el Pánico nadie invierte menos del 50 %
+  const fmtMoney = n => `${n < 0 ? '−' : ''}$${Math.abs(Math.round(n)).toLocaleString('es-CO')}`;
+  const fmtRoi = cap => { const r = Math.round((cap / ST_START - 1) * 100); return `${r >= 0 ? '+' : '−'}${Math.abs(r).toLocaleString('es-CO')} %`; };
+  function stHist(c, id) {
+    const s = c.hist[id];
+    return s ? s.split(',').map(Number) : [ST_START];
+  }
+  function stResolve(c, teams, q) {
+    const cap = { ...c.cap }, hist = { ...c.hist }, mk = [];
+    const mult = stMult(q);
+    const plays = teams.filter(t => t.results[q] !== null).map(t => {
+      const before = cap[t.id] === undefined ? ST_START : cap[t.id];
+      const pct = ST_BETS[Math.max(stMinBet(q), t.bt[q] === null ? 1 : t.bt[q])];
+      return { id: t.id, before, pct, stake: Math.round(before * pct / 100), ok: t.results[q] === 1, el: t.el[q] === null ? Q_MS : t.el[q] };
+    });
+    const pool = plays.filter(p => !p.ok).reduce((s, p) => s + p.stake, 0);
+    const won = plays.filter(p => p.ok).reduce((s, p) => s + p.stake, 0);
+    plays.forEach(p => {
+      const share = won ? Math.min(pool * p.stake / won, p.stake * ST_POOL_CAP) : 0;
+      const d = p.ok ? Math.round((p.stake * (0.1 + 0.2 * Math.max(0, 1 - p.el / Q_MS)) + share) * mult) : -p.stake;
+      const after = Math.max(ST_FLOOR, p.before + d);
+      cap[p.id] = after;
+      mk.push({ id: p.id, d: after - p.before, s: p.stake, p: p.pct, ok: p.ok, r: p.before + d < ST_FLOOR });
+    });
+    // Historial para la gráfica: un punto por reto para cada jugador, haya jugado o no.
+    teams.forEach(t => { hist[t.id] = (hist[t.id] || String(ST_START)) + ',' + (cap[t.id] === undefined ? ST_START : cap[t.id]); });
+    return { cap, hist, mk, mapQ: q };
+  }
+  function stCleanHist(h) {
+    const o = {};
+    if (h && typeof h === 'object') Object.keys(h).forEach(k => { if (okId(k) && typeof h[k] === 'string' && /^[0-9]{1,9}(,[0-9]{1,9}){0,16}$/.test(h[k])) o[k] = h[k]; });
+    return o;
+  }
+  function stCleanMk(r) {
+    const arr = Array.isArray(r) ? r : (r && typeof r === 'object' ? Object.values(r) : []);
+    return arr.filter(x => x && okId(x.id) && isFinite(Number(x.d))).slice(0, 300)
+      .map(x => ({ id: x.id, d: Math.round(Number(x.d)), s: Math.max(0, Math.round(Number(x.s) || 0)), p: ST_BETS.includes(Number(x.p)) ? Number(x.p) : 25, ok: x.ok === true, r: x.r === true }));
+  }
+  // Juegos con resultados que calcula la TV del anfitrión al cerrar cada reto.
+  const MODE_NAMES = { clasico: 'Batalla de KPIs', conquista: 'Conquista', bolsa: 'Bolsa de Valores' };
+  const modeEvents = m => (m === 'conquista' ? CQ_EVENTS : m === 'bolsa' ? ST_EVENTS : {});
+  function modeResolve(c, teams, q) { return c.mode === 'conquista' ? cqResolve(c, teams, q) : stResolve(c, teams, q); }
   // Contraseña de la pantalla del salón dentro de claude.ai: solo se guarda su huella PBKDF2 (no la contraseña).
   // En la versión web esta línea queda en null: la contraseña es la del usuario anfitrión de Firebase Authentication.
   const PW = null;
@@ -1305,7 +1751,7 @@ input:focus { outline: none; border-color: var(--cyan); }
           a: 'Clics en el botón de WhatsApp', d: ['Visitas al perfil', 'Alcance', 'Seguidores ganados'],
           why: 'Cada clic en el botón es alguien que intentó pedir. Ver el perfil no muestra esa intención.' },
         { s: 'Hiciste un anuncio del combo familiar del domingo. Invertiste $2.000.000 y entraron 400 pedidos con el código del anuncio. Quieres saber cuánto costó cada pedido.',
-          a: 'CPA (costo por pedido)', d: ['CPC (costo por clic)', 'CPM (costo por mil impresiones)', 'Alcance'],
+          a: 'CPA (costo por adquisición)', d: ['CPC (costo por clic)', 'CPM (costo por mil impresiones)', 'Alcance'],
           f: '$2.000.000 ÷ 400 pedidos = $5.000 por pedido',
           why: 'Si cada pedido deja más ganancia que lo que costó conseguirlo, la promo es rentable.' },
         { s: 'Quieres decidir a qué hora publicar la historia del almuerzo para que la vea la mayor parte de tus seguidores.',
@@ -1862,13 +2308,22 @@ input:focus { outline: none; border-color: var(--cyan); }
   // 'artifact': dentro de claude.ai, con la base de datos del artifact.
   // 'firebase': como página web (Vercel), con Firebase Realtime Database (los datos del proyecto van en config.js).
   // Sin conexión: cada jugador avanza a su ritmo en modo individual.
-  const FRESH_CFG = { phase: 'lobby', q: 0, startedAt: 0, closed: false, revealed: false, revealAt: 0 };
+  // mode: 'clasico', 'conquista' o 'bolsa'. mapQ = último reto ya resuelto por la TV (Conquista y Bolsa).
+  // Conquista: map/sales/res = mapa, ventas y batallas del último reto; crisis = el que no puede blindar en la Crisis de reputación.
+  // Bolsa: cap/hist/mk = capital de cada jugador, su historial para la gráfica y los movimientos del último reto.
+  const FRESH_CFG = { mode: 'clasico', phase: 'lobby', q: 0, startedAt: 0, closed: false, revealed: false, revealAt: 0, map: {}, sales: {}, mapQ: -1, res: [], crisis: null, cap: {}, hist: {}, mk: [] };
   const LIVE = { mode: null, db: null, round: 'inicio', cfg: { ...FRESH_CFG }, cfgLoaded: false, teams: [], unsubTeams: null, writable: true, isAdmin: false, status: 'connecting', netDown: false, offset: null, fbError: null };
   let winnerDismissed = false, prevRanks = null;
   let liveReadyResolve;
   const liveReady = new Promise(r => { liveReadyResolve = r; });
   const now = () => Date.now() + (LIVE.offset || 0);
   const isLive = () => !!LIVE.mode && LIVE.cfgLoaded;
+  const isCq = () => isLive() && LIVE.cfg.mode === 'conquista';
+  const isSt = () => isLive() && LIVE.cfg.mode === 'bolsa';
+  // Puntaje que decide el ranking: puntos en Batalla de KPIs, ventas en Conquista, capital en la Bolsa.
+  const stCap = id => (LIVE.cfg.cap[id] === undefined ? ST_START : LIVE.cfg.cap[id]);
+  const teamPts = t => (isCq() ? LIVE.cfg.sales[t.id] || 0 : isSt() ? stCap(t.id) : t.score);
+  const fmtPts = t => (isSt() ? fmtMoney(teamPts(t)) : String(teamPts(t)));
 
   const SYNC_TEXT = {
     connecting: 'Conectando con la pantalla del salón…',
@@ -1887,12 +2342,21 @@ input:focus { outline: none; border-color: var(--cyan); }
     d = d || {};
     return {
       round: typeof d.round === 'string' && /^[a-z0-9-]{1,40}$/.test(d.round) ? d.round : 'inicio',
+      mode: ['conquista', 'bolsa'].includes(d.mode) ? d.mode : 'clasico',
       phase: ['lobby', 'question', 'final'].includes(d.phase) ? d.phase : 'lobby',
       q: Number.isInteger(d.q) ? Math.max(0, Math.min(Q_COUNT - 1, d.q)) : 0,
       startedAt: Number(d.startedAt) || 0,
       closed: d.closed === true,
       revealed: d.revealed === true,
-      revealAt: Number(d.revealAt) || 0
+      revealAt: Number(d.revealAt) || 0,
+      map: cqCleanMap(d.map),
+      sales: cqCleanSales(d.sales),
+      mapQ: Number.isInteger(d.mapQ) ? Math.max(-1, Math.min(Q_COUNT - 1, d.mapQ)) : -1,
+      res: cqCleanRes(d.res),
+      crisis: okId(d.crisis) ? d.crisis : null,
+      cap: cqCleanSales(d.cap),
+      hist: stCleanHist(d.hist),
+      mk: stCleanMk(d.mk)
     };
   }
   function cleanTeam(id, d) {
@@ -1911,10 +2375,44 @@ input:focus { outline: none; border-color: var(--cyan); }
       answered: results.filter(x => x !== null).length,
       results,
       timeMs: Math.max(0, n(d.timeMs)),
-      joinedAt: n(d.joinedAt)
+      joinedAt: n(d.joinedAt),
+      // Conquista: tg = ciudad elegida en cada reto (base 36, "-" = ninguna); el = segundos en responder (centésimas).
+      tg: Array.from({ length: Q_COUNT }, (_, i) => {
+        const ch = typeof d.tg === 'string' ? d.tg[i] : '';
+        const k = ch && ch !== '-' ? parseInt(ch, 36) : NaN;
+        return k >= 0 && k < CQ_CITIES.length ? k : null;
+      }),
+      el: Array.from({ length: Q_COUNT }, (_, i) => {
+        const v = typeof d.el === 'string' ? d.el.split(',')[i] : '';
+        const ms = v ? Number(v) * 10 : NaN;
+        return isFinite(ms) && ms >= 0 ? Math.min(Q_MS, ms) : null;
+      }),
+      // Bolsa: bt = cuánto invirtió en cada reto (índice de ST_BETS, "-" = no eligió).
+      bt: Array.from({ length: Q_COUNT }, (_, i) => {
+        const k = typeof d.bt === 'string' ? Number(d.bt[i]) : NaN;
+        return k >= 0 && k < ST_BETS.length ? k : null;
+      })
     };
   }
   function rankTeams(list) {
+    if (isSt()) {
+      return list.slice().sort((a, b) =>
+        (stCap(b.id) - stCap(a.id)) ||
+        (b.correct - a.correct) ||
+        (a.timeMs - b.timeMs) ||
+        (a.joinedAt - b.joinedAt) ||
+        a.name.localeCompare(b.name));
+    }
+    if (isCq()) {
+      const s = LIVE.cfg.sales, m = LIVE.cfg.map;
+      return list.slice().sort((a, b) =>
+        ((s[b.id] || 0) - (s[a.id] || 0)) ||
+        (cqShare(m, b.id) - cqShare(m, a.id)) ||
+        (b.correct - a.correct) ||
+        (a.timeMs - b.timeMs) ||
+        (a.joinedAt - b.joinedAt) ||
+        a.name.localeCompare(b.name));
+    }
     return list.slice().sort((a, b) =>
       (b.score - a.score) ||
       (b.correct - a.correct) ||
@@ -2043,6 +2541,9 @@ input:focus { outline: none; border-color: var(--cyan); }
     return {
       name: G.name, caseId: G.caseId, score: G.score, correct: G.correct, results, timeMs: G.timeMs,
       status: results.every(x => x !== null) ? 'done' : 'playing',
+      tg: (G.tg || []).map(x => (x === null || x === undefined ? '-' : x.toString(36))).join(''),
+      bt: (G.bt || []).map(x => (x === null || x === undefined ? '-' : String(x))).join(''),
+      el: G.picks.map(p => (p && !p.skipped ? Math.round(p.elapsed / 10) : '')).join(','),
       joinedAt: G.joinedAt, updatedAt: Date.now()
     };
   }
@@ -2123,20 +2624,30 @@ input:focus { outline: none; border-color: var(--cyan); }
     return (await checkPwLocal(pw)) ? 'ok' : 'bad';
   }
   // Mismas reglas que el servidor (api/admin.js) para pasar de una fase a otra.
-  function nextConfig(c, action, fromQ) {
-    const base = { round: LIVE.round, phase: c.phase, q: c.q, startedAt: c.startedAt, closed: c.closed, revealed: c.revealed, revealAt: c.revealAt || 0, updatedAt: Date.now() };
-    if (action === 'start' && c.phase === 'lobby') return { ...base, phase: 'question', q: 0, startedAt: Date.now(), closed: false, revealed: false };
+  function nextConfig(c, action, fromQ, arg) {
+    const base = { round: LIVE.round, mode: c.mode, phase: c.phase, q: c.q, startedAt: c.startedAt, closed: c.closed, revealed: c.revealed, revealAt: c.revealAt || 0,
+      map: c.map, sales: c.sales, mapQ: c.mapQ, res: c.res, crisis: c.crisis, cap: c.cap, hist: c.hist, mk: c.mk, updatedAt: Date.now() };
+    const scored = c.mode === 'conquista' || c.mode === 'bolsa';
+    // Conquista y Bolsa: si el anfitrión avanza antes de que la TV resuelva el reto, se resuelve aquí mismo.
+    const settled = () => (scored && c.phase === 'question' && c.mapQ < c.q ? modeResolve(c, LIVE.teams, c.q) : {});
+    if (action === 'mode' && c.phase === 'lobby') return { ...base, mode: MODE_NAMES[arg] ? arg : 'clasico' };
+    if (action === 'start' && c.phase === 'lobby') return { ...base, phase: 'question', q: 0, startedAt: Date.now(), closed: false, revealed: false, map: {}, sales: {}, mapQ: -1, res: [], crisis: null, cap: {}, hist: {}, mk: [] };
     if (action === 'close' && c.phase === 'question' && fromQ === c.q) return { ...base, closed: true };
-    if (action === 'next' && c.phase === 'question' && fromQ === c.q && c.q < Q_COUNT - 1) return { ...base, q: c.q + 1, startedAt: Date.now(), closed: false };
+    if (action === 'resolve' && scored && c.phase === 'question' && fromQ === c.q && c.mapQ < c.q) return { ...base, closed: true, ...modeResolve(c, LIVE.teams, c.q) };
+    if (action === 'next' && c.phase === 'question' && fromQ === c.q && c.q < Q_COUNT - 1) {
+      const s = { ...base, ...settled() };
+      const q = c.q + 1;
+      return { ...s, q, startedAt: Date.now(), closed: false, crisis: c.mode === 'conquista' && q === CQ_CRISIS_Q ? cqLeader(s.sales, LIVE.teams) : s.crisis };
+    }
     // revealAt: hora (del servidor) en que la TV muestra el nombre del ganador; los celulares esperan hasta ese momento.
-    if (action === 'final' && c.phase === 'question') return { ...base, phase: 'final', closed: true, revealed: true, revealAt: Math.round(now()) + SUSPENSE_MS };
-    if (action === 'newRound') return { round: 'r-' + rid(), ...FRESH_CFG, updatedAt: Date.now() };
+    if (action === 'final' && c.phase === 'question') return { ...base, ...settled(), phase: 'final', closed: true, revealed: true, revealAt: Math.round(now()) + SUSPENSE_MS };
+    if (action === 'newRound') return { round: 'r-' + rid(), ...FRESH_CFG, mode: c.mode, updatedAt: Date.now() };
     return null;
   }
-  async function adminAction(action) {
+  async function adminAction(action, arg) {
     const fromQ = LIVE.cfg.q;
     if (!canAdmin()) return false;
-    const next = nextConfig(LIVE.cfg, action, fromQ);
+    const next = nextConfig(LIVE.cfg, action, fromQ, arg);
     if (!next) return true;
     if (LIVE.mode === 'artifact') { await LIVE.db.doc('live/config').set(next); return true; }
     const m = FB.m;
@@ -2181,7 +2692,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     $('#brief-type').textContent = c.type;
     $('#brief-nets').textContent = c.nets;
     $('#brief-goal').textContent = c.goal;
-    $('#btn-ready').textContent = isLive() ? 'Estoy listo' : 'Empezar los retos';
+    $('#btn-ready').textContent = isLive() || LIVE.status === 'connecting' ? 'Estoy listo' : 'Empezar los retos';
     b.hidden = false;
     $('#draw-title').textContent = `${G.name}, esta es tu marca`;
   }
@@ -2204,7 +2715,7 @@ input:focus { outline: none; border-color: var(--cyan); }
       return { qi, opts, ans: slots[k] };
     });
     G = {
-      v: 3, teamId: (LIVE.mode === 'firebase' && FB.uid) || rid(), name, caseId: c.id, plan, picks: Array(Q_COUNT).fill(null),
+      v: 3, teamId: (LIVE.mode === 'firebase' && FB.uid) || rid(), name, caseId: c.id, plan, picks: Array(Q_COUNT).fill(null), tg: Array(Q_COUNT).fill(null), bt: Array(Q_COUNT).fill(null),
       score: 0, correct: 0, timeMs: 0, ready: false, joinedAt: now(), solo: null,
       round: LIVE.round, provisional: !LIVE.cfgLoaded, ver: 0, synced: -1
     };
@@ -2229,7 +2740,7 @@ input:focus { outline: none; border-color: var(--cyan); }
   $('#btn-ready').addEventListener('click', () => {
     if (!G) return;
     G.ready = true;
-    if (!isLive()) G.solo = { q: 0, startedAt: now(), done: false };
+    if (!isLive() && LIVE.status !== 'connecting') G.solo = { q: 0, startedAt: now(), done: false };
     G.ver++; persist();
     syncPlayer();
   });
@@ -2252,7 +2763,15 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (!G.ready) {
       // El texto del botón depende de si ya hay conexión con la pantalla del salón.
       if (current !== 'draw') showBrief();
-      else $('#btn-ready').textContent = isLive() ? 'Estoy listo' : 'Empezar los retos';
+      else $('#btn-ready').textContent = isLive() || LIVE.status === 'connecting' ? 'Estoy listo' : 'Empezar los retos';
+      return;
+    }
+    // Mientras se conecta con la pantalla del salón (por ejemplo, al recargar) el jugador espera:
+    // así no ve ni responde un reto en modo individual antes de tiempo.
+    if (!isLive() && !G.solo && LIVE.status === 'connecting') {
+      stopTimer();
+      show('wait');
+      renderWait();
       return;
     }
     if (!isLive() && !G.solo) G.solo = { q: 0, startedAt: now(), done: false };
@@ -2310,8 +2829,55 @@ input:focus { outline: none; border-color: var(--cyan); }
     chip.style.setProperty('--c', c.color);
     chip.querySelector('span').textContent = c.brand;
     $('#q-num').textContent = `Reto ${pad(q + 1)}/${pad(Q_COUNT)}`;
+    const cq = isCq(), st = isSt();
     $('#q-lock').hidden = !(isLive() && isBlind(q));
-    $('#q-score').textContent = G.score;
+    $('#q-lock-t').textContent = cq ? 'Niebla de guerra' : st ? 'Bolsa a ciegas' : 'Tabla oculta';
+    $('#q-score-l').textContent = cq ? 'Ventas' : st ? 'Capital' : 'Pts';
+    $('#q-score').textContent = cq ? LIVE.cfg.sales[G.teamId] || 0 : st ? fmtMoney(stCap(G.teamId)) : G.score;
+    const ev = st ? stEventText(q) : cqEventText(q);
+    $('#q-event').textContent = ev;
+    $('#q-event').hidden = !ev;
+    $('#q-event').classList.toggle('dark', !!ev && (q === CQ_CRISIS_Q || (isBlind(q) && (st ? stMult(q) : cqMult(q)) === 1)));
+  }
+  function stEventText(q) {
+    const ev = ST_EVENTS[q];
+    if (q === ST_PANIC_Q) return 'Pánico en la bolsa: en este reto nadie puede invertir menos del 50 %.';
+    if (ev && ev.mult > 1) return `${ev.name}: en este reto las ganancias valen ×${ev.mult}.${isBlind(q) ? ' La bolsa sigue a ciegas.' : ''}`;
+    if (isBlind(q)) return 'Bolsa a ciegas: solo ves tu capital. Nadie sabe quién va ganando.';
+    return '';
+  }
+  // Bolsa: cuánto invierte en este reto. Se elige antes de responder y queda fija al tocar una respuesta.
+  function renderBets(q) {
+    const box = $('#st-bet');
+    box.hidden = !isSt();
+    if (!isSt()) return;
+    const min = stMinBet(q);
+    if (G.bt[q] === null || G.bt[q] < min) { G.bt[q] = Math.max(min, G.lastBet === undefined ? 1 : G.lastBet); persist(); }
+    const cap = stCap(G.teamId), sel = G.bt[q];
+    $('#st-bet-l').textContent = `¿Cuánto inviertes? Tienes ${fmtMoney(cap)}`;
+    $('#st-bets').innerHTML = ST_BETS.map((p, i) => `<button type="button" class="st-b${i === sel ? ' sel' : ''}${p === 100 ? ' all' : ''}" data-b="${i}"${i < min ? ' disabled' : ''}>`
+      + `<b>${p === 100 ? 'Todo' : p + ' %'}</b><small>${fmtMoney(Math.round(cap * p / 100))}</small></button>`).join('');
+  }
+  $('#st-bets').addEventListener('click', e => {
+    const b = e.target.closest('.st-b');
+    if (!b || b.disabled || !G || shownMode !== 'question' || G.picks[shownQ]) return;
+    G.bt[shownQ] = G.lastBet = Number(b.dataset.b);
+    persist();
+    renderBets(shownQ);
+  });
+  // Aviso del evento del reto en el celular (solo en Conquista).
+  function cqEventText(q) {
+    if (!isCq()) return '';
+    if (q === CQ_CRISIS_Q) {
+      const id = LIVE.cfg.crisis;
+      if (G && id === G.teamId) return 'Crisis de reputación: vas ganando y te estalló un escándalo. En este reto no puedes blindar tus ciudades.';
+      const t = LIVE.teams.find(x => x.id === id);
+      return `Crisis de reputación: ${t ? t.name : 'el líder'} no puede blindar en este reto. ¡Ataca sus ciudades!`;
+    }
+    const ev = CQ_EVENTS[q];
+    if (ev && ev.mult > 1) return `${ev.name}: en este reto las ventas valen ×${ev.mult}.${isBlind(q) ? ' El mapa sigue en la niebla.' : ''}`;
+    if (isBlind(q)) return 'Niebla de guerra: solo ves tus ciudades. Nadie sabe quién va ganando.';
+    return '';
   }
   function renderQuestion(q) {
     const c = caseOf(G);
@@ -2325,6 +2891,7 @@ input:focus { outline: none; border-color: var(--cyan); }
       `<button class="opt" type="button" data-i="${i}"><span class="key">${LETTERS[i]}</span><span>${esc(o)}</span></button>`).join('');
     $('#fb').hidden = true;
     $('#timer').classList.remove('low');
+    renderBets(q);
     window.scrollTo(0, 0);
   }
   $('#opts').addEventListener('click', e => {
@@ -2357,6 +2924,8 @@ input:focus { outline: none; border-color: var(--cyan); }
     recordAnswer(q, over ? -1 : i, st);
     renderFeedback(q, true);
     renderPlace();
+    // En Conquista, si acertó, lo primero que tiene que ver es el mapa para hacer su jugada.
+    if (isCq() && G.picks[q].ok) $('#fb').scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
   }
   function renderFeedback(q, fresh) {
     const c = caseOf(G);
@@ -2385,6 +2954,22 @@ input:focus { outline: none; border-color: var(--cyan); }
     const f = $('#fb-f');
     f.hidden = !item.f;
     f.textContent = item.f ? `Fórmula: ${item.f}` : '';
+    $('#st-bet').hidden = true;
+    if (isSt()) {
+      const m = LIVE.cfg.mapQ === q ? LIVE.cfg.mk.find(x => x.id === G.teamId) : null;
+      const pct = m ? m.p : ST_BETS[Math.max(stMinBet(q), G.bt[q] === null ? 1 : G.bt[q])];
+      const stake = fmtMoney(m ? m.s : stCap(G.teamId) * pct / 100);
+      $('#fb-pts').textContent = '';
+      $('#fb-ans').innerHTML = L.skipped ? 'Entraste con el reto en curso: inviertes desde el siguiente.'
+        : L.ok ? `Invertiste <b>${stake} (${pct} %)</b> y acertaste. Tu ganancia sale al cerrar el reto: mientras menos acierten, más ganas.`
+        : `El KPI indicado era <b>${esc(item.a)}</b>. Pierdes lo que invertiste: ${stake} (${pct} %).`;
+    }
+    if (isCq()) {
+      $('#fb-pts').textContent = '';
+      $('#fb-ans').innerHTML = L.skipped ? 'Entraste con el reto en curso: juegas desde el siguiente.'
+        : L.ok ? `Respondiste en <b>${(L.elapsed / 1000).toLocaleString('es-CO', { maximumFractionDigits: 1 })} s</b>. Si alguien elige tu misma ciudad, gana el que respondió más rápido.`
+        : `El KPI indicado era <b>${esc(item.a)}</b>. En este reto no puedes atacar ni blindar.`;
+    }
     const live = isLive();
     $('#btn-next').hidden = live;
     $('#btn-next').textContent = q >= Q_COUNT - 1 ? 'Ver mi resultado' : 'Siguiente reto';
@@ -2398,12 +2983,16 @@ input:focus { outline: none; border-color: var(--cyan); }
   }
   // Mensaje de espera y puesto actual mientras el anfitrión pasa al siguiente reto.
   function renderPlace() {
+    renderCqPhone();
     if (current !== 'quiz' || shownMode !== 'feedback' || !isLive() || !G) return;
     const st = LIVE.cfg;
     const teams = LIVE.teams;
-    const answered = teams.filter(t => t.results[st.q] !== null).length;
+    const cq = isCq();
+    const answered = cq ? cqReadyCount(teams, st.q) : teams.filter(t => t.results[st.q] !== null).length;
     const over = st.closed || now() >= st.startedAt + Q_MS || (teams.length > 0 && answered >= teams.length);
-    $('#fb-wait-msg').textContent = over
+    $('#fb-wait-msg').textContent = cq ? cqWaitText(st, over)
+      : isSt() ? stWaitText(st, over)
+      : over
       ? (st.q >= Q_COUNT - 1 ? 'Último reto cerrado. Mira la pantalla: el anfitrión va a revelar al ganador.'
         : isBlind(st.q) ? 'Reto cerrado. La tabla está oculta: el ganador se revela al final.'
         : 'Reto cerrado. Mira las posiciones en la pantalla del salón; el anfitrión pasará al siguiente reto.')
@@ -2419,6 +3008,131 @@ input:focus { outline: none; border-color: var(--cyan); }
       place.hidden = false;
     } else place.hidden = true;
   }
+  // ---------- Conquista en el celular: elegir ciudad y ver cómo te fue ----------
+  function cqReadyCount(teams, q) { return teams.filter(t => t.results[q] === 0 || (t.results[q] === 1 && t.tg[q] !== null)).length; }
+  function cqWaitText(st, over) {
+    const q = st.q, L = G.picks[q];
+    if (st.mapQ >= q) {
+      if (q >= Q_COUNT - 1) return 'Último reto resuelto. Mira la pantalla: el anfitrión va a revelar al ganador.';
+      return isBlind(q) ? 'Batallas resueltas en la niebla. Solo tú sabes cómo te fue.' : 'Batallas resueltas. Mira el mapa en la pantalla del salón.';
+    }
+    if (over) return 'Reto cerrado. Calculando las batallas…';
+    if (L && L.ok) return G.tg[q] !== null ? 'Jugada lista. Puedes cambiarla hasta que se cierre el reto.' : 'Elige tu jugada arriba antes de que se acabe el tiempo.';
+    return 'Respuesta enviada. Espera a que el resto del salón termine este reto.';
+  }
+  function stWaitText(st, over) {
+    const q = st.q;
+    if (st.mapQ >= q) {
+      if (q >= Q_COUNT - 1) return 'Último reto liquidado. Mira la pantalla: el anfitrión va a revelar al ganador.';
+      return isBlind(q) ? 'Mercado cerrado a ciegas: solo tú sabes cómo te fue.' : 'Mercado cerrado. Mira la pizarra en la pantalla del salón.';
+    }
+    return over ? 'Reto cerrado. Calculando el mercado…' : 'Inversión hecha. Espera a que el resto del salón responda.';
+  }
+  // Reporte de la Bolsa: cuánto ganaste o perdiste y cómo se movió el mercado.
+  function stReportHtml(q) {
+    const st = LIVE.cfg, me = G.teamId, m = st.mk.find(x => x.id === me);
+    const items = [];
+    const okN = st.mk.filter(x => x.ok).length, n = st.mk.length;
+    if (!m) items.push(['', 'No invertiste en este reto.']);
+    else if (m.ok) items.push(['ok', `¡Ganaste ${fmtMoney(m.d)}! Invertiste ${fmtMoney(m.s)} (${m.p} %) y te rindió ${m.s ? Math.round(m.d / m.s * 100) : 0} %.`]);
+    else items.push(['no', `Perdiste ${fmtMoney(m.s)}: invertiste el ${m.p} % y no acertaste.`]);
+    if (m && m.r) items.push(['no', `Quebraste: el banco te dejó ${fmtMoney(ST_FLOOR)} para seguir jugando.`]);
+    if (n) items.push(['', `Acertaron ${okN} de ${n}. ${okN <= n / 3 ? 'Pocos aciertos: los que acertaron se llevaron un gran botín.' : okN >= n * 0.8 ? 'Casi todos acertaron: ganancias modestas.' : 'Mercado repartido.'}`]);
+    const sum = `Capital: <b>${fmtMoney(stCap(me))}</b> · rentabilidad total ${fmtRoi(stCap(me))}${stMult(q) > 1 ? ` · ganancias ×${stMult(q)} en este reto` : ''}`;
+    return items.map(([cls, txt]) => `<li class="${cls}">${esc(txt)}</li>`).join('') + `<li class="sum">${sum}</li>`;
+  }
+  let cqKey = '', cqTimer = 0;
+  function renderCqPhone() {
+    const pick = $('#cq-pick'), rep = $('#cq-rep');
+    const st = LIVE.cfg, q = st.q;
+    if (!(isCq() || isSt()) || !G || current !== 'quiz' || shownMode !== 'feedback' || shownQ !== q) {
+      pick.hidden = true; rep.hidden = true;
+      if (cqTimer) { clearInterval(cqTimer); cqTimer = 0; }
+      return;
+    }
+    if (isSt()) {
+      pick.hidden = true;
+      $('#q-score').textContent = fmtMoney(stCap(G.teamId));
+      const show = st.mapQ === q && !!G.picks[q];
+      rep.hidden = !show;
+      if (show) rep.innerHTML = stReportHtml(q);
+      return;
+    }
+    const L = G.picks[q];
+    const resolved = st.mapQ >= q;
+    const left = Math.max(0, st.startedAt + Q_MS - now());
+    const open = !resolved && !st.closed && left > 0;
+    $('#q-score').textContent = st.sales[G.teamId] || 0;
+    if (L && L.ok && !resolved) {
+      const sel = G.tg[q], city = sel === null ? null : CQ_CITIES[sel];
+      const shield = !!city && st.map[city.id] === G.teamId;
+      $('#cq-pick-time').textContent = open ? `Te quedan ${Math.ceil(left / 1000)} s para mover` : 'Se acabó el tiempo';
+      $('#cq-pick-title').textContent = city ? `${shield ? 'Vas a blindar' : 'Vas a atacar'} ${city.name}` : open ? '¿A dónde llevas tu marca?' : 'No alcanzaste a mover';
+      $('#cq-pick-sub').textContent = city
+        ? (shield ? 'Blindada, nadie te la quita en este reto. Puedes cambiar de ciudad hasta que se cierre el reto.' : 'Si varios atacan esta ciudad, gana el que respondió más rápido. Puedes cambiar de ciudad hasta que se cierre el reto.')
+        : 'Toca una ciudad libre o de otro jugador para atacarla, o una tuya para blindarla.';
+      const key = [q, sel, open, isBlind(q), st.crisis, JSON.stringify(st.map), LIVE.teams.map(t => t.id + t.name).join()].join('|');
+      if (key !== cqKey) { cqKey = key; $('#cq-cities').innerHTML = cqCitiesHtml(st, q, sel, open); }
+      pick.hidden = false;
+    } else pick.hidden = true;
+    if (resolved && st.mapQ === q && L) { rep.innerHTML = cqReportHtml(q); rep.hidden = false; } else rep.hidden = true;
+    const ticking = !!(L && L.ok) && open;
+    if (ticking && !cqTimer) cqTimer = setInterval(renderPlace, 500);
+    if (!ticking && cqTimer) { clearInterval(cqTimer); cqTimer = 0; }
+  }
+  function cqCitiesHtml(st, q, sel, open) {
+    const me = G.teamId, fog = isBlind(q), mult = cqMult(q);
+    const names = new Map(LIVE.teams.map(t => [t.id, t.name]));
+    const colors = cqColors(LIVE.teams);
+    const crisisMe = q === CQ_CRISIS_Q && st.crisis === me;
+    return CQ_CITIES.map((city, i) => ({ city, i, owner: st.map[city.id] || null }))
+      .sort((a, b) => (b.city.v - a.city.v) || a.city.name.localeCompare(b.city.name, 'es'))
+      .map(({ city, i, owner }) => {
+        const mine = owner === me, known = !fog || mine;
+        const who = mine ? (crisisMe ? 'Tuya · en crisis: no puedes blindar' : 'Tuya · tócala para blindarla')
+          : !known ? 'Dueño oculto por la niebla' : owner ? `De ${names.get(owner) || 'otro jugador'}` : 'Libre';
+        const col = mine ? colors.get(me) : known && owner ? colors.get(owner) || 'var(--muted)' : 'transparent';
+        const dis = !open || (mine && crisisMe);
+        return `<button type="button" class="cq-city${mine ? ' mine' : ''}${sel === i ? ' sel' : ''}" data-i="${i}" style="--c:${col}"${dis ? ' disabled' : ''}>`
+          + `<i></i><b>${esc(city.name)}</b><small>${esc(who)}</small><em>+${city.v * mult}</em></button>`;
+      }).join('');
+  }
+  $('#cq-cities').addEventListener('click', e => {
+    const b = e.target.closest('.cq-city');
+    if (b && !b.disabled) cqChoose(Number(b.dataset.i));
+  });
+  function cqChoose(i) {
+    const st = LIVE.cfg, q = st.q, L = G && G.picks[q];
+    if (!isCq() || !L || !L.ok || st.mapQ >= q || st.closed || now() >= st.startedAt + Q_MS) return;
+    if (q === CQ_CRISIS_Q && st.crisis === G.teamId && st.map[CQ_CITIES[i].id] === G.teamId) return;
+    G.tg[q] = i;
+    touch();
+    try { if (navigator.vibrate) navigator.vibrate(12); } catch {}
+    renderPlace();
+  }
+  // Reporte de la ronda: tu jugada, lo que te robaron y cuánto vendiste.
+  function cqReportHtml(q) {
+    const st = LIVE.cfg, me = G.teamId, fog = isBlind(q), L = G.picks[q];
+    const name = id => { const t = LIVE.teams.find(x => x.id === id); return t ? t.name : 'otro jugador'; };
+    const sel = G.tg[q], city = sel === null ? null : CQ_CITIES[sel];
+    const r = city ? st.res.find(x => x.c === city.id) : null;
+    const items = [];
+    if (!L || L.skipped) items.push(['', 'No jugaste este reto.']);
+    else if (!L.ok) items.push(['no', 'Fallaste el KPI: en este reto no atacaste ni blindaste.']);
+    else if (!city) items.push(['', 'Acertaste, pero no elegiste ciudad a tiempo.']);
+    else if (r && r.to === me && r.k === 'conquista') items.push(['ok', `¡Conquistaste ${city.name}!`]);
+    else if (r && r.to === me && r.k === 'robo') items.push(['ok', `¡Le robaste ${city.name} a ${fog ? 'un rival' : name(r.from)}!`]);
+    else if (r && r.to === me) items.push(['ok', r.n ? `Blindaste ${city.name} y resistió ${plural(r.n, 'ataque', 'ataques')}.` : `Blindaste ${city.name}. Nadie la atacó.`]);
+    else if (r && r.k === 'defendida') items.push(['no', `${city.name} estaba blindada: tu ataque rebotó.`]);
+    else if (r) items.push(['no', fog ? `Alguien más rápido se quedó con ${city.name}.` : `${name(r.to)} llegó más rápido a ${city.name}.`]);
+    else items.push(['', st.map[city.id] === me ? `${city.name} sigue siendo tuya.` : `${city.name}: sin cambios.`]);
+    st.res.filter(x => x.k === 'robo' && x.from === me)
+      .forEach(x => items.push(['no', `Te robaron ${CQ_BY_ID[x.c].name}${fog ? '' : ` (se la llevó ${name(x.to)})`}.`]));
+    const own = cqOwned(st.map, me), mult = cqMult(q), gained = own.reduce((s, c) => s + c.v, 0) * mult;
+    const sum = `Ventas de este reto: <b>+${gained}</b>${mult > 1 ? ` (×${mult})` : ''} · Total: <b>${st.sales[me] || 0}</b> · ${plural(own.length, 'ciudad', 'ciudades')} · cuota ${fmtShare(cqShare(st.map, me))}`;
+    return items.map(([cls, txt]) => `<li class="${cls}">${esc(txt)}</li>`).join('') + `<li class="sum">${sum}</li>`;
+  }
+
   $('#btn-next').addEventListener('click', () => {
     if (!G || isLive() || !G.solo) return;
     if (G.solo.q >= Q_COUNT - 1) { G.solo.done = true; G.finishedAt = now(); }
@@ -2437,6 +3151,9 @@ input:focus { outline: none; border-color: var(--cyan); }
     chip.querySelector('span').textContent = c.brand;
     const n = LIVE.teams.length;
     $('#wait-count').textContent = n ? `${plural(n, 'jugador conectado', 'jugadores conectados')} en la sala.` : '';
+    $('#wait-classic').hidden = isCq() || isSt();
+    $('#wait-cq').hidden = !isCq();
+    $('#wait-st').hidden = !isSt();
   }
 
   // ---------- final ----------
@@ -2445,10 +3162,25 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (!G) return;
     const c = caseOf(G);
     $('#end-name').textContent = G.name;
-    $('#end-score').textContent = G.score;
     const played = G.picks.filter(p => p && !p.skipped).length;
-    $('#end-correct').textContent = `${G.correct} de ${played || Q_COUNT}`;
-    $('#end-time').textContent = fmtTime(G.timeMs);
+    const cq = isCq() && G.round === LIVE.round, stm = isSt() && G.round === LIVE.round;
+    $('#end-score-l').textContent = cq ? 'Ventas finales' : stm ? 'Capital final' : 'Puntos finales';
+    $('#end-l1').textContent = cq ? 'Cuota de mercado' : stm ? 'Rentabilidad' : 'Aciertos';
+    $('#end-l2').textContent = cq ? 'Ciudades' : stm ? 'Aciertos' : 'Tiempo';
+    if (stm) {
+      $('#end-score').textContent = fmtMoney(stCap(G.teamId));
+      $('#end-correct').textContent = fmtRoi(stCap(G.teamId));
+      $('#end-time').textContent = `${G.correct} de ${played || Q_COUNT}`;
+    } else if (cq) {
+      const m = LIVE.cfg.map;
+      $('#end-score').textContent = LIVE.cfg.sales[G.teamId] || 0;
+      $('#end-correct').textContent = fmtShare(cqShare(m, G.teamId));
+      $('#end-time').textContent = `${cqOwned(m, G.teamId).length} · ${G.correct} aciertos`;
+    } else {
+      $('#end-score').textContent = G.score;
+      $('#end-correct').textContent = `${G.correct} de ${played || Q_COUNT}`;
+      $('#end-time').textContent = fmtTime(G.timeMs);
+    }
     $('#end-brand').textContent = c.brand;
     $('#end-dots').innerHTML = G.picks.map(p => `<i class="${p && !p.skipped ? (p.ok ? 'ok' : 'no') : ''}"></i>`).join('');
     const pos = $('#end-pos');
@@ -2457,6 +3189,7 @@ input:focus { outline: none; border-color: var(--cyan); }
     // El ganador es secreto hasta que la TV lo revela (revealAt): mientras tanto, nada de puestos.
     if (isLive() && G.round === LIVE.round && LIVE.cfg.phase === 'final' && now() < LIVE.cfg.revealAt) {
       pos.hidden = true;
+      $('#end-pod').hidden = true;
       win.classList.remove('champ');
       win.innerHTML = '<span class="mono">Atento a la pantalla del salón</span><b>Revelando al ganador…</b><span>Tu puesto final aparece aquí en cuanto se anuncie.</span>';
       win.hidden = false;
@@ -2476,10 +3209,14 @@ input:focus { outline: none; border-color: var(--cyan); }
         win.classList.toggle('champ', w.id === G.teamId);
         win.innerHTML = w.id === G.teamId
           ? `<span class="mono">Resultado oficial</span><b>¡Ganaste la Batalla de <span class="nt">KPIs</span>!</b>`
-          : `<span class="mono">Ganador de la batalla</span><b>${esc(w.name)}</b><span>${w.score} pts · ${w.correct} aciertos</span>`;
+          : `<span class="mono">Ganador de la batalla</span><b>${esc(w.name)}</b><span>${isCq() ? `${teamPts(w)} ventas · ${fmtShare(cqShare(LIVE.cfg.map, w.id))} del mercado` : isSt() ? `${fmtMoney(stCap(w.id))} de capital · ${fmtRoi(stCap(w.id))}` : `${w.score} pts · ${w.correct} aciertos`}</span>`;
         win.hidden = false;
-      } else win.hidden = true;
-    } else { pos.hidden = true; win.hidden = true; }
+        // Podio: los 3 primeros, con el puntaje del juego que se jugó.
+        $('#end-pod').innerHTML = ranked.slice(0, 3).map((t, k) => `<li${t.id === G.teamId ? ' class="me"' : ''}><span class="p">${k + 1}</span>`
+          + `<span class="n">${esc(t.name)}</span><span class="v">${isCq() ? `${teamPts(t)} ventas` : isSt() ? fmtMoney(stCap(t.id)) : `${t.score} pts`}</span></li>`).join('');
+        $('#end-pod').hidden = false;
+      } else { win.hidden = true; $('#end-pod').hidden = true; }
+    } else { pos.hidden = true; win.hidden = true; $('#end-pod').hidden = true; }
     updateSyncUI();
   }
   $('#btn-retry-send').addEventListener('click', () => { if (G) { G.ver++; persist(); saveTeam(); } });
@@ -2588,12 +3325,14 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (!isLive() || c.phase === 'lobby') return 'lobby';
     if (c.phase === 'final') return 'final';
     const teams = LIVE.teams;
-    const over = c.closed || now() >= c.startedAt + Q_MS || (teams.length > 0 && answeredCount(teams, c.q) >= teams.length);
+    // En Conquista un jugador está listo cuando respondió y, si acertó, ya eligió ciudad.
+    const done = isCq() ? cqReadyCount(teams, c.q) : answeredCount(teams, c.q);
+    const over = c.closed || now() >= c.startedAt + Q_MS || (teams.length > 0 && done >= teams.length);
     return over ? 'standings' : 'question';
   }
   let busy = false;
   $('#tv-main').addEventListener('click', async () => {
-    if (busy) return;
+    if (busy || CQ.resolving) return;
     audioUnlock();
     SFX.click();
     const view = tvView();
@@ -2602,13 +3341,22 @@ input:focus { outline: none; border-color: var(--cyan); }
     let action = null;
     if (view === 'lobby') action = 'start';
     else if (view === 'question') {
-      const left = LIVE.teams.length - answeredCount(LIVE.teams, c.q);
-      const go = await confirmBox('¿Cerrar el reto?', `Todavía ${left === 1 ? 'falta 1 jugador' : `faltan ${left} jugadores`} por responder. Si cierras ahora, su respuesta cuenta como tiempo agotado.`, 'Cerrar reto');
+      const cq = isCq();
+      const left = LIVE.teams.length - (cq ? cqReadyCount : answeredCount)(LIVE.teams, c.q);
+      const go = await confirmBox('¿Cerrar el reto?', cq
+        ? `Todavía ${left === 1 ? 'falta 1 jugador' : `faltan ${left} jugadores`} por responder o elegir ciudad. Si cierras ahora, se quedan sin jugada en este reto.`
+        : isSt() ? `Todavía ${left === 1 ? 'falta 1 jugador' : `faltan ${left} jugadores`} por responder. Si cierras ahora, cuenta como error y pierden lo que invirtieron.`
+        : `Todavía ${left === 1 ? 'falta 1 jugador' : `faltan ${left} jugadores`} por responder. Si cierras ahora, su respuesta cuenta como tiempo agotado.`, 'Cerrar reto');
       if (!go) return;
       action = 'close';
     } else if (view === 'standings') action = c.q >= Q_COUNT - 1 ? 'final' : 'next';
-    // Antes del reto 12 la TV avisa que empiezan los retos a ciegas; al terminar el aviso pasa sola al reto.
-    if (action === 'next' && c.q + 1 === BLIND_FROM) { runBlindIntro(); return; }
+    // Antes de ciertos retos la TV muestra un aviso (retos a ciegas, o los eventos de Conquista y la Bolsa); al terminar pasa sola al reto.
+    if (action === 'next') {
+      const scored = isCq() || isSt();
+      const ev = scored ? modeEvents(c.mode)[c.q + 1] : null;
+      const kind = scored ? (ev ? ev.kind : null) : (c.q + 1 === BLIND_FROM ? 'blind' : null);
+      if (kind) { runBlindIntro(kind); return; }
+    }
     if (!action) return;
     busy = true; renderTV();
     try { await adminAction(action); }
@@ -2628,6 +3376,24 @@ input:focus { outline: none; border-color: var(--cyan); }
     } catch { toast('No se pudo empezar una nueva partida. Revisa tu conexión e intenta otra vez.'); }
   });
   $('#w-close').addEventListener('click', () => { winnerDismissed = true; $('#winner').hidden = true; });
+  // Elegir el modo de juego (solo en la sala de espera).
+  function renderModes() {
+    const m = LIVE.cfg.mode, admin = canAdmin();
+    document.querySelectorAll('#tv-modes .mode-card').forEach(b => {
+      b.setAttribute('aria-pressed', String(b.dataset.mode === m));
+      b.disabled = !admin || busy;
+    });
+  }
+  $('#tv-modes').addEventListener('click', async e => {
+    const b = e.target.closest('.mode-card');
+    if (!b || b.disabled || busy || tvView() !== 'lobby' || b.dataset.mode === LIVE.cfg.mode) return;
+    audioUnlock();
+    SFX.click();
+    busy = true; renderTV();
+    try { await adminAction('mode', b.dataset.mode); }
+    catch { toast('No se pudo cambiar el modo. Revisa la conexión e intenta otra vez.'); }
+    busy = false; renderTV();
+  });
 
   let qrLoaded = false;
   function loadQr() {
@@ -2679,13 +3445,16 @@ input:focus { outline: none; border-color: var(--cyan); }
     $('#tv-note').hidden = !msg;
     $('#tv-n').textContent = ranked.length;
     $('#tv-n-label').textContent = ranked.length === 1 ? 'jugador' : 'jugadores';
+    const cq = isCq(), st = isSt(), scored = cq || st;
+    const ev = modeEvents(c.mode)[c.q];
+    const mname = MODE_NAMES[isLive() ? c.mode : 'clasico'];
     $('#tv-stage').textContent = {
-      lobby: 'Sala de espera',
-      question: `Reto ${pad(c.q + 1)} de ${Q_COUNT} · en juego`,
-      standings: `Pausa · posiciones después del reto ${pad(c.q + 1)} de ${Q_COUNT}`,
-      final: 'Resultado final'
+      lobby: `Sala de espera · ${mname}`,
+      question: `Reto ${pad(c.q + 1)} de ${Q_COUNT} · en juego` + (scored && ev && !/fog/.test(ev.kind) ? ` · ${ev.name}` : ''),
+      standings: cq ? `Batallas del reto ${pad(c.q + 1)} de ${Q_COUNT}` : st ? `Cierre del mercado · reto ${pad(c.q + 1)} de ${Q_COUNT}` : `Pausa · posiciones después del reto ${pad(c.q + 1)} de ${Q_COUNT}`,
+      final: `Resultado final · ${mname}`
     }[view];
-    if (isBlind(c.q) && (view === 'question' || view === 'standings')) $('#tv-stage').textContent += ' · tabla oculta';
+    if (isBlind(c.q) && (view === 'question' || view === 'standings')) $('#tv-stage').textContent += cq ? ' · niebla de guerra' : st ? ' · bolsa a ciegas' : ' · tabla oculta';
 
     const main = $('#tv-main');
     main.textContent = {
@@ -2698,14 +3467,28 @@ input:focus { outline: none; border-color: var(--cyan); }
     $('#tv-new').disabled = !canAdmin();
 
     $('#tv-lobby').hidden = view !== 'lobby';
-    $('#tv-question').hidden = view !== 'question';
-    $('#tv-chips').hidden = !(view === 'lobby' || view === 'question') || !ranked.length;
+    $('#tv-modes').hidden = view !== 'lobby' || !isLive();
+    if (view === 'lobby') renderModes();
+    $('#tv-question').hidden = view !== 'question' || scored;
+    $('#tv-chips').hidden = !(view === 'lobby' || (view === 'question' && !scored)) || !ranked.length;
     $('#tv-empty').hidden = !(view === 'lobby' && !ranked.length);
     // En los retos a ciegas la pausa no muestra posiciones: solo el candado y cuántos retos faltan.
-    const secretView = view === 'standings' && isBlind(c.q);
-    const showBoard = (view === 'standings' && !secretView) || view === 'final';
+    // En Conquista (mapa) y en la Bolsa (gráfica y pizarra) la tabla completa solo aparece en el resultado final.
+    const secretView = !scored && view === 'standings' && isBlind(c.q);
+    const showBoard = scored ? view === 'final' : (view === 'standings' && !secretView) || view === 'final';
+    const board = $('#board'), boardHome = scored && view === 'final' ? $('#cq-side') : $('#s-tv');
+    if (board.parentElement !== boardHome) boardHome.insertBefore(board, scored && view === 'final' ? null : $('#tv-empty'));
+    $('#tv-cq').hidden = !scored;
+    $('#cq-map').hidden = !cq;
+    $('#st-chart').hidden = !st;
+    if (cq) renderCqTV(view, c, ranked);
+    if (st) renderStTV(view, c, ranked);
+    if (scored) modeAutoResolve(view, c);
     $('#board').hidden = !showBoard || !ranked.length;
     $('#tv-leader').hidden = !showBoard || !ranked.length;
+    const dense = ranked.length > 12;
+    $('#board').classList.toggle('dense', dense);
+    $('#tv-leader').classList.toggle('dense', dense);
     $('#tv-blind').hidden = !secretView;
     if (secretView) {
       const left = Q_COUNT - 1 - c.q;
@@ -2750,11 +3533,18 @@ input:focus { outline: none; border-color: var(--cyan); }
     leaderId = t.id;
     $('#tv-l-label').textContent = view === 'final' ? 'Primer lugar' : 'Va ganando';
     $('#tv-l-name').textContent = t.name;
-    $('#tv-l-pts').textContent = t.score;
-    $('#tv-l-sub').textContent = `${cs ? cs.brand : 'Marca'} · ${t.correct} aciertos · ` + (s ? `${t.score - s.score} pts de ventaja sobre ${s.name}` : 'Único jugador por ahora');
+    $('#tv-l-pts').textContent = fmtPts(t);
+    $('#tv-l-sub').textContent = isSt()
+      ? `${cs ? cs.brand : 'Marca'} · rentabilidad ${fmtRoi(stCap(t.id))} · ${plural(t.correct, 'acierto', 'aciertos')} · `
+        + (s ? `${fmtMoney(stCap(t.id) - stCap(s.id))} más que ${s.name}` : 'Único jugador por ahora')
+      : isCq()
+      ? `${cs ? cs.brand : 'Marca'} · ${plural(cqOwned(LIVE.cfg.map, t.id).length, 'ciudad', 'ciudades')} · ${fmtShare(cqShare(LIVE.cfg.map, t.id))} del mercado · `
+        + (s ? `${teamPts(t) - teamPts(s)} ventas de ventaja sobre ${s.name}` : 'Único jugador por ahora')
+      : `${cs ? cs.brand : 'Marca'} · ${t.correct} aciertos · ` + (s ? `${t.score - s.score} pts de ventaja sobre ${s.name}` : 'Único jugador por ahora');
   }
   function renderBoard(ranked, view) {
-    const key = view + '|' + ranked.map(t => `${t.id}:${t.score}:${t.results.join('')}:${t.name}`).join('|') + '|' + (prevRanks ? [...prevRanks].join() : '');
+    const cq = isCq();
+    const key = view + '|' + cq + '|' + ranked.map(t => `${t.id}:${teamPts(t)}:${t.results.join('')}:${t.name}`).join('|') + '|' + (prevRanks ? [...prevRanks].join() : '');
     if (key === boardKey) return;
     boardKey = key;
     const board = $('#board');
@@ -2779,12 +3569,16 @@ input:focus { outline: none; border-color: var(--cyan); }
       delta.textContent = diff > 0 ? `▲${diff}` : diff < 0 ? `▼${-diff}` : '';
       delta.className = 'delta' + (diff > 0 ? ' up' : diff < 0 ? ' down' : '');
       el.querySelector('.nm').textContent = t.name;
-      el.querySelector('.meta').textContent = `${cs ? cs.brand : 'Marca'} · ${t.correct} de ${t.answered} aciertos`;
+      el.querySelector('.meta').textContent = cq
+        ? `${cs ? cs.brand : 'Marca'} · ${plural(cqOwned(LIVE.cfg.map, t.id).length, 'ciudad', 'ciudades')} · ${fmtShare(cqShare(LIVE.cfg.map, t.id))}`
+        : isSt() ? `${cs ? cs.brand : 'Marca'} · ${fmtRoi(stCap(t.id))} · ${t.correct} aciertos`
+        : `${cs ? cs.brand : 'Marca'} · ${t.correct} de ${t.answered} aciertos`;
       el.querySelector('.dots').innerHTML = t.results.map(r => `<i class="${r === 1 ? 'ok' : r === 0 ? 'no' : ''}"></i>`).join('');
       const pts = el.querySelector('.pts');
-      if (pts.textContent !== String(t.score)) {
+      const v = fmtPts(t);
+      if (pts.textContent !== String(v)) {
         const had = pts.textContent !== '';
-        pts.textContent = t.score;
+        pts.textContent = v;
         if (had && !RM) { pts.classList.remove('pop'); void pts.offsetWidth; pts.classList.add('pop'); }
       }
       board.appendChild(el);
@@ -2803,6 +3597,307 @@ input:focus { outline: none; border-color: var(--cyan); }
         }
       });
     }
+  }
+
+  // ---------- Conquista en la pantalla del salón: mapa, batallas y ventas ----------
+  // baseMap: el mapa como estaba durante el reto; al resolverse, las batallas se animan una por una sobre ese mapa.
+  const CQ = { built: false, tiles: {}, baseQ: -1, baseMap: {}, animQ: -1, shown: null, feed: [], animating: false, timers: [],
+    overQ: -1, overAt: 0, resolving: false, paintKey: '', feedKey: '', rankKey: '' };
+  const CQ_R = 50, CQ_W = Math.sqrt(3) * CQ_R;
+  const cqCenter = c => [CQ_W * (c.col + (c.row % 2 ? 0.5 : 0)) + CQ_W / 2 + 8, CQ_R * 1.5 * c.row + CQ_R + 8];
+  const cqShort = s => (s.length > 13 ? s.slice(0, 12) + '…' : s);
+  function cqBuildMap() {
+    if (CQ.built) return;
+    CQ.built = true;
+    const pos = CQ_CITIES.map(cqCenter);
+    const W = Math.max(...pos.map(p => p[0])) + CQ_W / 2 + 8, H = Math.max(...pos.map(p => p[1])) + CQ_R + 8;
+    const pts = Array.from({ length: 6 }, (_, k) => { const a = Math.PI / 180 * (60 * k - 30); return `${(Math.cos(a) * (CQ_R - 2)).toFixed(1)},${(Math.sin(a) * (CQ_R - 2)).toFixed(1)}`; }).join(' ');
+    $('#cq-map').innerHTML = `<svg viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" role="img" aria-label="Mapa de Colombia del modo Conquista">`
+      + CQ_CITIES.map((c, i) => {
+        const fs = Math.min(15.5, 84 / (c.name.length * 0.46)).toFixed(1);
+        return `<g transform="translate(${pos[i][0].toFixed(1)} ${pos[i][1].toFixed(1)})"><g class="cq-tile free" id="cqt-${c.id}"><polygon points="${pts}"/>`
+          + `<text class="cv" y="-12">${c.v}</text><text class="cn" y="8" style="font-size:${fs}px">${esc(c.name)}</text><text class="co" y="25">Libre</text></g></g>`;
+      }).join('') + '</svg>';
+    CQ_CITIES.forEach((c, i) => { const g = document.getElementById('cqt-' + c.id); CQ.tiles[c.id] = { g, co: g.querySelector('.co'), xy: pos[i] }; });
+  }
+  function cqPaint(map, fog, colors, names) {
+    const key = JSON.stringify(map) + fog + [...colors].join() + [...names].join();
+    if (key === CQ.paintKey) return;
+    CQ.paintKey = key;
+    CQ_CITIES.forEach(c => {
+      const t = CQ.tiles[c.id], owner = map[c.id] || null;
+      t.g.classList.toggle('fog', fog);
+      t.g.classList.toggle('free', !fog && !owner);
+      if (!fog && owner) t.g.style.setProperty('--c', colors.get(owner) || '#ABA3CF'); else t.g.style.removeProperty('--c');
+      t.co.textContent = fog ? '?' : owner ? cqShort(names.get(owner) || 'Jugador') : 'Libre';
+    });
+  }
+  // Destello en la casilla + anillo + sonido de cada batalla.
+  function cqHit(r) {
+    const t = CQ.tiles[r.c];
+    if (t && !RM) {
+      t.g.classList.remove('hit'); void t.g.getBoundingClientRect(); t.g.classList.add('hit');
+      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      ring.setAttribute('class', 'cq-ring' + (r.k === 'robo' ? ' steal' : r.k === 'defendida' ? ' shield' : ''));
+      ring.setAttribute('cx', t.xy[0]); ring.setAttribute('cy', t.xy[1]); ring.setAttribute('r', CQ_R * 0.85);
+      $('#cq-map svg').appendChild(ring);
+      setTimeout(() => ring.remove(), 1100);
+    }
+    const v = CQ_BY_ID[r.c].v;
+    if (r.k === 'defendida') SFX.shield(); else if (r.k === 'robo') SFX.steal(v); else SFX.capture(v);
+  }
+  function cqAnimate(c) {
+    CQ.timers.forEach(clearTimeout);
+    CQ.timers = [];
+    CQ.animQ = c.q;
+    CQ.feedKey = '';
+    // De menor a mayor: Bogotá, si cambió de dueño, se ve de última.
+    const steps = c.res.filter(r => r.k !== 'blindada').sort((a, b) => (CQ_BY_ID[a.c].v - CQ_BY_ID[b.c].v) || (a.c < b.c ? -1 : 1));
+    if (CQ.baseQ !== c.q || RM) { CQ.shown = null; CQ.animating = false; CQ.feed = steps.slice().reverse(); return; }
+    CQ.shown = { ...CQ.baseMap };
+    CQ.feed = [];
+    CQ.animating = true;
+    const gap = steps.length ? Math.min(850, 6500 / steps.length) : 0;
+    steps.forEach((r, i) => CQ.timers.push(setTimeout(() => {
+      if (CQ.animQ !== c.q) return;
+      CQ.shown = { ...CQ.shown, [r.c]: r.to };
+      CQ.feed.unshift(r);
+      cqHit(r);
+      renderTV();
+    }, 500 + i * gap)));
+    CQ.timers.push(setTimeout(() => { if (CQ.animQ === c.q) { CQ.shown = null; CQ.animating = false; renderTV(); } }, 900 + steps.length * gap));
+  }
+  function cqFeedLine(r, names, colors) {
+    const n = id => `<b>${esc(names.get(id) || 'Jugador')}</b>`, city = `<em>${esc(CQ_BY_ID[r.c].name)}</em>`;
+    const txt = r.k === 'conquista' ? `${n(r.to)} conquistó ${city}${r.n > 1 ? ` (le ganó a ${r.n - 1} más)` : ''}`
+      : r.k === 'robo' ? `${n(r.to)} le robó ${city} a ${n(r.from)}`
+      : `${n(r.to)} defendió ${city} de ${plural(r.n, 'ataque', 'ataques')}`;
+    return `<li style="--c:${colors.get(r.to) || 'var(--muted)'}">${txt}</li>`;
+  }
+  function renderCqFeed(c, fog, names, colors) {
+    const max = LIVE.teams.length > 12 ? 4 : 7;
+    const resolved = c.mapQ === c.q;
+    const list = resolved && CQ.animQ === c.q ? CQ.feed : [];
+    const key = [c.q, fog, resolved, CQ.animating, list.length, max].join('|');
+    if (key === CQ.feedKey) return;
+    CQ.feedKey = key;
+    $('#cq-feed-h').textContent = fog ? 'Batallas en la niebla' : `Batallas del reto ${pad(c.q + 1)}`;
+    const ul = $('#cq-feed');
+    if (!resolved || (CQ.animating && !list.length)) { ul.innerHTML = '<li>Calculando las batallas…</li>'; return; }
+    if (!list.length) { ul.innerHTML = '<li>Nadie cambió de ciudad en este reto.</li>'; return; }
+    ul.innerHTML = fog
+      ? `<li style="--c: var(--violet)"><b>${plural(list.length, 'batalla', 'batallas')}</b> en este reto. ¿Quién ganó? Se sabrá con la revelación.</li>`
+      : list.slice(0, max).map(r => cqFeedLine(r, names, colors)).join('') + (list.length > max ? `<li>…y ${plural(list.length - max, 'batalla', 'batallas')} más.</li>` : '');
+  }
+  function renderCqRank(list, colors) {
+    const m = LIVE.cfg.map;
+    const key = list.map(t => `${t.id}:${teamPts(t)}:${t.name}`).join('|') + JSON.stringify(m);
+    if (key === CQ.rankKey) return;
+    CQ.rankKey = key;
+    $('#cq-rank').innerHTML = list.map((t, i) => `<li style="--c:${colors.get(t.id) || 'var(--muted)'}"><span class="rk">${i + 1}</span><i></i>`
+      + `<span class="nm">${esc(t.name)}</span><span class="mt">${plural(cqOwned(m, t.id).length, 'ciudad', 'ciudades')} · ${fmtShare(cqShare(m, t.id))}</span>`
+      + `<span class="v">${teamPts(t)}</span></li>`).join('');
+  }
+  function cqEventCard(c) {
+    if (c.q === CQ_CRISIS_Q) {
+      const t = LIVE.teams.find(x => x.id === c.crisis);
+      return { k: 'Evento · última hora', t: 'Crisis de reputación', s: t ? `${t.name} va ganando, pero en este reto no puede blindar sus ciudades.` : 'El líder no puede blindar en este reto.', dark: true };
+    }
+    const ev = CQ_EVENTS[c.q];
+    if (ev && ev.mult > 1) return { k: 'Evento especial', t: ev.name, s: `En este reto cada ciudad le paga ×${ev.mult} a su dueño.`, dark: false };
+    return null;
+  }
+  function renderCqTV(view, c, ranked) {
+    cqBuildMap();
+    STV.rankKey = ''; STV.feedKey = '';   // el ranking y las noticias son compartidos con la Bolsa
+    const teams = LIVE.teams;
+    const fog = isBlind(c.q) && (view === 'question' || view === 'standings');
+    const colors = cqColors(teams), names = new Map(teams.map(t => [t.id, t.name]));
+    let map = view === 'lobby' ? {} : c.map;
+    if (view === 'question') { CQ.baseQ = c.q; CQ.baseMap = { ...c.map }; CQ.animQ = -1; CQ.shown = null; }
+    if (view === 'standings' && c.mapQ === c.q && CQ.animQ !== c.q && !ST.active) cqAnimate(c);
+    if (view === 'standings' && c.mapQ === c.q && CQ.animQ !== c.q) map = CQ.baseQ === c.q ? CQ.baseMap : c.map;
+    if (view === 'standings' && CQ.shown && CQ.animQ === c.q) map = CQ.shown;
+    cqPaint(map, fog, colors, names);
+    $('#tv-cq').classList.toggle('lobby', view === 'lobby');
+    $('#tv-cq').classList.toggle('final', view === 'final');
+    $('#cq-rules-card').hidden = view !== 'lobby';
+    $('#st-rules-card').hidden = true;
+    $('#cq-clock-card').hidden = view !== 'question';
+    $('#cq-clock-note').textContent = 'Las jugadas son secretas hasta que se cierre el reto.';
+    $('#cq-fog-k').textContent = 'Niebla de guerra';
+    $('#cq-fog-b').textContent = 'Mapa oculto';
+    $('#cq-rank-h').textContent = 'Ventas acumuladas';
+    if (view === 'question') {
+      const left = Math.max(0, c.startedAt + Q_MS - now()), ready = cqReadyCount(teams, c.q);
+      $('#cq-qnum').textContent = pad(c.q + 1);
+      $('#cq-count').textContent = Math.ceil(left / 1000);
+      $('#cq-clock').classList.toggle('low', left < 8000);
+      $('#cq-ready').textContent = `${ready} de ${plural(teams.length, 'jugador listo', 'jugadores listos')}`;
+      $('#cq-ready-bar').style.width = teams.length ? `${(ready / teams.length) * 100}%` : '0';
+    }
+    const ev = view === 'question' || view === 'standings' ? cqEventCard(c) : null;
+    $('#cq-ev').hidden = !ev;
+    if (ev) {
+      $('#cq-ev').classList.toggle('dark', ev.dark);
+      $('#cq-ev-k').textContent = ev.k; $('#cq-ev-t').textContent = ev.t; $('#cq-ev-s').textContent = ev.s;
+    }
+    $('#cq-feed-card').hidden = view !== 'standings';
+    if (view === 'standings') renderCqFeed(c, fog, names, colors);
+    $('#cq-fog').hidden = !fog;
+    if (fog) $('#cq-fog-t').textContent = `Nadie sabe de quién es cada ciudad. ${Q_COUNT - 1 - c.q > 0 ? `Faltan ${plural(Q_COUNT - 1 - c.q, 'reto', 'retos')}.` : 'El mapa y las ventas se revelan con el ganador.'}`;
+    const showRank = (view === 'question' || view === 'standings') && !fog && ranked.length > 0;
+    $('#cq-rank-card').hidden = !showRank;
+    $('#cq-rank').classList.toggle('dense', ranked.length > 12);
+    // Mientras se animan las batallas, el ranking espera para no adelantar quién ganó.
+    if (showRank && !CQ.animating) renderCqRank(ranked.slice(0, 8), colors);
+  }
+  // La TV del anfitrión resuelve el reto (batallas o mercado) 1,5 s después de cerrarlo: deja llegar las jugadas del último segundo.
+  function modeAutoResolve(view, c) {
+    if (view !== 'standings' || c.mapQ >= c.q || !canAdmin() || busy || CQ.resolving) return;
+    if (CQ.overQ !== c.q) { CQ.overQ = c.q; CQ.overAt = Date.now(); return; }
+    if (Date.now() - CQ.overAt < 1500) return;
+    CQ.resolving = true;
+    adminAction('resolve').catch(() => {}).finally(() => { CQ.resolving = false; CQ.overQ = -1; renderTV(); });
+  }
+
+  // ---------- Bolsa en la pantalla del salón: gráfica del capital, pizarra y cierre del mercado ----------
+  const STV = { animQ: -1, animAt: 0, chartKey: '', feedKey: '', rankKey: '' };
+  function niceStep(x) {
+    const p = Math.pow(10, Math.floor(Math.log10(Math.max(1, x))));
+    return [1, 2, 2.5, 5, 10].map(m => m * p).find(s => s >= x) || 10 * p;
+  }
+  // upto = cuántos retos se dibujan; con animate, el último tramo se dibuja con una animación.
+  function renderStChart(c, teams, ranked, upto, fog, animate) {
+    const key = [upto, fog, animate, JSON.stringify(c.hist), ranked.map(t => t.id + t.name).join()].join('|');
+    if (key === STV.chartKey) return;
+    STV.chartKey = key;
+    const colors = cqColors(teams);
+    const W = 1000, H = 640, L = 86, R = 30, T = 24, B = 46;
+    const series = teams.map(t => ({ t, v: stHist(c, t.id).slice(0, upto + 1) }));
+    const step = niceStep(Math.max(ST_START * 1.6, ...series.flatMap(s => s.v)) / 4);
+    const top = step * Math.ceil(Math.max(ST_START * 1.6, ...series.flatMap(s => s.v)) / step);
+    const x = i => L + (W - L - R - 150) * i / Q_COUNT, y = v => T + (H - T - B) * (1 - v / top);
+    let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Capital de cada jugador reto a reto">`;
+    for (let g = 0; g <= top + 1; g += step) svg += `<line class="gl" x1="${L}" x2="${x(Q_COUNT)}" y1="${y(g).toFixed(1)}" y2="${y(g).toFixed(1)}"/><text class="gt" x="${L - 12}" y="${(y(g) + 5).toFixed(1)}" text-anchor="end">${fmtMoney(g)}</text>`;
+    for (let i = 0; i <= Q_COUNT; i += 3) svg += `<text class="gt" x="${x(i).toFixed(1)}" y="${H - 12}" text-anchor="middle">${i ? 'Reto ' + i : 'Inicio'}</text>`;
+    if (fog) svg += `<rect class="fogbox" x="${x(BLIND_FROM).toFixed(1)}" y="${T}" width="${(x(Q_COUNT) - x(BLIND_FROM)).toFixed(1)}" height="${H - T - B}" rx="14"/>`
+      + `<text class="fogtx" x="${((x(BLIND_FROM) + x(Q_COUNT)) / 2).toFixed(1)}" y="${(T + (H - T - B) / 2).toFixed(1)}">A ciegas</text>`;
+    const hot = new Set(ranked.slice(0, 6).map(t => t.id));
+    const labels = [];
+    series.sort((a, b) => (hot.has(a.t.id) ? 1 : 0) - (hot.has(b.t.id) ? 1 : 0)).forEach(({ t, v }) => {
+      const col = colors.get(t.id) || '#ABA3CF', n = v.length, on = hot.has(t.id);
+      const pts = v.map((val, i) => `${x(i).toFixed(1)},${y(val).toFixed(1)}`);
+      const base = animate && n > 1 ? pts.slice(0, n - 1) : pts;
+      if (base.length > 1) svg += `<polyline class="ln${on ? '' : ' dim'}" stroke="${col}" points="${base.join(' ')}"/>`;
+      if (animate && n > 1) svg += `<line class="seg" pathLength="1" stroke="${col}"${on ? '' : ' style="opacity:.28;stroke-width:2"'} x1="${x(n - 2).toFixed(1)}" y1="${y(v[n - 2]).toFixed(1)}" x2="${x(n - 1).toFixed(1)}" y2="${y(v[n - 1]).toFixed(1)}"/>`;
+      if (on) labels.push({ x: x(n - 1), py: y(v[n - 1]), y: y(v[n - 1]), col, name: t.name, val: v[n - 1] });
+    });
+    // Etiquetas al final de cada línea, separadas para que no se encimen ni se salgan por abajo.
+    labels.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labels.length; i++) if (labels[i].y - labels[i - 1].y < 36) labels[i].y = labels[i - 1].y + 36;
+    const floor = H - B - 24;
+    if (labels.length && labels[labels.length - 1].y > floor) {
+      labels[labels.length - 1].y = floor;
+      for (let i = labels.length - 2; i >= 0; i--) if (labels[i + 1].y - labels[i].y < 36) labels[i].y = labels[i + 1].y - 36;
+    }
+    if (upto > 0) labels.forEach(l => {
+      svg += `<circle cx="${l.x.toFixed(1)}" cy="${l.py.toFixed(1)}" r="7" fill="${l.col}" stroke="#130F26" stroke-width="3"/>`
+        + `<text class="lb" x="${(l.x + 14).toFixed(1)}" y="${(l.y + 2).toFixed(1)}" fill="${l.col}">${esc(cqShort(l.name))}</text>`
+        + `<text class="lv" x="${(l.x + 14).toFixed(1)}" y="${(l.y + 19).toFixed(1)}">${fmtMoney(l.val)}</text>`;
+    });
+    $('#st-chart').innerHTML = svg + '</svg>';
+  }
+  function stChange(c, id, upto) {
+    const v = stHist(c, id).slice(0, upto + 1);
+    return v.length > 1 && v[v.length - 2] ? (v[v.length - 1] / v[v.length - 2] - 1) * 100 : 0;
+  }
+  function renderStRank(c, list, colors, upto) {
+    const key = list.map(t => `${t.id}:${stCap(t.id)}:${t.name}`).join('|') + upto;
+    if (key === STV.rankKey) return;
+    STV.rankKey = key;
+    $('#cq-rank').innerHTML = list.map((t, i) => {
+      const ch = Math.round(stChange(c, t.id, upto));
+      const chg = ch > 0 ? `<span class="chg st-up">▲ +${ch} %</span>` : ch < 0 ? `<span class="chg st-down">▼ −${-ch} %</span>` : '<span class="chg">= 0 %</span>';
+      return `<li style="--c:${colors.get(t.id) || 'var(--muted)'}"><span class="rk">${i + 1}</span><i></i><span class="nm">${esc(t.name)}</span>`
+        + `<span class="mt">${chg} · ${plural(t.correct, 'acierto', 'aciertos')}</span><span class="v">${fmtMoney(stCap(t.id))}</span></li>`;
+    }).join('');
+  }
+  function renderStFeed(c, fog, colors) {
+    const resolved = c.mapQ === c.q;
+    const dense = LIVE.teams.length > 12;
+    const key = [c.q, fog, resolved, c.mk.length, dense].join('|');
+    if (key === STV.feedKey) return;
+    STV.feedKey = key;
+    $('#cq-feed-h').textContent = fog ? 'Mercado a ciegas' : `Cierre del mercado · reto ${pad(c.q + 1)}`;
+    const ul = $('#cq-feed');
+    if (!resolved) { ul.innerHTML = '<li>Calculando el mercado…</li>'; return; }
+    const mk = c.mk, n = mk.length, ok = mk.filter(m => m.ok).length;
+    const name = id => `<b>${esc((LIVE.teams.find(t => t.id === id) || {}).name || 'Jugador')}</b>`;
+    const li = (txt, col) => `<li style="--c:${col}">${txt}</li>`;
+    const lines = [li(`Acertaron <b>${ok} de ${n}</b>. ${ok <= n / 3 ? 'Pocos aciertos: ¡botín grande para ellos!' : ok >= n * 0.8 ? 'Casi todos acertaron: ganancias modestas.' : 'Mercado repartido.'}`, 'var(--gold)')];
+    if (fog) lines.push(li('¿Quién ganó y quién perdió? Se sabrá con la revelación.', 'var(--violet)'));
+    else {
+      const best = mk.filter(m => m.d > 0).sort((a, b) => b.d - a.d)[0];
+      const worst = mk.filter(m => m.d < 0).sort((a, b) => a.d - b.d)[0];
+      if (best) lines.push(li(`Mayor alza: ${name(best.id)} ganó <em>${fmtMoney(best.d)}</em>`, colors.get(best.id)));
+      if (worst) lines.push(li(`Mayor caída: ${name(worst.id)} perdió <em>${fmtMoney(worst.d)}</em>`, colors.get(worst.id)));
+      mk.filter(m => m.p === 100).slice(0, dense ? 1 : 3).forEach(m => lines.push(li(`${name(m.id)} fue con <em>todo</em> y ${m.ok ? 'acertó' : 'lo perdió'}`, colors.get(m.id))));
+      mk.filter(m => m.r).slice(0, dense ? 1 : 2).forEach(m => lines.push(li(`${name(m.id)} quebró: el banco le prestó ${fmtMoney(ST_FLOOR)}`, 'var(--bad)')));
+    }
+    ul.innerHTML = lines.join('');
+    if (!RM) [...ul.children].forEach((el, i) => { el.style.animationDelay = `${i * 0.35}s`; });
+  }
+  function stEventCard(c) {
+    const ev = ST_EVENTS[c.q];
+    if (c.q === ST_PANIC_Q) return { k: 'Evento · última hora', t: 'Pánico en la bolsa', s: 'En este reto nadie puede invertir menos del 50 %.', dark: true };
+    if (ev && ev.mult > 1) return { k: 'Evento especial', t: ev.name, s: `En este reto las ganancias valen ×${ev.mult}.`, dark: false };
+    return null;
+  }
+  function renderStTV(view, c, ranked) {
+    const teams = LIVE.teams, colors = cqColors(teams);
+    CQ.rankKey = ''; CQ.feedKey = '';   // el ranking y las noticias son compartidos con Conquista
+    const fog = isBlind(c.q) && (view === 'question' || view === 'standings');
+    const resolved = view === 'standings' && c.mapQ === c.q;
+    // Cuando llega el cierre del mercado (y ya pasó el “¡Se acabó!”): campana, caja registradora y la gráfica avanza.
+    if (resolved && STV.animQ !== c.q && !ST.active) { STV.animQ = c.q; STV.animAt = performance.now(); SFX.market(); }
+    const waiting = resolved && STV.animQ !== c.q;
+    const animate = resolved && !fog && !waiting && performance.now() - STV.animAt < 1300;
+    const upto = view === 'lobby' ? 0 : fog ? Math.min(BLIND_FROM, c.mapQ + 1) : waiting ? c.mapQ : c.mapQ + 1;
+    renderStChart(c, teams, ranked, Math.max(0, upto), fog, animate);
+    $('#tv-cq').classList.toggle('lobby', view === 'lobby');
+    $('#tv-cq').classList.toggle('final', view === 'final');
+    $('#cq-rules-card').hidden = true;
+    $('#st-rules-card').hidden = view !== 'lobby';
+    $('#cq-clock-card').hidden = view !== 'question';
+    $('#cq-clock-note').textContent = 'Las inversiones son secretas hasta que se cierre el reto.';
+    if (view === 'question') {
+      const left = Math.max(0, c.startedAt + Q_MS - now()), ans = answeredCount(teams, c.q);
+      $('#cq-qnum').textContent = pad(c.q + 1);
+      $('#cq-count').textContent = Math.ceil(left / 1000);
+      $('#cq-clock').classList.toggle('low', left < 8000);
+      $('#cq-ready').textContent = `${ans} de ${plural(teams.length, 'jugador respondió', 'jugadores respondieron')}`;
+      $('#cq-ready-bar').style.width = teams.length ? `${(ans / teams.length) * 100}%` : '0';
+    }
+    const ev = view === 'question' || view === 'standings' ? stEventCard(c) : null;
+    $('#cq-ev').hidden = !ev;
+    if (ev) {
+      $('#cq-ev').classList.toggle('dark', ev.dark);
+      $('#cq-ev-k').textContent = ev.k; $('#cq-ev-t').textContent = ev.t; $('#cq-ev-s').textContent = ev.s;
+    }
+    $('#cq-feed-card').hidden = view !== 'standings';
+    if (view === 'standings') renderStFeed(c, fog, colors);
+    $('#cq-fog').hidden = !fog;
+    if (fog) {
+      $('#cq-fog-k').textContent = 'Bolsa a ciegas';
+      $('#cq-fog-b').textContent = 'Pizarra apagada';
+      $('#cq-fog-t').textContent = `Nadie sabe cuánto capital tiene cada uno. ${Q_COUNT - 1 - c.q > 0 ? `Faltan ${plural(Q_COUNT - 1 - c.q, 'reto', 'retos')}.` : 'El ganador se revela al final.'}`;
+    }
+    $('#cq-rank-h').textContent = 'Pizarra de cotizaciones';
+    const showRank = (view === 'question' || view === 'standings') && !fog && ranked.length > 0;
+    $('#cq-rank-card').hidden = !showRank;
+    $('#cq-rank').classList.toggle('dense', ranked.length > 12);
+    if (showRank && !waiting) renderStRank(c, ranked.slice(0, 8), colors, Math.max(0, upto));
   }
 
   // ---------- sonido de la pantalla del salón ----------
@@ -2898,6 +3993,9 @@ input:focus { outline: none; border-color: var(--cyan); }
     hat: (t, v, open) => noise(A.music, t, { dur: open ? 0.22 : 0.045, gain: 0.08 * v, type: 'highpass', f: 7500 }),
     bass: (t, m, dur) => tone(A.music, t, { type: 'sawtooth', f: mtof(m), dur: Math.max(0.08, dur * 0.95), gain: 0.2, attack: 0.006, filter: { f: 900, f2: 220, q: 4 } }),
     pluck: (t, m, v) => tone(A.music, t, { type: 'triangle', f: mtof(m), dur: 0.22, gain: 0.07 * v, attack: 0.003 }),
+    // campanita de pizarra electrónica (Bolsa) y tambor de guerra (Conquista)
+    bell: (t, m, v) => { tone(A.music, t, { f: mtof(m), dur: 0.45, gain: 0.06 * v, attack: 0.002 }); tone(A.music, t, { f: mtof(m) * 2.76, dur: 0.18, gain: 0.02 * v, attack: 0.002 }); },
+    tom: (t, m) => { tone(A.music, t, { f: mtof(m), f2: mtof(m) * 0.62, dur: 0.24, gain: 0.3 }); noise(A.music, t, { dur: 0.03, gain: 0.05, type: 'bandpass', f: 900 }); },
     pad: (t, notes, dur, v) => notes.forEach((m, i) => tone(A.music, t, { type: 'sawtooth', f: mtof(m), dur, gain: 0.022 * v, attack: 0.25, detune: i % 2 ? 7 : -7, filter: { f: 1400, q: 0.5 } }))
   };
   // r = nota del bajo, n = acorde (números MIDI). Cada compás tiene 16 pasos.
@@ -2921,10 +4019,39 @@ input:focus { outline: none; border-color: var(--cyan); }
       { r: 36, n: [60, 64, 67] }, { r: 43, n: [59, 62, 67] }, { r: 45, n: [57, 60, 64] }, { r: 41, n: [57, 60, 65] }],
       kick: [0, 4, 8, 12], snare: [4, 12], clap: [4, 12], hat: [2, 6, 10, 14], ohat: [6, 14],
       bass: [[0, 0, 2], [3, 12, 1], [4, 0, 2], [8, 0, 2], [11, 12, 1], [12, 7, 2]],
-      pad: 1, arp: { steps: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], pattern: [0, 1, 2, 1], oct: 12, v: 0.55 } }
+      pad: 1, arp: { steps: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], pattern: [0, 1, 2, 1], oct: 12, v: 0.55 } },
+    // Conquista: tambores de guerra en re menor (retos) y marcha épica (batallas).
+    cq_question: { bpm: 128, vol: 0.3, chords: [
+      { r: 38, n: [62, 65, 69] }, { r: 34, n: [58, 62, 65] }, { r: 36, n: [60, 64, 67] }, { r: 33, n: [57, 61, 64] }],
+      kick: [0, 3, 8, 11], snare: [], clap: [12], hat: [2, 6, 10, 14], ohat: [],
+      tom: [[4, 52], [5, 52], [12, 49], [13, 49], [14, 47], [15, 45]],
+      bass: [[0, 0, 1], [2, 0, 1], [3, 12, 1], [6, 0, 1], [8, 0, 1], [10, 0, 1], [11, 12, 1], [14, 0, 1]],
+      pad: 0.6, arp: { steps: [0, 2, 4, 6, 8, 10, 12, 14], pattern: [0, 1, 2, 1], oct: 12, v: 0.55 } },
+    cq_standings: { bpm: 104, vol: 0.4, chords: [
+      { r: 38, n: [62, 65, 69] }, { r: 41, n: [60, 65, 69] }, { r: 36, n: [60, 64, 67] }, { r: 34, n: [58, 62, 65] }],
+      kick: [0, 8], snare: [4, 12], clap: [], hat: [2, 6, 10, 14], ohat: [14],
+      tom: [[13, 54], [14, 52], [15, 49]],
+      bass: [[0, 0, 3], [4, 12, 1], [8, 0, 3], [12, 7, 2]],
+      pad: 1, arp: { steps: [0, 3, 6, 8, 11, 14], pattern: [0, 2, 1], oct: 12, v: 0.8 } },
+    // Bolsa: funk de piso de la bolsa con campanitas de pizarra (retos) y cierre del mercado optimista (pausas).
+    st_question: { bpm: 116, vol: 0.28, chords: [
+      { r: 45, n: [57, 60, 64, 67] }, { r: 38, n: [57, 60, 62, 66] }, { r: 41, n: [57, 60, 64, 65] }, { r: 40, n: [56, 59, 62, 64] }],
+      kick: [0, 7, 10], snare: [4, 12], clap: [], hat: 'all', ohat: [6, 14],
+      bass: [[0, 0, 1], [3, 12, 1], [5, 0, 1], [7, 7, 1], [10, 0, 1], [12, 12, 1], [14, 10, 1]],
+      pad: 0.6, arp: { steps: [1, 3, 5, 9, 11, 13], pattern: [3, 2, 1, 0], oct: 24, v: 0.6, inst: 'bell' } },
+    st_standings: { bpm: 120, vol: 0.4, chords: [
+      { r: 36, n: [60, 64, 67] }, { r: 45, n: [57, 60, 64] }, { r: 41, n: [57, 60, 65] }, { r: 43, n: [55, 59, 62] }],
+      kick: [0, 4, 8, 12], snare: [4, 12], clap: [12], hat: [2, 6, 10, 14], ohat: [],
+      bass: [[0, 0, 2], [3, 12, 1], [6, 0, 1], [8, 0, 2], [11, 12, 1], [14, 7, 1]],
+      pad: 1, arp: { steps: [0, 2, 4, 6, 8, 10, 12, 14], pattern: [0, 1, 2, 1], oct: 24, v: 0.7, inst: 'bell' } }
   };
   const SEQ = { mood: null, timer: 0, next: 0, step: 0, bar: 0, arp: 0, duck: 1 };
-  function moodFor(view) { return { lobby: 'lobby', question: 'question', standings: 'standings', final: 'final' }[view] || 'lobby'; }
+  // Conquista y la Bolsa tienen su propia música en los retos y en las pausas; la sala y el final son compartidos.
+  function moodFor(view) {
+    const base = { lobby: 'lobby', question: 'question', standings: 'standings', final: 'final' }[view] || 'lobby';
+    const pre = isCq() ? 'cq_' : isSt() ? 'st_' : '';
+    return pre && SONGS[pre + base] ? pre + base : base;
+  }
   function musicLevel() { const s = SONGS[SEQ.mood]; return (s ? s.vol : 0.4) * SEQ.duck; }
   function musicSet(mood) {
     if (!A.ctx || current !== 'tv') return;
@@ -2948,10 +4075,11 @@ input:focus { outline: none; border-color: var(--cyan); }
     if (song.clap.includes(s)) INST.clap(t);
     if (song.hat === 'all' || song.hat.includes(s)) INST.hat(t, s % 4 === 2 ? 1 : 0.6, song.ohat.includes(s));
     song.bass.forEach(([st, oct, len]) => { if (st === s) INST.bass(t, ch.r + oct, len * sd); });
+    if (song.tom) song.tom.forEach(([st, m]) => { if (st === s) INST.tom(t, m); });
     if (s === 0 && song.pad) INST.pad(t, ch.n, sd * 16, song.pad);
     if (song.arp && song.arp.steps.includes(s)) {
       const p = song.arp.pattern;
-      INST.pluck(t, ch.n[p[SEQ.arp++ % p.length] % ch.n.length] + song.arp.oct, song.arp.v);
+      INST[song.arp.inst || 'pluck'](t, ch.n[p[SEQ.arp++ % p.length] % ch.n.length] + song.arp.oct, song.arp.v);
     }
   }
   function musicTick() {
@@ -2970,13 +4098,26 @@ input:focus { outline: none; border-color: var(--cyan); }
 
   // --- efectos de sonido para lo que aparece en la pantalla ---
   function brass(t, m, dur, g) { tone(A.sfx, t, { type: 'sawtooth', f: mtof(m), dur, gain: g, attack: 0.03, filter: { f: 2600, f2: 900, q: 0.8 } }); }
+  // Golpe grave que también se oye en los parlantes de un TV o un portátil (casi no reproducen menos de 100 Hz):
+  // el grave, su armónico y un clic.
+  function thump(t, f, f2, dur, gain) {
+    tone(A.sfx, t, { f, f2, dur, gain });
+    tone(A.sfx, t, { type: 'triangle', f: f * 2.5, f2: f2 * 2.5, dur: dur * 0.8, gain: gain * 0.45 });
+    noise(A.sfx, t, { dur: 0.04, gain: gain * 0.25, type: 'bandpass', f: 1400, q: 1.2 });
+  }
+  // Tensión de suspenso audible en un TV: dos notas disonantes (La y Si bemol) con el filtro que se abre y un temblor agudo.
+  function tensionPad(t, dur, gain) {
+    [[45, -8], [46, 8]].forEach(([m, d]) => tone(A.sfx, t, { type: 'sawtooth', f: mtof(m), dur, gain, attack: Math.min(2, dur * 0.7), detune: d, filter: { f: 500, f2: 2200, q: 1.5 } }));
+    tone(A.sfx, t, { type: 'triangle', f: mtof(81), dur, gain: gain * 0.4, attack: Math.min(2.5, dur * 0.8) });
+  }
   const SFX = {
     click() { if (!audioReady()) return; tone(A.sfx, A.ctx.currentTime, { type: 'square', f: 1500, dur: 0.035, gain: 0.04 }); },
     join(n) {
       if (!audioReady()) return;
       const t = A.ctx.currentTime, b = [72, 74, 76, 79, 81][n % 5];
-      tone(A.sfx, t, { type: 'triangle', f: mtof(b), dur: 0.12, gain: 0.22 });
-      tone(A.sfx, t + 0.07, { type: 'triangle', f: mtof(b + 7), dur: 0.2, gain: 0.2 });
+      tone(A.sfx, t, { type: 'triangle', f: mtof(b), dur: 0.14, gain: 0.34 });
+      tone(A.sfx, t + 0.07, { type: 'triangle', f: mtof(b + 7), dur: 0.24, gain: 0.3 });
+      tone(A.sfx, t + 0.14, { type: 'sine', f: mtof(b + 19), dur: 0.35, gain: 0.12 });
     },
     whoosh() {
       if (!audioReady()) return;
@@ -3020,10 +4161,15 @@ input:focus { outline: none; border-color: var(--cyan); }
       tone(A.sfx, t, { type: 'sawtooth', f: 155.6, dur: 0.8, gain: 0.18, attack: 0.01, filter: { f: 1400, f2: 500 } });
       SFX.impact(t + 0.05);
     },
-    podium(place) {
+    roll(dur) {
       if (!audioReady()) return;
-      const t = A.ctx.currentTime, m = { 3: 67, 2: 72, 1: 76 }[place], long = place === 1 ? 1.1 : 0.55;
-      tone(A.sfx, t, { f: 190, f2: 70, dur: 0.4, gain: 0.7 });
+      const t = A.ctx.currentTime;
+      for (let x = 0; x < dur;) { const k = x / dur; noise(A.sfx, t + x, { dur: 0.06, gain: 0.05 + 0.17 * k, type: 'bandpass', f: 1900, q: 0.8 }); x += 0.075 - 0.035 * k; }
+    },
+    podium(place, at) {
+      if (!audioReady()) return;
+      const t = at === undefined ? A.ctx.currentTime : at, m = { 3: 67, 2: 72, 1: 76 }[place], long = place === 1 ? 1.1 : 0.55;
+      thump(t, 190, 70, 0.4, 0.7);
       noise(A.sfx, t, { dur: 0.18, gain: 0.18, type: 'bandpass', f: 1600, q: 0.9 });
       brass(t, m, long, 0.11);
       brass(t, m - 12, long, 0.07);
@@ -3044,6 +4190,36 @@ input:focus { outline: none; border-color: var(--cyan); }
       if (!audioReady()) return;
       const t = A.ctx.currentTime;
       [79, 74, 67].forEach((m, i) => tone(A.sfx, t + i * 0.09, { type: 'triangle', f: mtof(m), dur: 0.18, gain: 0.16 }));
+    },
+    // Conquista: ciudad conquistada (más grande si la ciudad vale más), robo y ataque que rebota en un blindaje.
+    capture(v) {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime, m = 72 + Math.min(10, v);
+      tone(A.sfx, t, { type: 'triangle', f: mtof(m), dur: 0.16, gain: 0.2 });
+      tone(A.sfx, t + 0.08, { type: 'triangle', f: mtof(m + 7), dur: 0.3, gain: 0.18 });
+      if (v >= 5) { brass(t, m - 12, 0.6, 0.09); tone(A.sfx, t, { f: 160, f2: 60, dur: 0.35, gain: 0.5 }); }
+    },
+    steal(v) {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime;
+      tone(A.sfx, t, { f: 190, f2: 55, dur: 0.4, gain: 0.7 });
+      noise(A.sfx, t, { dur: 0.22, gain: 0.22, type: 'bandpass', f: 1700, q: 0.9 });
+      brass(t, 60 + Math.min(10, v), 0.5, 0.1);
+      brass(t + 0.12, 63 + Math.min(10, v), 0.5, 0.08);
+    },
+    shield() {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime;
+      [2400, 3600, 5100].forEach((f, i) => tone(A.sfx, t + i * 0.015, { type: 'square', f, dur: 0.35, gain: 0.04, filter: { type: 'bandpass', f, q: 9 } }));
+      tone(A.sfx, t, { f: 240, f2: 120, dur: 0.3, gain: 0.45 });
+    },
+    // Bolsa: campana de cierre del mercado + caja registradora.
+    market() {
+      if (!audioReady()) return;
+      const t = A.ctx.currentTime;
+      [0, 0.22].forEach(o => { tone(A.sfx, t + o, { f: mtof(88), dur: 0.9, gain: 0.13 }); tone(A.sfx, t + o, { f: mtof(95), dur: 0.6, gain: 0.05 }); });
+      noise(A.sfx, t + 0.55, { dur: 0.07, gain: 0.25, type: 'bandpass', f: 3600, q: 2 });
+      [84, 88, 91, 96].forEach((m, i) => tone(A.sfx, t + 0.6 + i * 0.06, { type: 'triangle', f: mtof(m), dur: 0.35, gain: 0.12 }));
     }
   };
   $('#tv-sound').addEventListener('click', () => {
@@ -3081,8 +4257,15 @@ input:focus { outline: none; border-color: var(--cyan); }
     const word = $('#st-word');
     word.classList.remove('go'); void word.offsetWidth; word.classList.add('go');
     SFX.timeUp();
-    musicDuck(true);
+    musicDuck(0.4);
     const at = (ms, fn) => ST.timers.push(setTimeout(fn, ms));
+    // Conquista y Bolsa: después del golpe, la pantalla vuelve al mapa o a la gráfica para ver qué pasó.
+    if (isCq() || isSt()) {
+      el.classList.remove('secret');
+      if (isBlind(q)) $('#st-sub').textContent += isCq() ? ' · niebla de guerra' : ' · bolsa a ciegas';
+      at(1700, () => endShowtime());
+      return;
+    }
     // Retos a ciegas: en lugar del podio, un candado. Nadie ve quién va ganando.
     const secret = isBlind(q);
     el.classList.toggle('secret', secret);
@@ -3098,8 +4281,12 @@ input:focus { outline: none; border-color: var(--cyan); }
       [1, 2, 3].forEach(p => fillPod(p, ranked[p - 1] || null));
       el.classList.add('stage-podium');
     });
+    // Un redoble corto antes de cada lugar del podio, para que no quede en silencio entre golpe y golpe.
+    at(1550, () => SFX.roll(0.55));
     at(2100, () => showPod(3));
+    at(2400, () => SFX.roll(0.6));
     at(3000, () => showPod(2));
+    at(3250, () => SFX.roll(0.75));
     at(4000, () => showPod(1));
     at(8200, () => endShowtime());
   }
@@ -3158,7 +4345,7 @@ input:focus { outline: none; border-color: var(--cyan); }
   }
   function retrigger(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
   function tvFx(view, c, ranked) {
-    const ans = view === 'question' ? answeredCount(LIVE.teams, c.q) : 0;
+    const ans = view === 'question' ? (isCq() ? cqReadyCount : answeredCount)(LIVE.teams, c.q) : 0;
     const secs = view === 'question' ? Math.ceil(Math.max(0, c.startedAt + Q_MS - now()) / 1000) : 0;
     const p = tvPrev;
     tvPrev = { view, q: c.q, n: ranked.length, ans, secs };
@@ -3195,21 +4382,64 @@ input:focus { outline: none; border-color: var(--cyan); }
     const t = A.ctx.currentTime;
     SFX.impact(t);
     tone(A.sfx, t, { type: 'sawtooth', f: 220, f2: 55, dur: 1.4, gain: 0.12, filter: { f: 1600, f2: 200 } });
-    tone(A.sfx, t + 0.2, { f: 55, dur: 5.5, gain: 0.14, attack: 1.5 });
-    tone(A.sfx, t + 0.2, { f: 58.3, dur: 5.5, gain: 0.08, attack: 1.8 });
+    tensionPad(t + 0.2, 5.5, 0.05);
+    // pulso lento de tensión mientras se lee el aviso
+    [1.0, 2.2, 3.4, 4.6].forEach(o => thump(t + o, 70, 40, 0.25, 0.35));
   };
-  function runBlindIntro() {
+  // Mismo aviso para los retos a ciegas y para los eventos de Conquista; cambia el texto, el ícono y el color.
+  const INTRO_ICONS = {
+    tag: '<path d="M34 5h24v24L29 58 5 34z" fill="currentColor"/><circle cx="47" cy="16" r="5" fill="#130F26"/><path d="M22 41 37 26" stroke="#130F26" stroke-width="4.5" stroke-linecap="round"/><circle cx="23" cy="29" r="4" fill="#130F26"/><circle cx="36" cy="39" r="4" fill="#130F26"/>',
+    alert: '<path d="M32 4 62 58H2z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="28.5" y="21" width="7" height="22" rx="3.5" fill="#130F26"/><circle cx="32" cy="50" r="4" fill="#130F26"/>',
+    rocket: '<path d="M32 3c11 9 15 22 12 37H20C17 25 21 12 32 3z" fill="currentColor"/><circle cx="32" cy="21" r="5.5" fill="#130F26"/><path d="M20 34 9 47l12-2zM44 34l11 13-12-2z" fill="currentColor"/><path d="M25 44h14l-7 17z" fill="#FF5B3A"/>',
+    chart: '<path d="M6 57h52" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="M9 45 24 29l10 10 19-21" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M41 15h14v14" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>',
+    bell: '<path d="M32 5c-11 0-17 9-17 20v12l-7 9h48l-7-9V25c0-11-6-20-17-20z" fill="currentColor"/><circle cx="32" cy="53" r="6" fill="currentColor"/>'
+  };
+  function introFor(kind) {
+    const nq = LIVE.cfg.q + 1;
+    if (kind === 'bull') return { tone: 'warm', kick: 'Evento especial', title: '¡Mercado alcista!', icon: 'chart',
+      sub: '<b>En este reto las ganancias valen el doble.</b> Si estás seguro, es el momento de invertir más.' };
+    if (kind === 'panic') return { tone: 'alarm', kick: 'Última hora', title: '¡Pánico en la bolsa!', icon: 'alert',
+      sub: '<b>Nadie puede invertir menos del 50 %.</b> En este reto todos arriesgan la mitad o más de su capital.' };
+    if (kind === 'stfog') return { tone: '', kick: 'Últimos 4 retos', title: '¡Bolsa a ciegas!', icon: null,
+      sub: '<b>La pizarra se apaga.</b> Desde ahora nadie sabrá cuánto capital tiene cada uno hasta la revelación.' };
+    if (kind === 'bell') return { tone: 'warm', kick: `Último reto · ${pad(nq + 1)} de ${Q_COUNT}`, title: '¡Campanazo final!', icon: 'bell',
+      sub: '<b>Las ganancias valen el triple.</b> Es la última oportunidad para remontar.' };
+    if (kind === 'fog') return { tone: '', kick: 'Últimos 4 retos', title: '¡Niebla de guerra!', icon: null,
+      sub: '<b>El mapa se cubre.</b> Desde ahora cada quien solo ve sus ciudades y nadie sabrá quién va ganando hasta la revelación.' };
+    if (kind === 'bf') return { tone: 'warm', kick: 'Evento especial', title: '¡Black Friday!', icon: 'tag',
+      sub: '<b>En este reto las ventas valen el doble.</b> Cada ciudad le paga ×2 a su dueño. ¡Vayan por las grandes!' };
+    if (kind === 'launch') return { tone: 'warm', kick: `Último reto · ${pad(nq + 1)} de ${Q_COUNT}`, title: '¡Gran Lanzamiento!', icon: 'rocket',
+      sub: '<b>Las ventas valen el triple.</b> Todo el mapa está en juego, todavía en la niebla.' };
+    if (kind === 'crisis') {
+      const c = LIVE.cfg, s = c.mapQ < c.q ? cqResolve(c, LIVE.teams, c.q).sales : c.sales;
+      const t = LIVE.teams.find(x => x.id === cqLeader(s, LIVE.teams));
+      return { tone: 'alarm', kick: 'Última hora', title: '¡Crisis de reputación!', icon: 'alert',
+        sub: t ? `<b>${esc(t.name)}</b> va ganando, pero le estalló un escándalo: en este reto no puede blindar sus ciudades. ¡Todos a atacarle!`
+          : '<b>Al líder le estalló un escándalo:</b> en este reto no puede blindar sus ciudades.' };
+    }
+    return { tone: '', kick: 'Atención, salón', title: '¡Últimos 4 retos!', icon: null,
+      sub: '<b>La tabla se esconde.</b> Desde ahora nadie sabrá quién va ganando hasta que se revele al ganador.' };
+  }
+  function runBlindIntro(kind) {
     if (BI.active || busy) return;
     BI.active = true;
+    const it = introFor(kind);
     const el = $('#blindintro');
-    el.className = 'overlay blindintro';
+    el.className = 'overlay blindintro' + (it.tone ? ' ' + it.tone : '');
+    $('#bi-kick').textContent = it.kick;
+    $('#bi-title').textContent = it.title;
+    $('#bi-sub').innerHTML = it.sub;
+    $('#bi-skip').textContent = `Toca la pantalla para empezar el reto ${pad(LIVE.cfg.q + 2)}`;
+    $('#bi-lock').toggleAttribute('hidden', !!it.icon);
+    $('#bi-icon').toggleAttribute('hidden', !it.icon);
+    if (it.icon) $('#bi-icon').innerHTML = INTRO_ICONS[it.icon];
     el.hidden = false;
     retrigger(el, 'go');
-    SFX.blind();
-    musicDuck(0.15);
+    SFX.intro(it.tone);
+    musicDuck(it.tone === 'warm' ? 0.35 : 0.2);
     const at = (ms, fn) => BI.timers.push(setTimeout(fn, ms));
     at(1300, () => el.classList.add('lock-in'));
-    at(1900, () => { el.classList.add('locked'); SFX.lock(); });
+    at(1900, () => { el.classList.add('locked'); if (it.icon) SFX.podium(it.tone === 'warm' ? 1 : 2); else SFX.lock(); });
     at(2300, () => el.classList.add('sub'));
     at(6400, () => blindSkip());
   }
@@ -3230,11 +4460,29 @@ input:focus { outline: none; border-color: var(--cyan); }
     busy = false; renderTV();
   }
   $('#blindintro').addEventListener('click', blindSkip);
+  // Sonido de cada aviso, con un fondo que dura lo que el aviso está en pantalla (para que no quede en silencio).
+  SFX.intro = kind => {
+    if (!audioReady()) return;
+    const t = A.ctx.currentTime;
+    if (kind === 'warm') {
+      // evento bueno: el arranque de siempre y una fanfarria con aplausos
+      SFX.start();
+      [[60, 64, 67], [62, 65, 69], [64, 67, 72], [65, 69, 72], [67, 72, 76]].forEach((ch, i) => ch.forEach(m => brass(t + 1.3 + i * 0.6, m, 0.4, 0.05)));
+      for (let i = 0; i < 14; i++) [0, 0.012, 0.024].forEach(o => noise(A.sfx, t + 1.3 + i * 0.3 + o, { dur: 0.08, gain: 0.06, type: 'bandpass', f: 1500, q: 1.2 }));
+      return;
+    }
+    SFX.blind();
+    // alarma (Crisis de reputación, Pánico en la bolsa): sirena encima de la tensión
+    if (kind === 'alarm') for (let i = 0; i < 8; i++) tone(A.sfx, t + 0.9 + i * 0.45, { type: 'square', f: i % 2 ? 660 : 880, dur: 0.4, gain: 0.035, filter: { f: 2400, q: 1 } });
+  };
 
   // ---------- revelación del ganador: suspenso → ¡bum! → celebración → tabla completa ----------
   // Todo se calcula desde revealAt (hora del servidor), así la TV y los celulares quedan sincronizados.
   const RV = { anchor: -1, stage: -2, shown: false, dismissed: false, raf: 0, scheduled: -1, score: 0, cannon: [], bursts: [] };
-  const RV_STAGES = [[0, 'dark'], [0.6, 'ask'], [2.4, 'cards'], [3.2, 'r3'], [5.0, 'r2'], [6.4, 'drum'], [9.0, 'boom'], [12.5, 'done']];
+  // Incertidumbre (0–9 s) → ¡bum! y celebración del campeón (9–13 s) → podio con los 3 primeros (13–16 s) → botón de la tabla.
+  const RV_STAGES = [[0, 'dark'], [0.6, 'ask'], [2.4, 'cards'], [3.2, 'r3'], [5.0, 'r2'], [6.4, 'drum'], [9.0, 'boom'],
+    [13.0, 'podium'], [13.4, 'p3'], [14.1, 'p2'], [14.9, 'p1'], [16.2, 'done']];
+  const RV_POD = { 3: 13.4, 2: 14.1, 1: 14.9 };
   const RV_BURSTS = [0.5, 1.3, 2.1, 2.8, 3.6, 4.5, 5.3, 6.2, 7.2, 8.4, 9.5, 10.8, 12.0, 13.4, 14.9];
   const k01 = x => Math.min(1, Math.max(0, x));
   function fillReveal(ranked) {
@@ -3245,12 +4493,27 @@ input:focus { outline: none; border-color: var(--cyan); }
       const cs = CASE_BY_ID[t.caseId];
       card.querySelector('.rv-name b').textContent = t.name;
       card.querySelector('.rv-name span').textContent = cs ? cs.brand : 'Marca';
-      card.querySelector('.rv-name em').textContent = `${t.score} pts`;
+      card.querySelector('.rv-name em').textContent = isCq() ? `${teamPts(t)} ventas` : isSt() ? fmtMoney(stCap(t.id)) : `${t.score} pts`;
     });
     const w = ranked[0], cs = CASE_BY_ID[w.caseId];
     $('#rv-win').textContent = w.name;
-    $('#rv-meta').textContent = `${plural(w.correct, 'acierto', 'aciertos')} de ${Q_COUNT} · ${cs ? cs.brand : 'Marca'}`;
-    RV.score = w.score;
+    $('#rv-meta').textContent = isCq()
+      ? `${fmtShare(cqShare(LIVE.cfg.map, w.id))} del mercado · ${plural(cqOwned(LIVE.cfg.map, w.id).length, 'ciudad', 'ciudades')} · ${cs ? cs.brand : 'Marca'}`
+      : isSt() ? `Rentabilidad ${fmtRoi(stCap(w.id))} · ${plural(w.correct, 'acierto', 'aciertos')} de ${Q_COUNT} · ${cs ? cs.brand : 'Marca'}`
+      : `${plural(w.correct, 'acierto', 'aciertos')} de ${Q_COUNT} · ${cs ? cs.brand : 'Marca'}`;
+    $('#rv-pts-l').textContent = isCq() ? 'ventas' : isSt() ? 'de capital' : 'puntos';
+    RV.score = teamPts(w);
+    RV.fmt = isSt() ? fmtMoney : String;
+    // Podio final: nombre, marca y puntaje (puntos, ventas o capital) de los 3 primeros.
+    [1, 2, 3].forEach(p => {
+      const pod = $('#rp-' + p), t = ranked[p - 1];
+      pod.style.visibility = t ? 'visible' : 'hidden';
+      if (!t) return;
+      const tcs = CASE_BY_ID[t.caseId];
+      pod.querySelector('b').textContent = t.name;
+      pod.querySelector('span').textContent = tcs ? tcs.brand : 'Marca';
+      pod.querySelector('em').textContent = isCq() ? `${teamPts(t)} ventas` : isSt() ? fmtMoney(stCap(t.id)) : `${t.score} pts`;
+    });
     const cols = ['#FF5B3A', '#45D0FF', '#FFC93D', '#A98BFF', '#38D99A', '#FFFFFF'];
     const pick = () => cols[Math.floor(Math.random() * cols.length)];
     RV.cannon = Array.from({ length: 220 }, () => ({ side: Math.random() < 0.5 ? 0 : 1, d: Math.random() * 0.5, vx: 250 + Math.random() * 650, vy: -(700 + Math.random() * 800), w: 8 + Math.random() * 9, h: 10 + Math.random() * 12, r: Math.random() * 6, vr: (Math.random() - 0.5) * 12, c: pick() }));
@@ -3291,14 +4554,10 @@ input:focus { outline: none; border-color: var(--cyan); }
   function revealAudio(tauNow) {
     const c = A.ctx, base = c.currentTime - tauNow;
     const at = (tau, fn) => { if (tau >= tauNow - 0.05) fn(Math.max(c.currentTime, base + tau)); };
-    if (tauNow < 9) {
-      const t0 = c.currentTime, dur = 9 - tauNow;
-      tone(A.sfx, t0, { f: 55, dur, gain: 0.14, attack: Math.min(2, dur * 0.8) });
-      tone(A.sfx, t0, { f: 82.4, dur, gain: 0.07, attack: Math.min(2.5, dur * 0.8) });
-    }
-    at(0, t => tone(A.sfx, t, { f: 90, f2: 30, dur: 0.6, gain: 0.7 }));
+    if (tauNow < 9) tensionPad(c.currentTime, 9 - tauNow, 0.045);
+    at(0, t => thump(t, 90, 30, 0.6, 0.7));
     at(0.6, t => { noise(A.sfx, t, { dur: 0.5, gain: 0.12, type: 'bandpass', f: 300, f2: 2500, attack: 0.3 }); tone(A.sfx, t + 0.2, { type: 'triangle', f: mtof(69), dur: 0.8, gain: 0.12 }); tone(A.sfx, t + 0.35, { type: 'triangle', f: mtof(72), dur: 0.9, gain: 0.1 }); });
-    [0.9, 1.15, 2.0, 2.25, 4.0, 4.25].forEach(b => at(b, t => tone(A.sfx, t, { f: 70, f2: 38, dur: 0.22, gain: 0.55 })));
+    [0.9, 1.15, 2.0, 2.25, 4.0, 4.25].forEach(b => at(b, t => thump(t, 70, 38, 0.22, 0.55)));
     [2.4, 2.55, 2.7].forEach(b => at(b, t => noise(A.sfx, t, { dur: 0.35, gain: 0.1, type: 'bandpass', f: 600, f2: 3000, attack: 0.15 })));
     [[3.2, 67], [5.0, 72]].forEach(([b, m]) => at(b, t => { tone(A.sfx, t, { f: 180, f2: 70, dur: 0.4, gain: 0.6 }); brass(t, m, 0.6, 0.1); brass(t, m - 12, 0.6, 0.06); noise(A.sfx, t, { dur: 0.25, gain: 0.15, type: 'bandpass', f: 1500 }); }));
     // redoble que acelera hasta el ¡bum!
@@ -3311,7 +4570,9 @@ input:focus { outline: none; border-color: var(--cyan); }
       noise(A.sfx, t + 0.1, { dur: 4.5, gain: 0.2, type: 'bandpass', f: 1300, q: 0.5, attack: 0.6 });
       for (let i = 0; i < 46; i++) noise(A.sfx, t + 0.3 + Math.random() * 3.8, { dur: 0.05, gain: 0.05 + Math.random() * 0.07, type: 'bandpass', f: 1800 + Math.random() * 1500, q: 1 });
     });
-    RV_BURSTS.forEach(b => at(9 + b, t => { tone(A.sfx, t, { f: 80, f2: 40, dur: 0.5, gain: 0.3 }); for (let i = 0; i < 10; i++) noise(A.sfx, t + 0.15 + Math.random() * 0.6, { dur: 0.03, gain: 0.04 + Math.random() * 0.05, type: 'highpass', f: 4000 }); }));
+    RV_BURSTS.forEach(b => at(9 + b, t => { thump(t, 80, 40, 0.5, 0.3); for (let i = 0; i < 10; i++) noise(A.sfx, t + 0.15 + Math.random() * 0.6, { dur: 0.03, gain: 0.04 + Math.random() * 0.05, type: 'highpass', f: 4000 }); }));
+    // Podio final: un golpe por cada lugar, el del campeón con campanas.
+    [3, 2, 1].forEach(p => at(RV_POD[p], t => SFX.podium(p, t)));
   }
   function revealFrame() {
     RV.raf = 0;
@@ -3334,7 +4595,7 @@ input:focus { outline: none; border-color: var(--cyan); }
       $('#rv-scr').textContent = '?#%&@*!$'[Math.floor(tau * 14) % 8];
     } else if (tau < 6.4) $('#rv-scr').textContent = '?';
     if (tau >= 9) {
-      $('#rv-ptsn').textContent = Math.round(RV.score * (1 - Math.pow(1 - k01((tau - 9.8) / 1.8), 3)));
+      $('#rv-ptsn').textContent = (RV.fmt || String)(Math.round(RV.score * (1 - Math.pow(1 - k01((tau - 9.8) / 1.8), 3))));
       drawRevealFx(tau);
     }
     RV.raf = requestAnimationFrame(revealFrame);
@@ -3415,7 +4676,11 @@ input:focus { outline: none; border-color: var(--cyan); }
   (function boot() {
     try {
       const saved = JSON.parse(lsGet(LS_KEY) || 'null');
-      if (saved && saved.v === 3 && Array.isArray(saved.plan) && Array.isArray(saved.picks) && CASE_BY_ID[saved.caseId]) G = saved;
+      if (saved && saved.v === 3 && Array.isArray(saved.plan) && Array.isArray(saved.picks) && CASE_BY_ID[saved.caseId]) {
+        G = saved;
+        if (!Array.isArray(G.tg)) G.tg = Array(Q_COUNT).fill(null);
+        if (!Array.isArray(G.bt)) G.bt = Array(Q_COUNT).fill(null);
+      }
     } catch { G = null; }
     if (ssGet(TV_KEY) === '1') enterTV();
     else syncPlayer();
