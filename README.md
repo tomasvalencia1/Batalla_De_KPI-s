@@ -31,7 +31,7 @@ Juego para el salón: cada jugador maneja las redes sociales de una marca colomb
 
 La página es estática: Vercel solo la publica. Los puntajes en vivo y la contraseña de la TV funcionan con **Firebase** (plan gratuito Spark).
 
-> **¿Ya lo tenías publicado?** Para tener los tres juegos solo vuelve a subir `index.html` y `README.md` a GitHub. Las reglas de Firebase (`database.rules.json`) y `config.js` no cambian.
+> **¿Ya lo tenías publicado?** Para tener los tres juegos vuelve a subir `index.html`, `README.md`, `og.png` y `apple-touch-icon.png` a GitHub. Las reglas de Firebase también se actualizaron (ahora revisan cada dato que escribe un jugador y no dejan meter datos de más): vuelve a pegar `database.rules.json` en Firebase y toca **Publicar** (paso 2, puntos 4 y 5). `config.js` no cambia.
 
 ## Qué hay en esta carpeta
 
@@ -41,6 +41,9 @@ La página es estática: Vercel solo la publica. Los puntajes en vivo y la contr
 | `config.js` | Los datos de tu proyecto de Firebase. **Este sí lo editas** (paso 5). |
 | `database.rules.json` | Las reglas de seguridad que pegas en Firebase (paso 2). |
 | `README.md` | Estas instrucciones. |
+| `og.png` | La imagen que aparece al compartir el enlace (WhatsApp, redes). |
+| `apple-touch-icon.png` | El ícono si alguien agrega el juego a la pantalla de inicio del celular. |
+| `video/` | El video explicativo de cómo se juega (no se publica en Vercel). |
 
 ## Paso 1. Crear el proyecto de Firebase
 
@@ -90,7 +93,7 @@ Conserva las comillas y las comas tal como están.
 
 1. Entra a [github.com/new](https://github.com/new) y crea un repositorio, por ejemplo `batalla-de-kpis`.
 2. En el repositorio vacío toca **uploading an existing file**.
-3. Arrastra los archivos de esta carpeta: `index.html`, `config.js`, `database.rules.json` y `README.md`.
+3. Arrastra los archivos de esta carpeta: `index.html`, `config.js`, `database.rules.json`, `README.md`, `og.png` y `apple-touch-icon.png`.
 4. Toca **Commit changes**.
 
 ## Paso 7. Publicar en Vercel
@@ -166,4 +169,4 @@ Todo está en `index.html`, dentro de `const CASES = [...]`. Cada reto tiene:
 - `f`: la fórmula (opcional).
 - `q`: una pregunta distinta a “¿Qué KPI deberías revisar?” (opcional).
 
-Si cambias la cantidad de retos (`Q_COUNT`), cambia también en `database.rules.json` el largo máximo de `results` (15) y el puntaje máximo (2250 = retos × 150).
+Si cambias la cantidad de retos (`Q_COUNT`), cambia también en `database.rules.json` el largo máximo de `results`, `tg` y `bt` (15), el máximo de `correct` (15) y el puntaje máximo (2250 = retos × 150).
